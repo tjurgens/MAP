@@ -48,23 +48,58 @@ AN_ba_69dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
  
  %%%%%% OLLO stimuli %%%%%%%%%%%%%%%%%
  
- OLLOwavfiles = {'dahd','bahb','dehd','behb','died','bieb','dohd','bohb','duhd','buhb','atta','ascha','assa'};
- OLLO_level = 69; %level of OLLO files in dB SPL
-for iCounter = 1:length(OLLOwavfiles)
+%  OLLOwavfiles = {'dahd','bahb','dehd','behb','died','bieb','dohd','bohb','duhd','buhb','atta','ascha','assa'};
+%  OLLO_level = 69; %level of OLLO files in dB SPL
+% for iCounter = 1:length(OLLOwavfiles)
+%     
+%     %read the stimuli
+%     eval(['[' OLLOwavfiles{iCounter} ',sfreq_OLLO] = wavread([''..\wavFileStore\S02M_L' ...
+%         sprintf('%3.3i',sloga2iloga(OLLOwavfiles{iCounter})) '_V6_M1_N2_CS0.wav'']);'])
+%     
+%     %delete preceding and subsequent silence and resample to 44100 Hz
+%     %sampling frequency
+%     eval([OLLOwavfiles{iCounter} ' = cutsignal(' OLLOwavfiles{iCounter} ',sfreq_OLLO,''d_d'');']);
+%     eval([OLLOwavfiles{iCounter} ' = resample(' OLLOwavfiles{iCounter} ',sfreq,sfreq_OLLO);']);
+%     
+%     %set level
+%     partfilename = [OLLOwavfiles{iCounter} num2str(OLLO_level) 'dB'];
+%     eval([partfilename ' = ' OLLOwavfiles{iCounter} ...
+%         './sqrt(mean(' OLLOwavfiles{iCounter} '.^2)).*10^(-(94-' num2str(OLLO_level) ')/20);']);
+%     
+%     %use MAP
+%     eval(['MAP1_14(' partfilename ',sfreq,-1,parameterfile,''probability'');']);
+%     global ANprobRateOutput
+%     eval(['AN_' partfilename ' = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);']);
+%     
+%     %Do the IPIH analysis
+%     eval(['[iih_' partfilename ',IPIhisttime_' partfilename ',IPIhistweight_' ...
+%         partfilename '] = track_formants_from_IPI_guy(AN_' partfilename ',sfreq);']);
+%     eval(['poolIPI_across_channels(IPIhisttime_' partfilename ',IPIhistweight_' partfilename ');']);
+%     title(partfilename);
+%     %set(gca,'Title',partfilename);
+%     xlabel('Interval (ms)')
+%     ylabel('Stimulus time (ms)');
+%     
+%     eval(['map_iih_onto_log(iih_' partfilename ',30,sfreq);']);
+%     title(partfilename);
+% end
+
+
+%%%%%% da stimuli with different pitches %%%%%%%%%%%%%%%%%
+ 
+ dawavfiles = {'200ms_da_080Hz.wav','200ms_da_100Hz.wav','200ms_da_120Hz.wav','200ms_da_140Hz.wav', ... 
+     '200ms_da_160Hz.wav','200ms_da_180Hz.wav','200ms_da_200Hz.wav','200ms_da_220Hz.wav', ...
+     '200ms_da_240Hz.wav','noise.wav'};
+ da_level = 69; %level of OLLO files in dB SPL
+for iCounter = 1:length(dawavfiles)
     
     %read the stimuli
-    eval(['[' OLLOwavfiles{iCounter} ',sfreq_OLLO] = wavread([''..\wavFileStore\S02M_L' ...
-        sprintf('%3.3i',sloga2iloga(OLLOwavfiles{iCounter})) '_V6_M1_N2_CS0.wav'']);'])
-    
-    %delete preceding and subsequent silence and resample to 44100 Hz
-    %sampling frequency
-    eval([OLLOwavfiles{iCounter} ' = cutsignal(' OLLOwavfiles{iCounter} ',sfreq_OLLO,''d_d'');']);
-    eval([OLLOwavfiles{iCounter} ' = resample(' OLLOwavfiles{iCounter} ',sfreq,sfreq_OLLO);']);
+    partfilename = ['da' dawavfiles{iCounter}(1:end-4)];
+    eval([ partfilename ' = wavread(''..\wavFileStore\' dawavfiles{iCounter} ''');'])
     
     %set level
-    partfilename = [OLLOwavfiles{iCounter} num2str(OLLO_level) 'dB'];
-    eval([partfilename ' = ' OLLOwavfiles{iCounter} ...
-        './sqrt(mean(' OLLOwavfiles{iCounter} '.^2)).*10^(-(94-' num2str(OLLO_level) ')/20);']);
+    eval([partfilename ' = ' partfilename ...
+        './sqrt(mean(' partfilename '.^2)).*10^(-(94-' num2str(da_level) ')/20);']);
     
     %use MAP
     eval(['MAP1_14(' partfilename ',sfreq,-1,parameterfile,''probability'');']);
