@@ -269,7 +269,7 @@ if showMapOptions.showACF
     filteredSACFParams.lambda=	0.12;       % slower filter to smooth ACF
     filteredSACFParams.lambda=	0.01;       % slower filter to smooth ACF
 
-    filteredSACFParams.plotACFs=0;          % special plot (see code)
+    filteredSACFParams.plotACFs=1;          % special plot (see code)
     filteredSACFParams.plotFilteredSACF=0;  % 0 plots unfiltered ACFs
     filteredSACFParams.plotMoviePauses=.3;          % special plot (see code)
 

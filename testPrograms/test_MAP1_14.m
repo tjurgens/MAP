@@ -45,7 +45,7 @@ MAPparamsName='Normal';
 AN_spikesOrProbability='spikes';
 
 % or
-% AN_spikesOrProbability='probability';
+ AN_spikesOrProbability='probability';
 
 
 %% #3 pure tone, harmonic sequence or speech file input
@@ -61,8 +61,8 @@ rampDuration=.005;              % raised cosine ramp (seconds)
 
 % or
 
-% signalType= 'file';
-% fileName='twister_44kHz';
+ signalType= 'file';
+ fileName='new-da-44khz';%'twister_44kHz';
 
 
 %% #4 rms level
@@ -109,7 +109,7 @@ paramChanges={' MacGregorMultiParams.tauGk=	0.0004;'};
 showMapOptions.printModelParameters=1;   % prints all parameters
 showMapOptions.showModelOutput=1;       % plot of all stages
 showMapOptions.printFiringRates=1;      % prints stage activity levels
-showMapOptions.showACF=0;               % shows SACF (probability only)
+showMapOptions.showACF=1;               % shows SACF (probability only)
 showMapOptions.showEfferent=1;          % tracks of AR and MOC
 showMapOptions.surfProbability=1;       % 2D plot of HSR response 
 showMapOptions.surfSpikes=1;            % 2D plot of spikes histogram
