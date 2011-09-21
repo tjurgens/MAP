@@ -79,7 +79,7 @@ DRNLParams=[];  % clear the structure first
 % broken stick compression
 DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
-DRNLParams.CtBMdB = 10;%20; %Compression threshold dB re 10e-9 m displacement
+DRNLParams.CtBMdB = 10; %Compression threshold dB re 10e-9 m displacement
 
 % filters
 DRNLParams.nonlinOrder=	3;  % order of nonlinear gammatone filters

@@ -320,14 +320,14 @@ if showMapOptions.showACF
 
     filteredSACFParams.plotACFs=1;          % special plot (see code)
     filteredSACFParams.plotFilteredSACF=0;  % 0 plots unfiltered ACFs
-    filteredSACFParams.plotMoviePauses=.3;          % special plot (see code)
+    filteredSACFParams.plotMoviePauses=.5;%.3          % special plot (see code)
 
     filteredSACFParams.usePressnitzer=0; % attenuates ACF at  long lags
     filteredSACFParams.lagsProcedure=  'useAllLags';
     % filteredSACFParams.lagsProcedure=  'useBernsteinLagWeights';
     % filteredSACFParams.lagsProcedure=  'omitShortLags';
     filteredSACFParams.criterionForOmittingLags=3;
-    filteredSACFParams.plotACFsInterval=200;
+    filteredSACFParams.plotACFsInterval=50;%200;
 
     if filteredSACFParams.plotACFs
         % plot original waveform on ACF plot

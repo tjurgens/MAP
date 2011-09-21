@@ -1,4 +1,4 @@
-function [iih,IPIhisttime,IPIhistweight]=track_formants_from_IPI_guy(IFRAN_pattern, sfreq)
+function [iih,IPIhisttime,IPIhistweight]=IPIHextract(IFRAN_pattern, sfreq)
 % 
 % tracks the formants according to an analysis proposed in Secker-Walker
 % JASA 1990, section V.A
@@ -23,54 +23,47 @@ time_axis = 0:1/sfreq:(size(IFRAN_pattern,2)-1)/sfreq;
 [tmp, stop20_time_index] = min(abs(0.020-time_axis));
 number_of_samples20ms = stop20_time_index - start_time_index;
 
-[tmp, stop3_time_index] = min(abs(0.003-time_axis));
-number_of_samples3ms = stop3_time_index - start_time_index;
-every_3ms = 1:number_of_samples3ms:size(IFRAN_pattern,2)-number_of_samples20ms;
+[tmp, stop10_time_index] = min(abs(0.010-time_axis));
+number_of_samples10ms = stop10_time_index - start_time_index;
+every_10ms = 1:number_of_samples10ms:size(IFRAN_pattern,2)-number_of_samples20ms;
 
 hamm_window = hamming(11);
 halfHamming = (length(hamm_window)-1)/2;
 
 % window normalization
 
-norm = conv(ones(1,floor(number_of_samples20ms/2)),hamm_window);
+norm = conv(ones(1,number_of_samples20ms),hamm_window);
 norm = norm(5+1:end-5)';
 win_size = number_of_samples20ms;
 half_win_size = floor(win_size/2);
-hop_size = number_of_samples3ms;
+hop_size = number_of_samples10ms;
+
+%parameters of the autocorrelation
+params.acfTau=0.1;
+params.lags=[0:1/sfreq:0.02-1/sfreq];
+sampledacf = runningACF(IFRAN_pattern,sfreq,params);
+sampledacf(sampledacf<0)=0;
+sampledacf = sqrt(sampledacf);
 
 
 %pre-allocation due to speed
 %Acorr = zeros(size(IFRAN_pattern,1),size(every_3ms,2),number_of_samples10ms*2+1);
 %RAcorr = zeros(size(IFRAN_pattern,1),size(every_3ms,2),number_of_samples10ms*2+1);
 %SRAcorr = zeros(size(IFRAN_pattern,1),size(every_3ms,2),number_of_samples10ms*2+1-10);
-IPIhisttime = zeros(size(IFRAN_pattern,1),size(every_3ms,2),3);
-IPIhistweight = zeros(size(IFRAN_pattern,1),size(every_3ms,2),3);  %maximum 3 peaks from the SRA
-iih = zeros(half_win_size,size(every_3ms,2));
+IPIhisttime = zeros(size(IFRAN_pattern,1),size(every_10ms,2),3);
+IPIhistweight = zeros(size(IFRAN_pattern,1),size(every_10ms,2),3);  %maximum 3 peaks from the SRA
+iih = zeros(half_win_size,size(sampledacf,1));
 
 
 
 
-for iCounter = 1:size(IFRAN_pattern,1) %each channel
+
+for iCounter = 1:size(sampledacf,2) %each channel
     fprintf('Channel No. %i\n',iCounter);
     %time_counter = 1;
     %for jCounter = every_3ms %every 3ms time segment
-    
-    
-    
-    %% Guy's code
-    % enframe this signal
-    
-    frames = enframe(IFRAN_pattern(iCounter,:),win_size,hop_size);
-    
-    % compute the autocorrelation
-    
-    acf = real(ifft(abs(fft(frames,[],2)).^2,[],2));
-    acf(acf<0)=0;
-    acf = sqrt(acf(:,1:half_win_size));
-    
-    % smooth with hamming window and take the root
-    
-    for frame=1:size(acf,1)
+                    
+    for frame=1:size(sampledacf,1)
         
         %%debug
         %if iCounter == 130
@@ -78,9 +71,9 @@ for iCounter = 1:size(IFRAN_pattern,1) %each channel
         %end
         
         
-        sra = conv(acf(frame,:),hamm_window);
-        sra = sra(halfHamming+1:end-halfHamming)./norm';
-        df = [0 ; diff(sra')];
+        sra = conv(squeeze(sampledacf(frame,iCounter,:)),hamm_window);
+        sra = sra(halfHamming+1:end-halfHamming)./norm;
+        df = [0 ; diff(sra)];
         idx = find((df(1:end-1)>=0)&(df(2:end)<0));
         % interpolate
         a=df(idx);
@@ -95,7 +88,9 @@ for iCounter = 1:size(IFRAN_pattern,1) %each channel
         % if required, remove peaks that lie below the mean sra
         % note that we disregard the value at zero delay
         %if (params.removePeaksBelowMean)
-        valid = find(amp>1.2*mean(sra(1:end)));
+        valid = find(amp>1.2*mean(sra(1:floor(length(sra)/2))));
+        %valid = find(amp>mean(sra));
+        %just take the mean of the first half of the sra as a comparison
         idx = idx(valid);
         amp = amp(valid);
         %end
@@ -105,10 +100,12 @@ for iCounter = 1:size(IFRAN_pattern,1) %each channel
         interval = diff(idx);
         % now histogram the intervals
         if (~isempty(interval))
-            for k=1:length(interval),
-                iih(round(interval(k)),frame) = iih(round(interval(k)),frame)+amp(k);
-                IPIhisttime(iCounter,frame,k) = interval(k)/sfreq;
-                IPIhistweight(iCounter,frame,k) = amp(k);
+            for k=1:length(interval)
+                if interval(k)<=half_win_size
+                    iih(round(interval(k)),frame) = iih(round(interval(k)),frame)+amp(k);
+                    IPIhisttime(iCounter,frame,k) = interval(k)/sfreq;
+                    IPIhistweight(iCounter,frame,k) = amp(k);
+                end
             end
         end
         

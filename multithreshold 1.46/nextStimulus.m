@@ -162,7 +162,7 @@ eval(cmd);
 
 % When variableList2 is 'targetFrequency' targetLevel may vary between runs 
 % If so, it is changed at the end of each variableList1.
-if strcmp(betweenRuns.variableName2, 'maskerRelativeFrequency') && ...
+if strcmp(betweenRuns.variableName2, 'targetFrequency') && ...
         length(stimulusParameters.targetLevels)>1
     switch experiment.paradigm
         case {'trainingIFMC', 'TMC','TMC_16ms', 'TMC - ELP', 'IFMC','IFMC_8ms','IFMC_16ms'}
