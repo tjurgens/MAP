@@ -91,6 +91,7 @@ frequency = frequency(1:number_of_channels_to_display);
 
 
             YTickIdx = 1:floor(numel(frequency)/6):numel(frequency);
+            XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
             YTickIdxRev = numel(frequency)+1-YTickIdx;
             if ~isempty(gca)
                 axes(gca);  %#ok<MAXES>
@@ -98,7 +99,10 @@ frequency = frequency(1:number_of_channels_to_display);
                 axis xy      
                 set(gca, 'YTick', YTickIdx);                
                 set(gca, 'YTickLabel', num2str(   frequency(YTickIdx)', '%0.0f' ));
-                ylabel('frequency (Hz)')                
+                ylabel('frequency (Hz)') 
+                 set(gca, 'XTick', XTickIdx);
+                set(gca, 'XTickLabel', XTickIdx.*3);
+                 xlabel('Time (ms)')
             end
 
 
