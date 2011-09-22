@@ -24,7 +24,7 @@ function [pooledIPIdata,ctr] = poolIPI_across_channels(IPIhisttime,IPIhistweight
 % 'verticalshift' might have to be adjusted in order to see structures in
 % the plot
 
-verticalshift =   5000; %0.008;%vertical shift of single time series in z-coordinate units
+verticalshift =   3000; %0.008;%vertical shift of single time series in z-coordinate units
 ctr = [0:0.02:5].*1e-3; %classes (center-values) of 20 microsec width
 
 %preallocation of variables
@@ -72,7 +72,7 @@ for iCounter = 1:size(IPIhisttime,2)
         'k','LineWidth',2);  
     if mod(iCounter,5) == 1 %set best frequency as a label every 10 channels
         Tickvector = [Tickvector verticalposition];
-        TickLabels = [TickLabels; (iCounter-1)*10]; %time spacing is every 3ms
+        TickLabels = [TickLabels; (iCounter-1)*3]; %time spacing is every 3ms
     end
 end
 set(gca,'yTick',Tickvector,'yTickLabel',num2str(TickLabels,'%4.0f'));

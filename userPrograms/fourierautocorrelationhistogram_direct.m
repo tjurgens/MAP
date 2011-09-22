@@ -50,12 +50,12 @@ for iCounter = 1:size(ANpattern,1) %each channel
     for frame=1:size(frames,1)
         
                
-        smoothed_correlation = conv(frames(frame,:),hamm_window);
-        smoothed_correlation = smoothed_correlation(halfHamming+1:end-halfHamming);
-        fsra = 20*log10(abs(fft(smoothed_correlation-mean(smoothed_correlation))));
+        smoothed_frame = conv(frames(frame,:),hamm_window);
+        smoothed_frame = smoothed_frame(halfHamming+1:end-halfHamming);
+        fsra = 20*log10(abs(fft(smoothed_frame-mean(smoothed_frame))));
         fsra = fsra(1:floor(length(fsra)/2));
         
-        t = [0:1/sfreq:length(fsra)/sfreq-1/sfreq];
+        t = [0:1/sfreq:length(smoothed_frame)/sfreq-1/sfreq];
         frequency = [0:1/t(end):1/(2*(t(2)-t(1)))];
         %identify peaks in the fft
         df = [0 ; diff(fsra')];
@@ -80,4 +80,27 @@ for iCounter = 1:size(ANpattern,1) %each channel
     end
 end
 
-%fach = 0;
+
+%plot the result
+figure
+maxfrequency = 4000;
+[tmp,number_of_channels_to_display] = min(abs(frequency-maxfrequency));
+frequency = frequency(1:number_of_channels_to_display);
+
+
+
+
+            YTickIdx = 1:floor(numel(frequency)/6):numel(frequency);
+            YTickIdxRev = numel(frequency)+1-YTickIdx;
+            if ~isempty(gca)
+                axes(gca);  %#ok<MAXES>
+                imagesc(fach(1:number_of_channels_to_display,:));
+                axis xy      
+                set(gca, 'YTick', YTickIdx);                
+                set(gca, 'YTickLabel', num2str(   frequency(YTickIdx)', '%0.0f' ));
+                ylabel('frequency (Hz)')                
+            end
+
+
+
+

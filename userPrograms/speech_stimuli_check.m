@@ -36,7 +36,7 @@ AN_da_69dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
 %Do the IPIH analysis
  [iih_da_69dB,IPIhisttime_da_69dB,IPIhistweight_da_69dB] = track_formants_from_IPI_guy(AN_da_69dB,sfreq);
  %[iih_da_69dB,IPIhisttime_da_69dB,IPIhistweight_da_69dB] = IPIHextract(AN_da_69dB,sfreq);
- %poolIPI_across_channels(IPIhisttime_da_69dB,IPIhistweight_da_69dB);
+ poolIPI_across_channels(IPIhisttime_da_69dB,IPIhistweight_da_69dB);
  map_iih_onto_log(iih_da_69dB,30,sfreq);
   [iih_da_49dB,IPIhisttime_da_49dB,IPIhistweight_da_49dB] = track_formants_from_IPI_guy(AN_da_49dB,sfreq);
 %  poolIPI_across_channels(IPIhisttime_da_49dB,IPIhistweight_da_49dB);
@@ -131,7 +131,10 @@ AN_da_69dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
   dawavfiles = { ...%'200ms_da_080Hz.wav','200ms_da_100Hz.wav','200ms_da_120Hz.wav','200ms_da_140Hz.wav', ... 
       %'200ms_da_160Hz.wav','200ms_da_180Hz.wav','200ms_da_200Hz.wav','200ms_da_220Hz.wav', ...
       %'200ms_da_240Hz.wav',
-      'noise.wav'};
+      %'noise.wav'};
+      %'da_whispered.wav' ...
+      };
+      
  da_level = 69; %level of OLLO files in dB SPL
 for iCounter = 1:length(dawavfiles)
     

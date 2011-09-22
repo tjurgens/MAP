@@ -20,7 +20,7 @@ time_axis = 0:1/sfreq:(size(IFRAN_pattern,2)-1)/sfreq;
 %find how many samples of AN_pattern are 10ms and 3ms
 %one_sample_is_a_time_of = time_axis(2);
 [tmp, start_time_index] = min(abs(0-time_axis));
-[tmp, stop10_time_index] = min(abs(0.01-time_axis));
+[tmp, stop10_time_index] = min(abs(0.010-time_axis));
 number_of_samples10ms = stop10_time_index - start_time_index;
 
 [tmp, stop3_time_index] = min(abs(0.003-time_axis));
@@ -88,12 +88,14 @@ for iCounter = 1:size(IFRAN_pattern,1) %each channel
         idx = (idx-1+a./(a-b));
         % get rid of a zero peak, if it exists
         idx = idx(idx>1);
+        %include the zeroth peak
+        %idx = [1 idx']';
         % peak values corresponding to these intervals
         amp = interp1(1:length(sra),sra,idx,'linear');
         % if required, remove peaks that lie below the mean sra
         % note that we disregard the value at zero delay
         %if (params.removePeaksBelowMean)
-        valid = find(amp>mean(sra(2:end)));
+        valid = find(amp>1.2*mean(sra(1:end)));
         idx = idx(valid);
         amp = amp(valid);
         %end
