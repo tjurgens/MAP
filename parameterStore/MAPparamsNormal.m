@@ -89,7 +89,7 @@ DRNLParams.nlBWs=  p * BFlist + q;
 DRNLParams.p=p;   DRNLParams.q=q;   % save p and q for printing only
 
 %   *** DRNL linear path:
-DRNLParams.g=200;       % linear path gain factor
+DRNLParams.g=50;       % linear path gain factor
 DRNLParams.linOrder=3;  % order of linear gammatone filters
 % linCF is not necessarily the same as nonlinCF
 minLinCF=153.13; coeffLinCF=0.7341;   % linCF>nonlinBF for BF < 1 kHz

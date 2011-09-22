@@ -10,7 +10,7 @@ parameterfile='Normal';
 ba = wavread('..\wavFileStore\new-ba-44khz.wav'); %artificial stimulus
 
 %set level of speech stimuli (RMS 1 equals 94 dB)
-da_69dB = da./sqrt(mean(da.^2)).*10^(-(94-69)/20);
+da_69dB = da./sqrt(mean(da.^2)).*10^(-(94-80)/20);
 da_49dB = da./sqrt(mean(da.^2)).*10^(-(94-49)/20);
 ba_69dB = ba./sqrt(mean(ba.^2)).*10^(-(94-69)/20);
 %20*log10(sqrt(mean(ba_69dB.^2))/20e-6) %reference pressure: 20uPa
@@ -24,14 +24,14 @@ MAP1_14(da_69dB,sfreq,-1,parameterfile,'probability');
 global ANprobRateOutput
 AN_da_69dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
 
- MAP1_14(da_49dB,sfreq,-1,parameterfile,'probability');
- global ANprobRateOutput
- AN_da_49dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
-% 
- MAP1_14(ba_69dB,sfreq,-1,parameterfile,'probability');
- global ANprobRateOutput
- global savedBFlist
- AN_ba_69dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
+%  MAP1_14(da_49dB,sfreq,-1,parameterfile,'probability');
+%  global ANprobRateOutput
+%  AN_da_49dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
+% % 
+%  MAP1_14(ba_69dB,sfreq,-1,parameterfile,'probability');
+%  global ANprobRateOutput
+%  global savedBFlist
+%  AN_ba_69dB = ANprobRateOutput(1:size(ANprobRateOutput,1)/2,:);
 
 %Do the IPIH analysis
  [iih_da_69dB,IPIhisttime_da_69dB,IPIhistweight_da_69dB] = track_formants_from_IPI_guy(AN_da_69dB,sfreq);
