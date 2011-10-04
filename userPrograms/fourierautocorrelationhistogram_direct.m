@@ -1,4 +1,4 @@
-function fach=fourierautocorrelationhistogram_direct(ANpattern,sfreq)
+function fach=fourierautocorrelationhistogram_direct(ANpattern,sfreq,plothandle)
 
 
 time_axis = 0:1/sfreq:(size(ANpattern,2)-1)/sfreq;
@@ -25,7 +25,7 @@ half_win_size = floor(win_size/2);
 hop_size = number_of_samples3ms;
 
 %preallocation due to speed
-fach = zeros(half_win_size,size(every_3ms,2));
+fach = zeros(half_win_size,size(every_3ms,2)+1);
 
 for iCounter = 1:size(ANpattern,1) %each channel
     fprintf('Channel No. %i\n',iCounter);
@@ -82,28 +82,27 @@ end
 
 
 %plot the result
-figure
+if ~exist('plothandle'), plothandle=figure; end
 maxfrequency = 4000;
 [tmp,number_of_channels_to_display] = min(abs(frequency-maxfrequency));
 frequency = frequency(1:number_of_channels_to_display);
 
+set(gcf,'Currentaxes',plothandle);
 
-
-
-            YTickIdx = 1:floor(numel(frequency)/6):numel(frequency);
-            XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
-            YTickIdxRev = numel(frequency)+1-YTickIdx;
-            if ~isempty(gca)
-                axes(gca);  %#ok<MAXES>
-                imagesc(fach(1:number_of_channels_to_display,:));
-                axis xy      
-                set(gca, 'YTick', YTickIdx);                
-                set(gca, 'YTickLabel', num2str(   frequency(YTickIdx)', '%0.0f' ));
-                ylabel('frequency (Hz)') 
-                 set(gca, 'XTick', XTickIdx);
-                set(gca, 'XTickLabel', XTickIdx.*3);
-                 xlabel('Time (ms)')
-            end
+YTickIdx = 1:floor(numel(frequency)/6):numel(frequency);
+XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
+YTickIdxRev = numel(frequency)+1-YTickIdx;
+if ~isempty(gca)
+    axes(gca);  %#ok<MAXES>
+    imagesc(fach(1:number_of_channels_to_display,:));
+    axis xy
+    set(gca, 'YTick', YTickIdx);
+    set(gca, 'YTickLabel', num2str(   frequency(YTickIdx)', '%0.0f' ));
+    ylabel('frequency (Hz)')
+    set(gca, 'XTick', XTickIdx);
+    set(gca, 'XTickLabel', XTickIdx.*3);
+    xlabel('Time (ms)')
+end
 
 
 
