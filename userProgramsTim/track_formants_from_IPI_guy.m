@@ -45,7 +45,7 @@ hop_size = number_of_samples3ms;
 %SRAcorr = zeros(size(IFRAN_pattern,1),size(every_3ms,2),number_of_samples10ms*2+1-10);
 IPIhisttime = zeros(size(IFRAN_pattern,1),size(every_3ms,2),3);
 IPIhistweight = zeros(size(IFRAN_pattern,1),size(every_3ms,2),3);  %maximum 3 peaks from the SRA
-iih = zeros(half_win_size,size(every_3ms,2));
+iih = zeros(half_win_size,size(every_3ms,2)+1);
 
 
 

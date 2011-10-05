@@ -22,7 +22,7 @@ function varargout = speechmanipulation(varargin)
 
 % Edit the above text to modify the response to help speechmanipulation
 
-% Last Modified by GUIDE v2.5 01-Oct-2011 08:44:30
+% Last Modified by GUIDE v2.5 05-Oct-2011 11:21:58
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,6 +52,9 @@ function speechmanipulation_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to speechmanipulation (see VARARGIN)
 global wavfilescell;
+global rateaxeshandle; %handle to axis6 is needed, if radiobuttons12 and 13 change
+
+
 % Choose default command line output for speechmanipulation
 handles.output = hObject;
 
@@ -66,6 +69,8 @@ for iCounter = 1:length(wavfiles)
 end
 set(handles.popupmenu1,'String',wavfilescell);
 set(handles.popupmenu2,'String',wavfilescell);
+set(handles.uipanel8,'SelectionChangeFcn',@radiobuttonselected);
+rateaxeshandle = handles.axes6;
 
 % --- Outputs from this function are returned to the command line.
 function varargout = speechmanipulation_OutputFcn(hObject, eventdata, handles) 
@@ -76,6 +81,19 @@ function varargout = speechmanipulation_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
+
+function edit1_Callback(hObject, eventdata, handles)
+function edit2_Callback(hObject, eventdata, handles)
+function edit3_Callback(hObject, eventdata, handles)
+function edit4_Callback(hObject, eventdata, handles)
+function edit5_Callback(hObject, eventdata, handles)
+function edit6_Callback(hObject, eventdata, handles)
+function edit7_Callback(hObject, eventdata, handles)
+function edit8_Callback(hObject, eventdata, handles)
+function edit9_Callback(hObject, eventdata, handles)
+function edit10_Callback(hObject, eventdata, handles)
+function edit11_Callback(hObject, eventdata, handles)
+function edit12_Callback(hObject, eventdata, handles)
 
 
 % --- Executes on selection change in popupmenu1.
@@ -153,14 +171,6 @@ originalsignal.sfreq = sfreq;
 
 %plot it
 multipleplot(actualsignal,handles)
-
-function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
 
 
 % --- Executes during object creation, after setting all properties.
@@ -298,45 +308,6 @@ end
 %plot the resulting manipulated waveform
 multipleplot(actualsignal,handles);
 
-
-
-% --- Executes on button press in radiobutton1.
-function radiobutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to radiobutton1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radiobutton1
-
-
-% --- Executes on button press in radiobutton2.
-function radiobutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to radiobutton2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radiobutton2
-
-
-% --- Executes on button press in radiobutton3.
-function radiobutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to radiobutton3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radiobutton3
-
-
-
-function edit3_Callback(hObject, eventdata, handles)
-% hObject    handle to edit3 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit3 as text
-%        str2double(get(hObject,'String')) returns contents of edit3 as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function edit3_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit3 (see GCBO)
@@ -348,16 +319,6 @@ function edit3_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-
-function edit4_Callback(hObject, eventdata, handles)
-% hObject    handle to edit4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit4 as text
-%        str2double(get(hObject,'String')) returns contents of edit4 as a double
 
 
 % --- Executes during object creation, after setting all properties.
@@ -373,16 +334,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
-function edit5_Callback(hObject, eventdata, handles)
-% hObject    handle to edit5 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit5 as text
-%        str2double(get(hObject,'String')) returns contents of edit5 as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function edit5_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit5 (see GCBO)
@@ -394,16 +345,6 @@ function edit5_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-% --- Executes on selection change in popupmenu2.
-function popupmenu2_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu2
 
 
 % --- Executes during object creation, after setting all properties.
@@ -431,7 +372,6 @@ toplay = audioplayer(originalsignal.waveform,originalsignal.sfreq);
 play(toplay)
 
 
-
 % --- Executes on button press in pushbutton5.
 function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
@@ -439,10 +379,6 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global toplay
 stop(toplay);
-
-
-    
-
 
 
 function edit6_Callback(hObject, eventdata, handles)
@@ -466,17 +402,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
-
-function edit7_Callback(hObject, eventdata, handles)
-% hObject    handle to edit7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit7 as text
-%        str2double(get(hObject,'String')) returns contents of edit7 as a double
-
-
 % --- Executes during object creation, after setting all properties.
 function edit7_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit7 (see GCBO)
@@ -488,16 +413,6 @@ function edit7_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-
-function edit8_Callback(hObject, eventdata, handles)
-% hObject    handle to edit8 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit8 as text
-%        str2double(get(hObject,'String')) returns contents of edit8 as a double
 
 
 % --- Executes during object creation, after setting all properties.
@@ -521,7 +436,9 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 
 %% CALCULATE MAP 1.14 auditory nerve probability output
 addpath(['..' filesep 'MAP']);
+addpath(['..' filesep 'utilities']);
 global actualsignal
+global AN_HSRoutput
 
 tmp = get(handles.edit6,'String');
 level4MAP=str2num(tmp);
@@ -552,41 +469,90 @@ global ANprobRateOutput savedBFlist
 AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
 
 %plot the auditory nerve firing probability as line plot
-plotIFRAN(AN_HSRoutput,actualsignal.sfreq,savedBFlist,handles.axes4);
+start_time = size(AN_HSRoutput,2)/2/actualsignal.sfreq-0.025; %start time to plot in s
+end_time = start_time+0.05; %plot 50ms
+plotIFRAN(AN_HSRoutput,start_time,end_time,actualsignal.sfreq,savedBFlist,handles.axes4);
+set(handles.edit11,'String',num2str(1000*size(AN_HSRoutput,2)/2/actualsignal.sfreq));
 
 %plot the fourierhistogram as image plot
 formantpattern = fourierautocorrelationhistogram_direct(AN_HSRoutput,actualsignal.sfreq,handles.axes5);
-caxis([0 2241]);
+caxis([0 2000]);
 colorbar;
 
-%calculate rate representation
-ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
-hopSize = 10; %ms
-winSize = 25; %ms
-winSizeSamples = round(winSize*actualsignal.sfreq/1000);
-hann = hanning(winSizeSamples);
-hopSizeSamples = round(hopSize*actualsignal.sfreq/1000);
-for chan = 1:size(AN_HSRoutput,1)
-    f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
-    ANsmooth(chan,:) = mean(f,2)';
-end
+%plot the rate output
+plotrateOutput(AN_HSRoutput,actualsignal.sfreq,handles.axes6,[33.7 300]);
+set(handles.radiobutton12,'Value',1);
 
-%plot rate representation
-time_axis_rate=[0:hopSize/1000:size(AN_HSRoutput,2)/actualsignal.sfreq];
-set(gcf,'CurrentAxes',handles.axes6);
-YTickIdx = 1:floor(numel(savedBFlist)/6):numel(savedBFlist);
-XTickIdx = 1:floor(numel(time_axis_rate)/6):numel(time_axis_rate);
-imagesc(ANsmooth);
-axis xy;
+%calculate the IPIH
+ipih=track_formants_from_IPI_guy(AN_HSRoutput, actualsignal.sfreq);
+%the following code assumes that the bin width is 1/actualsignal.sfreq and 
+%the temporal step size is 3ms
+
+ipihfreqaxis=1./[1/actualsignal.sfreq:1/actualsignal.sfreq:size(ipih,1)/actualsignal.sfreq];
+ipihtimeaxis=[0:3:size(ipih,2)*3];
+set(gcf,'CurrentAxes',handles.axes7);
+YTickIdx = 1:floor(numel(ipihfreqaxis)/6):numel(ipihfreqaxis);
+XTickIdx = 1:floor(numel(ipihtimeaxis)/6):numel(ipihtimeaxis);
+imagesc(ipih);
 set(gca, 'YTick', YTickIdx);
-set(gca, 'YTickLabel', num2str(  savedBFlist(YTickIdx)', '%0.0f' ));
+set(gca, 'YTickLabel', num2str(  ipihfreqaxis(YTickIdx)', '%0.0f' ));
 ylabel('best frequency (Hz)')
 set(gca, 'XTick', XTickIdx);
-set(gca, 'XTickLabel', XTickIdx.*10);
+set(gca, 'XTickLabel', XTickIdx.*3);
 xlabel('Time (ms)');
-caxis([33.7 300]); %set color from average spontaneous rate to a maximum of 600
+caxis([0 8e4]); %set color 
 colorbar;
 
+%calculate and plot summarized autocorrelation, code from Ray
+method.dt=1/actualsignal.sfreq;
+method.segmentNo=1;
+method.nonlinCF=savedBFlist;
+
+minPitch=	80; maxPitch=	4000; numPitches=100;    % specify lags
+pitches=10.^ linspace(log10(minPitch), log10(maxPitch),numPitches);
+pitches=fliplr(pitches);
+filteredSACFParams.lags=1./pitches;     % autocorrelation lags vector
+filteredSACFParams.acfTau=	.003;       % time constant of running ACF
+filteredSACFParams.lambda=	0.12;       % slower filter to smooth ACF
+filteredSACFParams.lambda=	0.01;       % slower filter to smooth ACF
+
+filteredSACFParams.plotACFs=0;          % special plot (see code)
+filteredSACFParams.plotFilteredSACF=0;  % 0 plots unfiltered ACFs
+filteredSACFParams.plotMoviePauses=.5;%.3          % special plot (see code)
+
+filteredSACFParams.usePressnitzer=0; % attenuates ACF at  long lags
+filteredSACFParams.lagsProcedure=  'useAllLags';
+filteredSACFParams.criterionForOmittingLags=3;
+filteredSACFParams.plotACFsInterval=50;%200;
+
+% compute ACF
+%switch saveAN_spikesOrProbability
+%    case 'probability'
+        inputToACF=ANprobRateOutput.^0.5;
+%    otherwise
+%        inputToACF=ANoutput;
+%end
+
+disp ('computing ACF...')
+t=method.dt*(1:length(actualsignal.waveform));
+[P, BFlist, sacf, boundaryValue] = ...
+    filteredSACF(inputToACF, method, filteredSACFParams);
+P = real(P); %dont know why sometimes P can be (very slightly) complex
+disp(' ACF done.')
+
+% SACF
+set(gcf,'CurrentAxes',handles.axes8);
+imagesc(P)
+ylabel('periodicities (Hz)')
+xlabel('time (s)')
+%title(['running smoothed (root) SACF. ' saveAN_spikesOrProbability ' input'])
+pt=[1 get(gca,'ytick')]; % force top xtick to show
+set(gca,'ytick',pt)
+set(gca,'ytickLabel', round(pitches(pt)))
+tt=get(gca,'xtick');
+tt=tt(tt<length(t));
+set(gca,'xtickLabel', round(100*t(tt))/100)
+colorbar;
 
 % --- Executes on button press in pushbutton7.
 function pushbutton7_Callback(hObject, eventdata, handles)
@@ -650,7 +616,7 @@ set(handles.axes2,'XLim',[100 10000]);
 set(handles.axes2,'XScale','log');
 
 %spectrogram plot (10 ms temporal resolution)
-[s,f,t] = spectrogram(actualsignal.waveform,round(0.01*actualsignal.sfreq),[],[],actualsignal.sfreq); %10ms short term windows
+[s,f,t] = spectrogram(actualsignal.waveform,hann(round(0.01*actualsignal.sfreq)),[],[],actualsignal.sfreq); %10ms short term windows
 set(gcf,'CurrentAxes',handles.axes3);
 if max(f)>10000
     [tmp,idx] = min(abs(f-10000));
@@ -661,3 +627,88 @@ end
 axis xy;
 set(get(handles.axes3,'YLabel'),'String','frequency (Hz)');
 set(get(handles.axes3,'XLabel'),'String','Time (s)');
+
+
+function plotrateOutput(ratepattern,sfreq,axeshandle,colorrange)
+%% calculate rate representation and plot, code from Nick
+global savedBFlist
+%calculate rate representation
+ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+hopSize = 10; %ms
+winSize = 25; %ms
+winSizeSamples = round(winSize*sfreq/1000);
+hann = hanning(winSizeSamples);
+hopSizeSamples = round(hopSize*sfreq/1000);
+for chan = 1:size(ratepattern,1)
+    f = enframe(ratepattern(chan,:), hann, hopSizeSamples);
+    ANsmooth(chan,:) = mean(f,2)';
+end
+
+%plot rate representation
+time_axis_rate=[0:hopSize/1000:size(ratepattern,2)/sfreq];
+set(gcf,'CurrentAxes',axeshandle);
+YTickIdx = 1:floor(numel(savedBFlist)/6):numel(savedBFlist);
+XTickIdx = 1:floor(numel(time_axis_rate)/6):numel(time_axis_rate);
+imagesc(ANsmooth);
+axis xy;
+set(gca, 'YTick', YTickIdx);
+set(gca, 'YTickLabel', num2str(  savedBFlist(YTickIdx)', '%0.0f' ));
+ylabel('best frequency (Hz)')
+set(gca, 'XTick', XTickIdx);
+set(gca, 'XTickLabel', XTickIdx.*10);
+xlabel('Time (ms)');
+caxis(colorrange); %set color from average spontaneous rate to a maximum of 600
+colorbar;
+
+
+% --- Executes if the radiobuttons hsr and lsr are changed
+function radiobuttonselected(source, eventdata)
+
+global rateaxeshandle
+global ANprobRateOutput
+global actualsignal
+
+selected = get(get(source,'SelectedObject'),'String');
+
+if isempty(ANprobRateOutput)
+    msgbox('Please calculate AN pattern first!');
+elseif strcmp(selected,'HSR')
+    AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
+    colorrange = [33.7 300];
+    plotrateOutput(AN_HSRoutput,actualsignal.sfreq,rateaxeshandle,colorrange);
+else
+    AN_LSRoutput = ANprobRateOutput(1:size(ANprobRateOutput)/2,:);
+    colorrange = [10.7 100];
+    plotrateOutput(AN_LSRoutput,actualsignal.sfreq,rateaxeshandle,colorrange);
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function edit11_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit11 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton8.
+function pushbutton8_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton8 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+%plot the auditory nerve firing probability as line plot after grabbing the
+%time value from edit11
+global AN_HSRoutput
+global actualsignal
+global savedBFlist
+
+middletime = str2num(get(handles.edit11,'String'))/1000;
+
+start_time = min([size(AN_HSRoutput,2)/actualsignal.sfreq-0.01 max([0 middletime-0.025])]); %start time to plot in s
+end_time = max([start_time+0.01 min([start_time+0.05 size(AN_HSRoutput,2)/actualsignal.sfreq-0.01])]); %plot max 50ms
+plotIFRAN(AN_HSRoutput,start_time,end_time,actualsignal.sfreq,savedBFlist,handles.axes4);

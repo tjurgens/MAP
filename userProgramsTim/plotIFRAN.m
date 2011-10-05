@@ -1,4 +1,4 @@
-function plotIFRAN(data_matrix,sfreq,BFlist,plothandle)
+function plotIFRAN(data_matrix,start_time,end_time,sfreq,BFlist,plothandle)
 
 %function that produces a plot similar to the plots in Secker-Walker, JASA
 %1990 Fig.2 (Neurograms) from a IFRAN data matrix
@@ -6,10 +6,10 @@ function plotIFRAN(data_matrix,sfreq,BFlist,plothandle)
 
 %plot 50ms right from the middle of the signal
 time_axis = [0:1/sfreq:(size(data_matrix,2)-1)/sfreq];
-start_time = size(data_matrix,2)/2/sfreq-0.025; %start time to plot in s
-temporal_length = min([0.05 size(data_matrix,2)/sfreq]); %length to plot in s, at least 50ms or the length of the stimulus
+%start_time = size(data_matrix,2)/2/sfreq-0.025; %start time to plot in s
+%temporal_length = min([0.05 size(data_matrix,2)/sfreq]); %length to plot in s, at least 50ms or the length of the stimulus
 [tmp, start_time_index] = min(abs(start_time-time_axis));
-end_time = start_time+temporal_length;
+%end_time = start_time+temporal_length;
 [tmp, end_time_index] = min(abs(end_time-time_axis));
 
 
