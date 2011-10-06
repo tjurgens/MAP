@@ -359,6 +359,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+function popupmenu2_Callback(hObject, eventdata, handles)
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)
@@ -380,14 +381,6 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 global toplay
 stop(toplay);
 
-
-function edit6_Callback(hObject, eventdata, handles)
-% hObject    handle to edit6 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit6 as text
-%        str2double(get(hObject,'String')) returns contents of edit6 as a double
 
 
 % --- Executes during object creation, after setting all properties.
@@ -475,7 +468,9 @@ plotIFRAN(AN_HSRoutput,start_time,end_time,actualsignal.sfreq,savedBFlist,handle
 set(handles.edit11,'String',num2str(1000*size(AN_HSRoutput,2)/2/actualsignal.sfreq));
 
 %plot the fourierhistogram as image plot
-formantpattern = fourierautocorrelationhistogram_direct(AN_HSRoutput,actualsignal.sfreq,handles.axes5);
+%formantpattern = fourierautocorrelationhistogram_direct(AN_HSRoutput,actualsignal.sfreq,handles.axes5);
+formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,actualsignal.sfreq,handles.axes5,savedBFlist);
+%caxis([0 4e6]);
 caxis([0 2000]);
 colorbar;
 

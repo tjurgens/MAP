@@ -1,4 +1,4 @@
-function fach=fourierautocorrelationhistogram_direct(ANpattern,sfreq,plothandle)
+function fach=fourierautocorrelationhistogram_direct(ANpattern,sfreq,plothandle,BFs)
 
 
 time_axis = 0:1/sfreq:(size(ANpattern,2)-1)/sfreq;
@@ -25,7 +25,8 @@ half_win_size = floor(win_size/2);
 hop_size = number_of_samples3ms;
 
 %preallocation due to speed
-fach = zeros(half_win_size,size(every_3ms,2)+1);
+fftbinlength = 1000;
+fach = zeros(fftbinlength/2,size(every_3ms,2)+1);
 
 for iCounter = 1:size(ANpattern,1) %each channel
     fprintf('Channel No. %i\n',iCounter);
@@ -52,11 +53,11 @@ for iCounter = 1:size(ANpattern,1) %each channel
                
         smoothed_frame = conv(frames(frame,:),hamm_window);
         smoothed_frame = smoothed_frame(halfHamming+1:end-halfHamming);
-        fsra = 20*log10(abs(fft(smoothed_frame-mean(smoothed_frame))));
+        fsra = 20*log10(abs(fft(smoothed_frame-mean(smoothed_frame),fftbinlength)));
         %fsra = abs(fft(smoothed_frame-mean(smoothed_frame)));
         fsra = fsra(1:floor(length(fsra)/2));
         
-        t = [0:1/sfreq:length(smoothed_frame)/sfreq-1/sfreq];
+        t = [0:1/sfreq:fftbinlength/sfreq-1/sfreq];
         frequency = [0:1/t(end):1/(2*(t(2)-t(1)))];
         %identify peaks in the fft
         df = [0 ; diff(fsra')];
@@ -84,24 +85,41 @@ for iCounter = 1:size(ANpattern,1) %each channel
     end
 end
 
+%summarize channels so that the frequency axis matches best to the BF axis
+%double the accuracy of the savedBfs axis
+% zaehler =1;
+% for iCounter = 1:length(BFs)-1;
+%     BFs_new(zaehler) = BFs(iCounter); 
+%     zaehler = zaehler+1;
+%     BFs_new(zaehler) = 10^((log10(BFs(iCounter))+log10(BFs(iCounter+1)))/2);
+%     zaehler = zaehler+1;
+% end
+fach_logscale = zeros(length(BFs),size(fach,2));
+for iCounter = 1:length(frequency);
+    %find that BF that fits best to the fft-frequency
+    [tmp,tmpindex]=min(abs(BFs-frequency(iCounter)));
+    %store result over here
+    fach_logscale(tmpindex,:) = fach_logscale(tmpindex,:)+fach(iCounter,:);
+end
 
 %plot the result
 if ~exist('plothandle'), plothandle=figure; end
-maxfrequency = 4000;
-[tmp,number_of_channels_to_display] = min(abs(frequency-maxfrequency));
-frequency = frequency(1:number_of_channels_to_display);
+%maxfrequency = 4000;
+%[tmp,number_of_channels_to_display] = min(abs(frequency-maxfrequency));
+%frequency = frequency(1:number_of_channels_to_display);
 
 set(gcf,'Currentaxes',plothandle);
 
-YTickIdx = 1:floor(numel(frequency)/6):numel(frequency);
+YTickIdx = 1:floor(numel(BFs)/6):numel(BFs);
 XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
 YTickIdxRev = numel(frequency)+1-YTickIdx;
 if ~isempty(gca)
     axes(gca);  %#ok<MAXES>
-    imagesc(fach(1:number_of_channels_to_display,:));
+    %imagesc(fach(1:number_of_channels_to_display,:));
+    imagesc(fach_logscale);
     axis xy
     set(gca, 'YTick', YTickIdx);
-    set(gca, 'YTickLabel', num2str(   frequency(YTickIdx)', '%0.0f' ));
+    set(gca, 'YTickLabel', num2str(   BFs(YTickIdx)', '%0.0f' ));
     ylabel('frequency (Hz)')
     set(gca, 'XTick', XTickIdx);
     set(gca, 'XTickLabel', XTickIdx.*3);
