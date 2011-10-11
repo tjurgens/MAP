@@ -1,0 +1,13 @@
+function [HLFreq,HLevel] = HearingLevel
+
+% Rainer Beutelmann
+% (die Daten sind aus: ISO 226 (Table 1))
+
+% Frequencies in Hz
+HLFreq = [  20   25    31.5    40    50    63   80   100     125   160 ...
+           200  250   315     400   500   630  800  1000    1250  1600 ...
+          2000 2500  3150    4000  5000  6300 8000 10000   12500];
+% Hörschwellenpegel in dBSPL      
+HLevel = [ 76.7  67.3  58.4    50.1  43.2  36.7 30.7  25.7    21.3  17.1 ...
+           13.7  10.7   8.0     5.7   3.8   2.4  1.8   2.2     2.9   1.5 ...
+           -1.2  -4.2  -6.3    -6.1  -2.5   5.5 13.5  14.8    15.9];

@@ -1,0 +1,372 @@
+/* 
+ * This file implements one branch of the gammatone filterbank described in 
+ * [Patterson, 1987] as a 4 times iterated complex bandpass filter of first
+ * order as a C function, to be incorporated into MATLAB as a MEX function.
+ * (Remark: this is a basic version, no special data types (e.g. complex or
+ * structs) are used.)
+ * Difference to 'gammatone.c': only the real part of the filter output is
+ * returned
+ *
+ * filename : gammatone_r.c
+ * copyright: Universitaet Oldenburg
+ * authors  : vh, rh
+ * date     : Sept 1998
+ * update   : 08/2003
+ */
+
+
+/*-----------------------------------------------------------------------------
+ *   Copyright (C) 1998-2003   AG Medizinische Physik,
+ *                             Universitaet Oldenburg, Germany
+ *                             http://www.physik.uni-oldenburg.de/docs/medi
+ *   
+ *   Permission to use, copy, and distribute this software/file and its
+ *   documentation for any purpose without permission by UNIVERSITAET OLDENBURG
+ *   is not granted.
+ *   
+ *   Permission to use this software for academic purposes is generally
+ *   granted.
+ *
+ *   Permission to modify the software is granted, but not the right to
+ *   distribute the modified code.
+ *
+ *   This software is provided "as is" without expressed or implied warranty.
+ *
+ *   Author:                                                                    
+ *
+ *   Volker Hohmann  (volker.hohmann@uni-oldenburg.de)
+ ---------------------------------------------------------------------------*/
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+#include "gammatone_r.h"
+#include "mex.h"
+
+/*//-------------------------------------------------------------------------------------------------------------
+
+// compile command line version of filterbranch, if defined*/
+#define GAMMA_MAIN
+
+/* Input Arguments */
+#define	IN			prhs[0]
+#define CF_ERBSCALE prhs[1]
+#define BW_ERB 		prhs[2]
+#define FS 			prhs[3]
+
+/* Output Arguments */
+#define	OUT			plhs[0]	 
+
+#define	max(A, B)	((A) > (B) ? (A) : (B))
+#define	min(A, B)	((A) < (B) ? (A) : (B))
+/*#define true 1
+#define false 0*/
+
+
+/*//-------------------------------------------------------------------------------------------------------------
+
+
+// calculates gain and real and imaginary part of filter coefficient from
+// center frequency, 3 dB full bandwidth and sampling frequency in Hertz
+// (maximum gain of the filter at center frequency is set to be 0 dB)*/
+void gamma_calc_coefficent(float* pcoeff, float cf, float bw, float fs)
+{
+	double att=-3.0/GAMMA_ORDER;
+	double square_linatt=pow(10,att/10);
+	double phi=2*M_PI/fs*bw/2;
+	double b=(-2+2*square_linatt*cos(phi))/(1-square_linatt);
+	double r=-b/2-sqrt(b*b/4-1);
+	phi=2*M_PI*cf/fs;
+	pcoeff[1]=r*cos(phi);
+	pcoeff[2]=r*sin(phi);
+	pcoeff[0]=pow(1-r,GAMMA_ORDER);
+	if(phi != 0.0 && phi != M_PI)
+		pcoeff[0]=pcoeff[0] * 2;
+
+	return;
+} /*// gamma_calc_coefficent()
+
+
+//-------------------------------------------------------------------------------------------------------------
+
+
+// calculate one branch of gammatone filterbank
+// output sample array (real and imaginary part) is calculated from
+// real input sample array using the given filter coefficients
+// (pcoeff[0]: gain, pcoeff[1]: real part, pcoeff[2]: imag. part)
+// The filter state is kept in two arrays of length GAMMA_ORDER.
+// The state must be initialized with 0 and must not be deleted or
+// changed while the filter branch calculates output.
+// (remark: call by reference is used, because parameters for many filter
+// branches can be stored in matrices and calling multiple branches with
+// many input samples gets easier)*/
+void gamma_filterbranch(double* pinsample, unsigned int inlen, double* poutsample, float* pcoeff, float* pstate_real, float* pstate_imag)
+{
+	float *pstate2_real;
+	float *pstate2_imag;
+	float realtemp;
+	float imagtemp;
+	int index;
+	float coeff_real = pcoeff[1];
+	float coeff_imag = pcoeff[2];
+
+	while(inlen-- > 0)
+	{
+		realtemp = *pcoeff * *pinsample++;
+		imagtemp = 0.0;
+		pstate2_real=pstate_real;
+		pstate2_imag=pstate_imag;
+
+		index = GAMMA_ORDER;
+		while(index-- > 0)
+		{
+			realtemp        += coeff_real * *pstate2_real - coeff_imag * *pstate2_imag;
+			imagtemp        += coeff_imag * *pstate2_real + coeff_real * *pstate2_imag;
+			*pstate2_real++  = realtemp ;
+			*pstate2_imag++  = imagtemp ;
+		}
+		*poutsample++ = (double)realtemp;
+	}
+	return;
+} /*// gamma_filterbranch()
+
+
+//-------------------------------------------------------------------------------------------------------------*/
+
+
+#ifdef GAMMA_MAIN
+#include <string.h>
+#define GAMMA_BUFLEN	4096
+
+float* state_real = NULL;
+float* state_imag = NULL;
+
+
+/*//-------------------------------------------------------------------------------------------------------------*/
+
+
+void usage()
+{
+	mexPrintf("\n");
+	mexPrintf(" Usage: OUT = GAMMATONE_R(IN, CF, BW, FS)\n");
+	mexPrintf("\n");
+	mexPrintf(" implements one branch of the gammatone filterbank as an\n");
+	mexPrintf(" 4 times iterated complex bandpass filter of first order\n");
+	mexPrintf("\n");
+	mexPrintf(" Parameters:\n");
+	mexPrintf("   OUT     : output array (only real part)\n");
+	mexPrintf("   IN      : input array (real input signal)\n");
+	mexPrintf("   CF      : filter center frequency on ERBscale\n");
+	mexPrintf("   BW      : filter bandwidth (factor re. ERB of Auditory Filter)\n");
+	mexPrintf("   FS      : sampling frequency of input signal\n");
+	mexPrintf("\n");
+	mexPrintf(" If IN equates to '1', the impulse response (length %d) is generated.\n",GAMMA_BUFLEN);
+	mexPrintf("\n");
+	mexPrintf(" Auditory filter bandwidth:     ERB = 24.7+freq/9.265 (freq in Hz)\n");
+	mexPrintf("                               (see Moore and Glasberg (1989))\n");
+	mexPrintf(" Filter equiv. rect. bandwidth: (see Holdsworth et al. (1988)).\n");
+	mexPrintf("\n");
+	mexPrintf(" copyright: Universitaet Oldenburg 1998-2003\n");
+	mexPrintf(" author   : vh\n");
+	mexPrintf(" date     : Sept 1998\n");
+	mexPrintf("\n"); 
+
+} /*// usage()
+
+
+//-------------------------------------------------------------------------------------------------------------*/
+
+
+void close()
+{
+	if(state_real) free(state_real);
+	if(state_imag) free(state_imag);
+
+} /*// close()
+
+
+//-------------------------------------------------------------------------------------------------------------*/
+
+
+float erbscale2hz(float erbscale)
+{
+	return ( (exp(erbscale/GAMMA_Q) - 1.0) * GAMMA_LIMIT * GAMMA_Q);
+} /*// erbscale2hz()
+
+
+//-------------------------------------------------------------------------------------------------------------*/
+
+
+float erb2hz(float cf_hz, float bw_erb)
+{
+	return ( bw_erb * (GAMMA_LIMIT + cf_hz/GAMMA_Q) );
+} /*// erb2hz()
+
+
+//-------------------------------------------------------------------------------------------------------------*/
+
+
+float factorial(int n)
+{
+	float fact = 1;
+	while(n>1)
+		fact *= n--;
+	return fact;
+} /*// factorial()
+
+
+//-------------------------------------------------------------------------------------------------------------
+
+
+// calculate erb normalization factor*/
+float gamma_erbnorm()
+{
+	float fac = 1.0;
+	fac  = M_PI * factorial(2*GAMMA_ORDER - 2);
+	fac  = fac / pow(factorial(GAMMA_ORDER - 1),2.0);
+	fac  = fac / pow(2.0, 2.0*GAMMA_ORDER - 2.0);
+	return fac;
+} /*// gamma_erbnorm()
+
+
+//-------------------------------------------------------------------------------------------------------------
+
+
+// calc filter coefficient and 3 dB full bandwidth in Hz*/
+float calc_coefficent(float* pcoeff, float cf_hz, float bw_hz, float fs)
+{
+	double fac  = gamma_erbnorm();
+
+	/*// calulcate filter coefficients*/
+	double phi  = 2*M_PI/fs * bw_hz/fac;
+	double r    = exp(-phi);
+	/*// calculate 3 dB full bandwidth*/
+	float fac2   = 2.0*sqrt(pow(2.0, 1.0/GAMMA_ORDER)-1.0);
+	float bw_3dB = fac2 * bw_hz / fac;
+	
+	phi         = 2*M_PI/fs * cf_hz;
+	pcoeff[1]=r*cos(phi);
+	pcoeff[2]=r*sin(phi);
+	pcoeff[0]=pow(1-r,GAMMA_ORDER);
+	if(phi != 0.0 && phi != M_PI)
+		pcoeff[0]=pcoeff[0] * 2;
+
+	
+	return bw_3dB;
+} /*// calc_coefficent()
+
+
+//-------------------------------------------------------------------------------------------------------------*/
+
+
+int gamma_fun(double *in, double *out, unsigned int len, float cf_erbscale, float bw_erb, float fs)
+{
+	int impresp = 0;
+	int retval = 0;
+	
+	/*// filter parameters:
+	// cf_erbscale: center freq. on ERBscale
+	// bw_erb: 		bandwidth re. ERB
+	// fs: 			sampling frequency*/
+	 
+	float cf_hz = erbscale2hz(cf_erbscale);  /*// center freq. in Hz*/
+	float bw_hz = erb2hz(cf_hz, bw_erb);     /*// equiv. rect. bandwidth in Hz*/
+
+	/*// calculate filter branch coefficients and print to stderr*/
+	float coeff[3];
+	float bw_3dB = calc_coefficent(coeff, cf_hz, bw_hz, fs); /*// calc filter coefficient and 3 dB full bandwidth in Hz*/
+	/*
+	mexPrintf("\nINFO: filter parameters:\n");
+	mexPrintf("INFO: center frequency  : %g Hz (%g ERBscale).\n", cf_hz, cf_erbscale);
+	mexPrintf("INFO: Equiv. rect. bandwidth: %g Hz (%g ERB).\n", bw_hz, bw_erb);
+	mexPrintf("INFO: 3dB full bandwidth: %g Hz.\n", bw_3dB);
+	mexPrintf("INFO: sampling frequency: %g Hz.\n", fs);
+	mexPrintf("INFO: filter coefficients: gain:%g real:%g imag.:%g.\n", coeff[0], coeff[1], coeff[2]);
+	// initialize state vectors*/
+	
+	state_real = (float*) calloc(GAMMA_ORDER,sizeof(float));
+	state_imag = (float*) calloc(GAMMA_ORDER,sizeof(float));
+	
+	
+	if(!in || !out || !state_real || !state_imag)
+	{
+		mexErrMsgTxt("ERROR: out of memory.\n");
+		close();
+		return 1;
+	}
+
+	/*// calculate filter output*/
+	gamma_filterbranch(in, len, out, coeff, state_real, state_imag);
+	
+	/*// close*/
+	close();
+
+	return retval;
+} /*// gamma()*/
+
+#endif /*// GAMMA_MAIN
+
+
+//-------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------*/
+
+
+void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+{
+	double *in, *zr, *zi, *out_re, *out_im;
+  	unsigned int i, m, n, len;
+	float *out_temp;
+	float cf_erbscale, bw_erb, fs;
+	double impuls[GAMMA_BUFLEN];
+	int exit = false;
+	impuls[0] = 1;
+	
+  	/* Check for proper number of arguments */
+  	if ((nrhs != 4) || (nlhs != 1)) {
+    	usage();
+    	exit = true;
+  	} 
+  	
+  	if (!exit) {
+  		/* Check the dimensions and type of IN */
+  		m = mxGetM(IN);
+  		n = mxGetN(IN);
+  		if (!mxIsNumeric(IN) || mxIsComplex(IN) || mxIsSparse(IN)  || !mxIsDouble(IN) || (min(m,n) != 1)) 
+   			mexErrMsgTxt("GAMMATONE_R requires that IN be a N x 1 real vector.");
+   	
+   		/* Assign pointers and values to the various parameters*/
+  		in = mxGetPr(IN);
+  		cf_erbscale = mxGetScalar(CF_ERBSCALE);
+  		bw_erb = mxGetScalar(BW_ERB); 
+  		fs = mxGetScalar(FS);
+  	
+  		/* Allocate temporal memory */
+  		len = max(m,n);
+  	
+  		if (len == 1) {    
+  			i = GAMMA_BUFLEN;
+  			while(i--) *(impuls+i) = 0.0;
+  			*impuls = 1.0;
+  			in = impuls;  /*// alternatives Eingangssignal (Impuls)*/
+  			len = GAMMA_BUFLEN; 
+  		}  
+	
+  		/* Create a matrix for the return argument */
+  		OUT = mxCreateDoubleMatrix(1, len, mxREAL);
+  	
+  		/* Get output-pointer */
+  		out_re = mxGetPr(OUT);
+  		/*//out_im = mxGetPi(OUT);  	*/
+	
+		/* Do the actual computations in a subroutine */
+  		gamma_fun(in, out_re, len, cf_erbscale, bw_erb, fs);
+  	
+	}	
+  	
+}
+
+/*//-------------------------------------------------------------------------------------------------------------*/
+
+

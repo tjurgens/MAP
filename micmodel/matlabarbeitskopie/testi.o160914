@@ -1,0 +1,27 @@
+Warning: no access to tty (Bad file descriptor).
+Thus no job control in this shell.
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2008 The MathWorks, Inc.
+                         Version 7.6.0.324 (R2008a)
+                             February 10, 2008
+
+Warning: Duplicate directory name: /home/tim/matlab.
+Warning: Duplicate directory name: /share/apps/Matlab_R2008a/toolbox/local.
+Warning: Duplicate directory name: /home/tim/matlab.
+Warning: Name is nonexistent or not a directory:
+/net/medisan/home/tim/matlab/PEMO SH.
+Warning: Duplicate directory name: /home/tim/matlab.
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+Warning: Could not find an exact (case-sensitive) match for 'GETGAMMAPARAM'.
+/net/medisan/home/tim/matlab/PEMO/GetGammaParam.mexa64 is a case-insensitive
+match and will be used instead.
+You can improve the performance of your code by using exact
+name matches and we therefore recommend that you update your
+usage accordingly. Alternatively, you can disable this warning using
+warning('off','MATLAB:dispatcher:InexactCaseMatch').
+This warning will become an error in future releases.
+>> 

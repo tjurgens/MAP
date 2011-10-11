@@ -195,7 +195,7 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 global actualsignal
 global toplay
 
-toplay = audioplayer(actualsignal.waveform,actualsignal.sfreq);
+toplay = audioplayer(actualsignal.waveform./(max(abs(actualsignal.waveform))-.01),actualsignal.sfreq);
 play(toplay);
 
 
@@ -250,6 +250,17 @@ switch filtertype
             [a,b] = butter(filterorder,cutofffreq*2/actualsignal.sfreq,'low');
             actualsignal.waveform=filter(a,b,actualsignal.waveform);
         end
+    case 'Band pass'
+        if isempty(cutofffreq)|| isempty(filterorder)
+            error('Please specify cutoff frequency')
+        else
+            %realize a band pass as a cascade of low and high pass filter
+            %with the same cutoff-frequency (=centerfrequency)
+            [a,b] = butter(filterorder,cutofffreq*2/actualsignal.sfreq,'low');
+            actualsignal.waveform=filter(a,b,actualsignal.waveform);
+            [a,b] = butter(filterorder,cutofffreq*2/actualsignal.sfreq,'high');
+            actualsignal.waveform=filter(a,b,actualsignal.waveform);
+        end 
 end
 
 %additive noise
@@ -369,7 +380,7 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 %% PLAY THE ORIGINAL WAVEFORM
 global originalsignal
 global toplay
-toplay = audioplayer(originalsignal.waveform,originalsignal.sfreq);
+toplay = audioplayer(originalsignal.waveform./(max(abs(originalsignal.waveform))-.01),originalsignal.sfreq);
 play(toplay)
 
 
@@ -450,6 +461,12 @@ paramChanges=get(handles.edit8,'string');
 if ~strcmp(paramChanges, ';'), paramChanges=[paramChanges ';']; end
 eval(paramChanges);
 
+% set sampling rate to at least 16 kHz
+if actualsignal.sfreq < 16000
+    actualsignal.waveform = resample(actualsignal.waveform,16000,actualsignal.sfreq);
+    actualsignal.sfreq = 16000;
+end
+
 %set level
 actualsignal.waveform = actualsignal.waveform./sqrt(mean(actualsignal.waveform.^2)).*10^(-(94-level4MAP)/20);
 %20*log10(sqrt(mean(actualsignal.waveform.^2))/20e-6) %reference pressure: 20uPa
@@ -506,8 +523,12 @@ method.nonlinCF=savedBFlist;
 minPitch=	80; maxPitch=	4000; numPitches=100;    % specify lags
 pitches=10.^ linspace(log10(minPitch), log10(maxPitch),numPitches);
 pitches=fliplr(pitches);
-filteredSACFParams.lags=1./pitches;     % autocorrelation lags vector
-filteredSACFParams.acfTau=	.003;       % time constant of running ACF
+%filteredSACFParams.lags=1./pitches;     % autocorrelation lags vector
+filteredSACFParams.lags=[method.dt:method.dt:9e-3];
+%filteredSACFParams.lags=[0.5e-3:method.dt:25e-3];
+pitches=1./filteredSACFParams.lags;
+%filteredSACFParams.acfTau=	.003;       % time constant of running ACF
+filteredSACFParams.acfTau=	.006;       % time constant of running ACF
 filteredSACFParams.lambda=	0.12;       % slower filter to smooth ACF
 filteredSACFParams.lambda=	0.01;       % slower filter to smooth ACF
 
@@ -541,13 +562,44 @@ imagesc(P)
 ylabel('periodicities (Hz)')
 xlabel('time (s)')
 %title(['running smoothed (root) SACF. ' saveAN_spikesOrProbability ' input'])
-pt=[1 get(gca,'ytick')]; % force top xtick to show
-set(gca,'ytick',pt)
-set(gca,'ytickLabel', round(pitches(pt)))
+YTickIdx = 1:floor(numel(pitches)/6):numel(pitches);
+set(gca,'ytick',YTickIdx)
+set(gca,'ytickLabel', round(pitches(YTickIdx)))
+[tmp,tmpindex] = min(abs(pitches-800)); %just plot up to 800 Hz
+ylim([tmpindex length(pitches)]);
 tt=get(gca,'xtick');
 tt=tt(tt<length(t));
 set(gca,'xtickLabel', round(100*t(tt))/100)
 colorbar;
+
+FFTACF = zeros(size(sacf,1),size(sacf,2));
+%additionally plot the fourier-transform of the SACF, which is close to the
+%FFT from the original AN pattern signal
+hwsacf = sacf-repmat(mean(sacf),size(sacf,1),1);
+hwsacf(hwsacf<0)=0;
+
+for iCounter = 1:size(sacf,2) %for every sample
+    FFTACF(:,iCounter) = abs(fft(hwsacf(:,iCounter)-mean(sacf(:,iCounter))));
+end
+%  figure;
+%  frequency_axis = [1:1/method.dt/size(FFTACF,1):1/method.dt/2];
+%  [tmp,tmpindex] = min(abs(frequency_axis-3000)); %just plot up to 800 Hz
+%  imagesc(sqrt(FFTACF(1:tmpindex,:)));
+%  %half the size of the fft corresponds to the sampling frequency, which is
+%  %dt in this case => one step is method.dt/(floor(size(FFTACF,1)/2)+1)
+%   axis xy;
+% ylabel('frequencies of lags (Hz)')
+% xlabel('time (s)')
+% %title(['running smoothed (root) SACF. ' saveAN_spikesOrProbability ' input'])
+% YTickIdx = get(gca,'ytick');
+% set(gca,'ytick',YTickIdx)
+% set(gca,'ytickLabel', round(frequency_axis(YTickIdx)))
+% 
+% tt=get(gca,'xtick');
+% tt=tt(tt<length(t));
+% set(gca,'xtickLabel', round(100*t(tt))/100)
+% colorbar;
+
 
 % --- Executes on button press in pushbutton7.
 function pushbutton7_Callback(hObject, eventdata, handles)
