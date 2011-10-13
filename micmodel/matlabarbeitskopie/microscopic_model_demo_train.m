@@ -172,7 +172,7 @@ end
 
 
 % Make vocabulary
-%make_all_vocabulary_mfb(speaker,pcondition);
+make_all_vocabulary_mfb(speaker,pcondition);
 
 % Recognize speech_material using this vocabulary
 recognizeall_mfb(speaker,pcondition,speech_material);
