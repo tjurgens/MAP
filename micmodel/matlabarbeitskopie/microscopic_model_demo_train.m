@@ -13,21 +13,21 @@ function microscopic_model(speech_level,noise_level,workingdirectorynumber,worki
 
 pcondition.auditorymodel = 'PEMO'; %CASP_Diss, CASP_2011, PEMO, or PEMOSH%
 %% PATH & RANDOM INITIALIZE
-addpath /net/medisan/home/tim/matlabarbeitskopie;
-addpath /net/medisan/home/tim/matlabarbeitskopie/PEMO/gfb_new;
+addpath /scratch/tjurgens/MAP/micmodel/matlabarbeitskopie;
+addpath /scratch/tjurgens/MAP/micmodel/matlabarbeitskopie/PEMO/gfb_new;
 
 if strcmp(pcondition.auditorymodel,'CASP_Diss')
-    addpath /net/medisan/home/tim/AFC_june2008/AFC_june2008/models;
-    addpath /net/medisan/home/tim/AFC_june2008/AFC_june2008;
+    addpath /scratch/tjurgens/MAP/micmodel/AFC_june2008/AFC_june2008/models;
+    addpath /scratch/tjurgens/MAP/micmodel/AFC_june2008/AFC_june2008;
 elseif strcmp(pcondition.auditorymodel,'CASP_2011')
-    addpath /net/medisan/home/tim/CASP_2011/;
-    addpath /net/medisan/home/tim/CASP_2011/accessories;
+    addpath /scratch/tjurgens/MAP/micmodel/CASP_2011/;
+    addpath /scratch/tjurgens/MAP/micmodel/CASP_2011/accessories;
 elseif strcmp(pcondition.auditorymodel,'PEMO')
-    addpath /net/medisan/home/tim/matlabarbeitskopie/PEMO;
+    addpath /scratch/tjurgens/MAP/micmodel/matlabarbeitskopie/PEMO;
     
     
 elseif strcmp(pcondition.auditorymodel,'PEMOSH')
-    addpath /net/medisan/home/tim/matlab/PEMOSH;
+    addpath /scratch/tjurgens/MAP/micmodel/matlab/PEMOSH;
     
 else error('auditory model not found')
 end
@@ -38,8 +38,8 @@ rand('twister',sum(10000*tmp_clock(6))); %Tageszeitabhängiger Zustand des Zufall
 randn('state',sum(10000*tmp_clock(6))); %Tageszeitabhängiger Zustand des Zufallsgenerators 
 
 %% Templatepath, templatefilestructure & create new modelling directory
-pcondition.templatedirectory = '/net/medisan/home/tim/templatewavs/';
-pcondition.templatefilestructure = '/net/medisan/home/tim/templatefilestructure/';
+pcondition.templatedirectory = '/scratch/tjurgens/MAP/micmodel/templatewavs/';
+pcondition.templatefilestructure = '/scratch/tjurgens/MAP/micmodel/templatefilestructure/';
 
 indexvec = strfind(workingdirectory,'/');
 %take the 6th index and one more to avoid double //
@@ -54,7 +54,7 @@ clear global simwork
 global simwork
 global home_directory
 
-home_directory = '/net/medisan/home/tim/';
+home_directory = '/scratch/tjurgens/MAP/micmodel/';
 %% INITIALIZE
    
 pause(1); % Pause to assure that outer script has written jobID to protocol file
@@ -171,9 +171,9 @@ end
 make_all_vocabulary_mfb(speaker,pcondition);
 
 % Recognize speech_material using this vocabulary
-%recognizeall_mfb(speaker,pcondition,speech_material);
+recognizeall_mfb(speaker,pcondition,speech_material);
 
 % Summarize results in one file
-%[BIG_CM, hitrate] = sumup_cm(speaker,pcondition);
+[BIG_CM, hitrate] = sumup_cm(speaker,pcondition);
 
 toc

@@ -74,12 +74,12 @@ for i = 1:length(bigCMs)
     eval(['[voic' bigCMs{i} ', manner' bigCMs{i} ', place' bigCMs{i} '] = makePFCM(cons' bigCMs{i} ');']);
 end
 
-matlabdir = '/net/medisan/home/tim/matlab';
-act_dir = pwd;
-cd(matlabdir);
+%matlabdir = '/net/medisan/home/tim/matlab';
+%act_dir = pwd;
+%cd(matlabdir);
 conphon = load('phonemestring_consonants.mat');
 vowphon = load('phonemestring_vowels.mat');
-cd(act_dir);
+%cd(act_dir);
 cd ..
 cd('auswertung');
 
