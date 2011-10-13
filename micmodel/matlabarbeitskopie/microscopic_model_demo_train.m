@@ -35,6 +35,7 @@ elseif strcmp(pcondition.auditorymodel, 'MAP')
     addpath([parentdir '..' filesep 'MAP']);
     addpath([parentdir '..' filesep 'parameterStore']);
     addpath([parentdir '..' filesep 'userProgramsTim']);
+    addpath([parentdir '..' filesep 'utilities']);
 else error('auditory model not found')
 end
 
