@@ -1,3 +1,4 @@
+function MMparentscript(parentdir)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Skript
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17,7 +18,7 @@ speechlevel = 60; %dB SPL
 noiselevel = speechlevel-SNR;
 no_repetitions = 10; %number of repetitions (temporal passages of the noise) to obtain variability
 subpath_to_save = 'MMtest'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
-parentdir = 'C:\MAP\micmodel\';%'/scratch/tjurgens/MAP/micmodel/'; 
+%parentdir = 'C:\MAP\micmodel\';%'/scratch/tjurgens/MAP/micmodel/'; 
 addpath([parentdir 'matlabarbeitskopie' filesep]);
 
 %% Copy template filestructure for results to new subdirectory
