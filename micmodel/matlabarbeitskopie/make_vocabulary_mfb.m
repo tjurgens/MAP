@@ -41,6 +41,7 @@ end
 %%%%%%%%%%
 correcttemplatedir = get_actual_templatedir(actualdirectory,pcondition.templatedirectory);
 cd(correcttemplatedir);
+
 File = dir('*.wav');
 nFiles = length(File);
 if ~isdir('Internal_Representations')      
@@ -96,7 +97,7 @@ for i = 1:nFiles,
             backgroundnoise = backnoise.icranoise_voc{getnr_fromvocabularyset(vocabularyset)};
             % set noise level
             backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
-           
+            
             backgroundnoise = backgroundnoise(1:length(vocabul{i}));
             vocabul{i} = vocabul{i} + backgroundnoise;
         end
@@ -112,19 +113,22 @@ for i = 1:nFiles,
         %hier kein fluktuierendes rauschen, da davon ausgegangen wird, dass
         %das gelernte optimal ist und nicht zufaellig ein logatom
         %schlechter im speicher ist als ein anderes.
-%         if fluctuating_htsn == 1;
-%             pcondition.audiogram = pcondition.audiogram+pcondition.fluctuating_to_add(vocab(i).number);
-%         else
-%             actual_audiogram = pcondition.audiogram;
-%         end
-        if ~isfield(hearing_impairment,'internalnoise')
-            %         %add hearing threshold simulating noise
-            hear_thres_noise = masknoise(pcondition.audiogram,length(vocabul{i}),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
-            %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
-            hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
-            vocabul{i} = hear_thres_noise + vocabul{i};
+        %         if fluctuating_htsn == 1;
+        %             pcondition.audiogram = pcondition.audiogram+pcondition.fluctuating_to_add(vocab(i).number);
+        %         else
+        %             actual_audiogram = pcondition.audiogram;
+        %         end
+        if strcmp(pcondition.auditorymodel,'MAP')
+        else
+            if ~isfield(hearing_impairment,'internalnoise')
+                %         %add hearing threshold simulating noise
+                hear_thres_noise = masknoise(pcondition.audiogram,length(vocabul{i}),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
+                %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
+                hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
+                vocabul{i} = hear_thres_noise + vocabul{i};
+            end
         end
-%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         
         % control of preprocessing by once saving pemo-input
@@ -143,7 +147,7 @@ for i = 1:nFiles,
         end
         
         if pcondition.use_mfb == 1
-            %%%%%%%%%%%%%%% PEMO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %%%%%%%%%%%%%%% AUDITORY MODELS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             if strcmp(pcondition.auditorymodel,'CASP_Diss')
                 IR_vocabultmp = pemo_preproc(vocabul{i},sfreq);%, sfreq,pcondition.nrmodchan);
                 if iscell(IR_vocabultmp)
@@ -172,6 +176,23 @@ for i = 1:nFiles,
             elseif strcmp(pcondition.auditorymodel,'PEMOSH')
                 IR_vocabul = pemo_mfb_hi_schelle1_tim(vocabul{i},sfreq,hearing_impairment.audiogram,pcondition.nrmodchan);
                 % schelles hearing-impaired model
+            elseif strcmp(pcondition.auditorymodel,'MAP')
+                MAP1_14(vocabul{i},sfreq,-1,pcondition.parameterfile,'probability')
+                global ANprobRateOutput %savedBFlist
+                %take only the HSR fibers
+                AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
+                %calculate rate pattern
+                ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+                hopSize = 10; %ms
+                winSize = 25; %ms
+                winSizeSamples = round(winSize*sfreq/1000);
+                hann = hanning(winSizeSamples);
+                hopSizeSamples = round(hopSize*sfreq/1000);
+                for chan = 1:size(AN_HSRoutput,1)
+                    f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
+                    ANsmooth(chan,:) = mean(f,2)';
+                end
+                IR_vocabul = ANsmooth;
             else
                 error('auditory model not found!')
             end
@@ -193,8 +214,12 @@ for i = 1:nFiles,
         end
         
         % cut IR of (white,ol) noise / silence in front
-        for mod_freq = 1:length(IR_vocabul)
-            IR_vocabul{mod_freq} = IR_vocabul{mod_freq}(:,41:end);
+        if strcmp(pcondition.auditorymodel,'MAP')
+            IR_vocabul = IR_vocabul(:,41:end);
+        else
+            for mod_freq = 1:length(IR_vocabul)
+                IR_vocabul{mod_freq} = IR_vocabul{mod_freq}(:,41:end);
+            end
         end
         
         if pcondition.use_mfb == 0

@@ -1,4 +1,4 @@
-function microscopic_model(speech_level,noise_level,workingdirectorynumber,workingdirectory,audiogram,k_fit)
+function microscopic_model_demo_train(speech_level,noise_level,workingdirectorynumber,parentdir,workingdirectory,auditorymodel,subject)
 
 %% Microscopic Model outer Routine
 % input: speech_level
@@ -11,24 +11,30 @@ function microscopic_model(speech_level,noise_level,workingdirectorynumber,worki
 % Tim Jürgens, 2009
 %%%
 
-pcondition.auditorymodel = 'PEMO'; %CASP_Diss, CASP_2011, PEMO, or PEMOSH%
+if strcmp(subject,'Normal')
+    pcondition.parameterfile = 'Normal';
+    pcondition.audiogram = zeros(1,11);
+end
+pcondition.auditorymodel = auditorymodel; %'MAP', 'PEMO', %CASP_Diss, CASP_2011, PEMO, or PEMOSH%
 %% PATH & RANDOM INITIALIZE
-addpath /scratch/tjurgens/MAP/micmodel/matlabarbeitskopie;
-addpath /scratch/tjurgens/MAP/micmodel/matlabarbeitskopie/PEMO/gfb_new;
+addpath([parentdir 'matlabarbeitskopie' filesep]);
 
-if strcmp(pcondition.auditorymodel,'CASP_Diss')
-    addpath /scratch/tjurgens/MAP/micmodel/AFC_june2008/AFC_june2008/models;
-    addpath /scratch/tjurgens/MAP/micmodel/AFC_june2008/AFC_june2008;
+if strcmp(pcondition.auditorymodel,'PeMO')
+    addpath([parentdir 'matlabarbeitskopie' filesep 'PEMO' filesep 'gfb_new']); 
+elseif strcmp(pcondition.auditorymodel,'CASP_Diss')
+    addpath([parentdir 'AFC_june2008' filesep 'AFC_june2008' filesep 'models']);
+    addpath([parentdir 'AFC_june2008' filesep 'AFC_june2008']);
 elseif strcmp(pcondition.auditorymodel,'CASP_2011')
-    addpath /scratch/tjurgens/MAP/micmodel/CASP_2011/;
-    addpath /scratch/tjurgens/MAP/micmodel/CASP_2011/accessories;
+    addpath([parentdir 'CASP_2011']);
+    addpath([parentdir 'CASP_2011' filesep 'accessoires']);
 elseif strcmp(pcondition.auditorymodel,'PEMO')
-    addpath /scratch/tjurgens/MAP/micmodel/matlabarbeitskopie/PEMO;
-    
-    
+    addpath([parentdir 'matlabarbeitskopie' filesep 'PEMO']);
 elseif strcmp(pcondition.auditorymodel,'PEMOSH')
-    addpath /scratch/tjurgens/MAP/micmodel/matlab/PEMOSH;
-    
+    addpath([parentdir 'matlabarbeitskopie' filesep 'PEMOSH']);
+elseif strcmp(pcondition.auditorymodel, 'MAP')
+    addpath([parentdir '..' filesep 'MAP']);
+    addpath([parentdir '..' filesep 'parameterStore']);
+    addpath([parentdir '..' filesep 'userProgramsTim']);
 else error('auditory model not found')
 end
 
@@ -38,13 +44,9 @@ rand('twister',sum(10000*tmp_clock(6))); %Tageszeitabhängiger Zustand des Zufall
 randn('state',sum(10000*tmp_clock(6))); %Tageszeitabhängiger Zustand des Zufallsgenerators 
 
 %% Templatepath, templatefilestructure & create new modelling directory
-pcondition.templatedirectory = '/scratch/tjurgens/MAP/micmodel/templatewavs/';
-pcondition.templatefilestructure = '/scratch/tjurgens/MAP/micmodel/templatefilestructure/';
+pcondition.templatedirectory = [parentdir 'templatewavs' filesep];
+pcondition.templatefilestructure = [parentdir 'templatefilestructure' filesep];
 
-indexvec = strfind(workingdirectory,'/');
-%take the 6th index and one more to avoid double //
-modelrootdirectory = workingdirectory(1:indexvec(6));
-create_directories(modelrootdirectory,pcondition.templatefilestructure);
 tic
 
 global backnoiseshift 
@@ -54,7 +56,7 @@ clear global simwork
 global simwork
 global home_directory
 
-home_directory = '/scratch/tjurgens/MAP/micmodel/';
+home_directory = parentdir;
 %% INITIALIZE
    
 pause(1); % Pause to assure that outer script has written jobID to protocol file
@@ -63,19 +65,21 @@ initial_index_of_subjectID = regexp(workingdirectory,'\w\w\d\d');
 pcondition.subjectID = workingdirectory(initial_index_of_subjectID:initial_index_of_subjectID+3);
 
 %% SET MODEL CONFIGURATION
-pcondition.audiogram = audiogram;
+%pcondition.audiogram = audiogram;
 if exist('k_fit')
     pcondition.k_fit = k_fit;
+else
+    pcondition.k_fit = [0 0 0 0];
 end
 pcondition.audiogramfreqs = [];
 pcondition.nrmodchan = 4;
 fluctuating_htsn = 0;  %1 == fluctuating hearing threshold enabled
 backnoiseshift = workingdirectorynumber;
 pcondition.speechrecognizer = 'DTW';
-speaker = 'S02M_NO'
+speaker = 'S02M_NO';
 pcondition.noiselevel = noise_level;
 pcondition.speechlevel = speech_level;
-speech_material = 'normal_auswahl'
+speech_material = 'normal_auswahl';
 
 pcondition.distancemeasure = 'Lorentz'; %Lorentz, Euklid, Absolut
 
@@ -168,7 +172,7 @@ end
 
 
 % Make vocabulary
-make_all_vocabulary_mfb(speaker,pcondition);
+%make_all_vocabulary_mfb(speaker,pcondition);
 
 % Recognize speech_material using this vocabulary
 recognizeall_mfb(speaker,pcondition,speech_material);

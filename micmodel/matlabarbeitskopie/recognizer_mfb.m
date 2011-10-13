@@ -132,12 +132,15 @@ for j = 1:nFiles,
         else
             actual_audiogram = pcondition.audiogram;
         end
-        if ~isfield(hearing_impairment,'internalnoise')
-            %add hearing threshold simulating noise
-            hear_thres_noise = masknoise(actual_audiogram,length(testsignal),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
-            %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
-            hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
-            testsignal = hear_thres_noise + testsignal;
+        if strcmp(pcondition.auditorymodel,'MAP')
+        else
+            if ~isfield(hearing_impairment,'internalnoise')
+                %add hearing threshold simulating noise
+                hear_thres_noise = masknoise(actual_audiogram,length(testsignal),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
+                %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
+                hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
+                testsignal = hear_thres_noise + testsignal;
+            end
         end
 %         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
@@ -189,6 +192,23 @@ for j = 1:nFiles,
             elseif strcmp(pcondition.auditorymodel,'PEMOSH')
                 IR_testsignal = pemo_mfb_hi_schelle1_tim(testsignal,sfreq,hearing_impairment.audiogram,pcondition.nrmodchan);
                 % schelles hearing-impaired model
+            elseif strcmp(pcondition.auditorymodel,'MAP')
+                MAP1_14(testsignal,sfreq,-1,pcondition.parameterfile,'probability')
+                global ANprobRateOutput %savedBFlist
+                %take only the HSR fibers
+                AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
+                %calculate rate pattern
+                ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+                hopSize = 10; %ms
+                winSize = 25; %ms
+                winSizeSamples = round(winSize*sfreq/1000);
+                hann = hanning(winSizeSamples);
+                hopSizeSamples = round(hopSize*sfreq/1000);
+                for chan = 1:size(AN_HSRoutput,1)
+                    f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
+                    ANsmooth(chan,:) = mean(f,2)';
+                end
+                IR_testsignal = ANsmooth;
             else
                 error('auditory model not found!')
             end
@@ -210,8 +230,12 @@ for j = 1:nFiles,
         end
     
         % cut IR of (white,ol) noise / silence in front
-        for mod_freq = 1:length(IR_testsignal)
-             IR_testsignal{mod_freq} = IR_testsignal{mod_freq}(:,41:end);
+        if strcmp(pcondition.auditorymodel,'MAP')
+            IR_testsignal = IR_testsignal(:,41:end);
+        else
+            for mod_freq = 1:length(IR_testsignal)
+                IR_testsignal{mod_freq} = IR_testsignal{mod_freq}(:,41:end);
+            end
         end
         
         if pcondition.use_mfb == 0
@@ -226,9 +250,12 @@ for j = 1:nFiles,
        
         % equalize testsignal-IR in time damit in allen
         % modulationsfrequenz-IRs die zeit gleich ist.
-        zeitlaenge = min(cellfun('size',IR_testsignal,2)); %minimal timelength of the modulation frequency layers
-        for mod_freq = 1:length(IR_testsignal)
-             IR_testsignal{mod_freq} = IR_testsignal{mod_freq}(:,1:zeitlaenge);
+        if strcmp(pcondition.auditorymodel,'MAP')
+        else
+            zeitlaenge = min(cellfun('size',IR_testsignal,2)); %minimal timelength of the modulation frequency layers
+            for mod_freq = 1:length(IR_testsignal)
+                IR_testsignal{mod_freq} = IR_testsignal{mod_freq}(:,1:zeitlaenge);
+            end
         end
         
         %%%%%look especially at the middle phoneme, new: Aug.09
@@ -257,14 +284,21 @@ for j = 1:nFiles,
 
     % determine distance between testsignal and vocabulary-templates
         for k = 1:length(vocabulary) 
-            % equalize template-IRs in time
-            zeitlaenge = min(cellfun('length',vocabulary(k).IR(1,:)));%minimal timelength of the modulation frequency layers
-            for mod_freq = 1:length(vocabulary(k).IR)
-                vocabulary(k).IR{mod_freq} = vocabulary(k).IR{mod_freq}(:,1:zeitlaenge);
-            end
-            %%%%%DTW%%%%%%
-            if strcmp(pcondition.speechrecognizer,'DTW')
-                distance(j,k) = dynamictimewarp_mfb(vocabulary(k).IR,IR_testsignal,pcondition.distancemeasure); 
+            if strcmp(pcondition.auditorymodel,'MAP')
+                %%%%%DTW%%%%%%
+                if strcmp(pcondition.speechrecognizer,'DTW')
+                    distance(j,k) = dynamictimewarp(vocabulary(k).IR,IR_testsignal);
+                end
+            else 
+                % equalize template-IRs in time
+                zeitlaenge = min(cellfun('length',vocabulary(k).IR(1,:)));%minimal timelength of the modulation frequency layers
+                for mod_freq = 1:length(vocabulary(k).IR)
+                    vocabulary(k).IR{mod_freq} = vocabulary(k).IR{mod_freq}(:,1:zeitlaenge);
+                end
+                %%%%%DTW%%%%%%
+                if strcmp(pcondition.speechrecognizer,'DTW')
+                    distance(j,k) = dynamictimewarp_mfb(vocabulary(k).IR,IR_testsignal,pcondition.distancemeasure);
+                end
             end
         end
         
