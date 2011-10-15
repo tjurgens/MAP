@@ -33,7 +33,7 @@ addpath([parentdir 'matlabarbeitskopie' filesep]);
      error('directory could not be installed. check permission rights');
  end
  
- if ~copyfile([parentdir 'templatefilestructure' filesep '*.*'],[parentdir subpath_to_save filesep]);
+ if ~copyfile([parentdir 'templatefilestructure' filesep '*.*'],[parentdir '..' filesep '..' filesep subpath_to_save filesep]);
      error('result file structure could not be copied. check permission rights');
  end
 
@@ -41,7 +41,7 @@ addpath([parentdir 'matlabarbeitskopie' filesep]);
 for iCounter = 1:no_repetitions
     for jCounter = 1:length(SNR)
         noiselevel = speechlevel-SNR(jCounter);
-        complete_path = [parentdir subpath_to_save filesep 'daten' filesep 'identicalrunninglorentz' num2str(iCounter) filesep 'S02M_NO' filesep];
+        complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunninglorentz' num2str(iCounter) filesep 'S02M_NO' filesep];
         microscopic_model_demo_train(speechlevel,noiselevel,iCounter,parentdir,complete_path,auditorymodel,subject);
     end
 end

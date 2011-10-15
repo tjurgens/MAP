@@ -292,7 +292,7 @@ for j = 1:nFiles,
             if strcmp(pcondition.auditorymodel,'MAP')
                 %%%%%DTW%%%%%%
                 if strcmp(pcondition.speechrecognizer,'DTW')
-                    distance(j,k) = dynamictimewarp(vocabulary(k).IR,IR_testsignal);
+                    distance(j,k) = dynamictimewarp(vocabulary(k).IR,IR_testsignal,pcondition.distancemeasure);
                 end
             else 
                 % equalize template-IRs in time

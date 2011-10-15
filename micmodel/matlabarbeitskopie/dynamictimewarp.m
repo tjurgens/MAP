@@ -82,14 +82,47 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 distancematrix = zeros(length(template(1,:)),length(testsignal(1,:))); %preallocation due to speed
 
-for i = 1:length(template(1,:))
-    for j = 1:length(testsignal(1,:))
-        distancematrix(i,j) = sqrt(sum((template(:,i)-testsignal(:,j)).^2));
+%%%%% EUCLIDIAN %%%%%
+if strcmp(distancemeasure,'Euklid')
+    for i = 1:length(template(1,:))
+        for j = 1:length(testsignal(1,:))
+            distancematrix(i,j) = sqrt(sum((template(:,i)-testsignal(:,j)).^2));
+            if ShowWaitBar,
+                waitbar(i/length(template)/3,h);                  % refresh display of progress
+            end
+        end
+    end
+    %%%%% END EUCLIDIAN %%%%%%
+    %%%%% LORENTZ %%%%%%
+elseif strcmp(distancemeasure,'Lorentz')
+    for i = 1:size(template,2)
+        for j = 1:size(testsignal,2)
+            distancematrix(i,j) = ...
+                sum(sum(log(1+1/2*(template(:,i,:)-testsignal(:,j,:)).^2)));
+        end
         if ShowWaitBar,
             waitbar(i/length(template)/3,h);                  % refresh display of progress
-        end 
+        end
     end
+    %%%%% END LORENTZ %%%%%
+    
+    %%%%% 2-SIDED EXPONENTIAL %%%%%%
+elseif strcmp(distancemeasure,'Absolut')
+    for i = 1:size(template,2)
+        for j = 1:size(testsignal,2)
+            distancematrix(i,j) = ...
+                sum(sum(abs(template(:,i,:)-testsignal(:,j,:))));
+        end
+        if ShowWaitBar,
+            waitbar(i/length(template)/3,h);                  % refresh display of progress
+        end
+    end
+else
+    error('Distancemeasure not found!')
 end
+
+%%%%% END 2-SIDED EXPONENTIAL %%%%%
+
 
 %plot distancematrix
 if Verbatim,
