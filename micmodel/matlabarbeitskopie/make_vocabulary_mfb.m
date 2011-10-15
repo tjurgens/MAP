@@ -96,8 +96,12 @@ for i = 1:nFiles,
         else
             backgroundnoise = backnoise.icranoise_voc{getnr_fromvocabularyset(vocabularyset)};
             % set noise level
-            backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
-            
+            if strcmp(pcondition.auditorymodel,'MAP')
+                backgroundnoise = backgroundnoise./sqrt(mean(backgroundnoise.^2)).*10^(-(94-pcondition.noiselevel)/20);
+                %20*log10(sqrt(mean(backgroundnoise.^2))/20e-6) %reference pressure: 20uPa
+            else
+                backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
+            end
             backgroundnoise = backgroundnoise(1:length(vocabul{i}));
             vocabul{i} = vocabul{i} + backgroundnoise;
         end

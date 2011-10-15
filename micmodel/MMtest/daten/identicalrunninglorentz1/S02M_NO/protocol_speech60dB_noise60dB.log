@@ -154,3 +154,29 @@ Perceptual Distance Measure: Lorentz
 
 Auditory Model: MAP
 Perception Model Details:
+Time Stamp: 2011 10 15 8 40 12.3086
+
+
+Speech Level: 60 dB
+Noise Level: 60 dB
+
+
+Audiogram data: 0  0  0  0  0  0  0  0  0  0  0 
+Audiogram Freqs: default
+Subject ID: 
+Additional subject specific parameters: 
+k_fit: 0  0  0  0
+
+
+
+Repetition session: 1
+Working directory path: /Users/timjurgens/MAP/MAP/micmodel/MMtest/daten/identicalrunninglorentz1/S02M_NO/
+Chance number to check status of rand: 0.3590
+Chance number to check status of randn: 0.6222
+Choice of the recognized response alternative: Least distance
+Speech Recognizer: DTW
+Perceptual Distance Measure: Lorentz
+
+
+Auditory Model: MAP
+Perception Model Details:

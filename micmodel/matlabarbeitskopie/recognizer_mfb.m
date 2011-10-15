@@ -102,7 +102,12 @@ for j = 1:nFiles,
         else
             backgroundnoise = backnoise.icranoise_test{getnr_fromvocabularyset(vocabularyset)};
             % set noise level
-            backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
+            if strcmp(pcondition.auditorymodel,'MAP')
+                backgroundnoise = backgroundnoise./sqrt(mean(backgroundnoise.^2)).*10^(-(94-pcondition.noiselevel)/20);
+                %20*log10(sqrt(mean(backgroundnoise.^2))/20e-6) %reference pressure: 20uPa
+            else
+                backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
+            end
             % set initial sample at random for creating random noise.
             in_samp = 1;%ceil(500*rand);
             backgroundnoise = backgroundnoise(in_samp:length(testsignal)+in_samp-1);

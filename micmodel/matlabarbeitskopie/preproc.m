@@ -46,7 +46,12 @@ end
 
 
 % set speech level
-cutted_signal = cutted_signal./rms(cutted_signal)/db2factor(pcondition.logalevel); 
+if strcmp(pcondition.auditorymodel,'MAP')
+    cutted_signal = cutted_signal./sqrt(mean(cutted_signal.^2)).*10^(-(94-pcondition.logalevel)/20);
+    %20*log10(sqrt(mean(cutted_signal.^2))/20e-6) %reference pressure: 20uPa
+else
+    cutted_signal = cutted_signal./rms(cutted_signal)/db2factor(pcondition.logalevel); 
+end
 
 disp('.');
 % add (on demand) white noise before speech sample to set initial conditions of
