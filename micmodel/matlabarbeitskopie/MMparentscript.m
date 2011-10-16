@@ -48,6 +48,6 @@ end
 
 
 %% Evaluate
-auswertung_model([parentdir subpath_to_save]);
+auswertung_model([parentdir '..' filesep '..' filesep subpath_to_save]);
 
 %eof
