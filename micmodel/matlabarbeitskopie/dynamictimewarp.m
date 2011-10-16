@@ -16,7 +16,7 @@ if nargin < 2,
     error('Not enough input arguments.');
 end
 
-if nargin > 2,
+if nargin > 3,
     error('Too many arguments.')
 end
 
