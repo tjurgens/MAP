@@ -1,4 +1,4 @@
-function distance = dynamictimewarp(template, testsignal)
+function distance = dynamictimewarp(template, testsignal, distancemeasure)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %   Classical Dynamic time warping algorithm as described in 
