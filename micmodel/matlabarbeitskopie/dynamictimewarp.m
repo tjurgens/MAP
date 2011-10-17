@@ -98,7 +98,7 @@ elseif strcmp(distancemeasure,'Lorentz')
     for i = 1:size(template,2)
         for j = 1:size(testsignal,2)
             distancematrix(i,j) = ...
-                sum(sum(log(1+1/2*(template(:,i,:)-testsignal(:,j,:)).^2)));
+                sum(log(1+1/2*(template(:,i)-testsignal(:,j)).^2));
         end
         if ShowWaitBar,
             waitbar(i/length(template)/3,h);                  % refresh display of progress
@@ -111,7 +111,7 @@ elseif strcmp(distancemeasure,'Absolut')
     for i = 1:size(template,2)
         for j = 1:size(testsignal,2)
             distancematrix(i,j) = ...
-                sum(sum(abs(template(:,i,:)-testsignal(:,j,:))));
+                sum(abs(template(:,i)-testsignal(:,j)));
         end
         if ShowWaitBar,
             waitbar(i/length(template)/3,h);                  % refresh display of progress
