@@ -82,7 +82,7 @@ pcondition.noiselevel = noise_level;
 pcondition.speechlevel = speech_level;
 speech_material = 'normal_auswahl';
 
-pcondition.distancemeasure = 'Lorentz'; %Lorentz, Euklid, Absolut
+pcondition.distancemeasure = 'Euklid'; %Lorentz, Euklid, Absolut
 
 if strcmp(pcondition.auditorymodel,'CASP_Diss') || strcmp(pcondition.auditorymodel,'CASP_2011')
     % INITIALIZE
@@ -173,7 +173,7 @@ end
 
 
 % Make vocabulary
-%make_all_vocabulary_mfb(speaker,pcondition);
+make_all_vocabulary_mfb(speaker,pcondition);
 
 % Recognize speech_material using this vocabulary
 recognizeall_mfb(speaker,pcondition,speech_material);

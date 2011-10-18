@@ -486,10 +486,37 @@ set(handles.edit11,'String',num2str(1000*size(AN_HSRoutput,2)/2/actualsignal.sfr
 
 %plot the fourierhistogram as image plot
 %formantpattern = fourierautocorrelationhistogram_direct(AN_HSRoutput,actualsignal.sfreq,handles.axes5);
-formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,actualsignal.sfreq,handles.axes5,savedBFlist);
-%formantpattern = getIFpattern(AN_HSRoutput,actualsignal.sfreq,handles.axes5,savedBFlist);
+%formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,actualsignal.sfreq,handles.axes5,savedBFlist);
+formantpattern = getIFpattern(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
+%formantpattern = getreassignedpattern(AN_HSRoutput,actualsignal.sfreq,handles.axes5,savedBFlist);
 %caxis([0 4e6]);
 %caxis([0 2000]);
+
+%plot the result
+%if ~exist('plothandle'), plothandle=figure; end
+%maxfrequency = 4000;
+%[tmp,number_of_channels_to_display] = min(abs(frequency-maxfrequency));
+%frequency = frequency(1:number_of_channels_to_display);
+
+set(gcf,'Currentaxes',handles.axes5);
+
+YTickIdx = 1:floor(numel(BFs)/6):numel(BFs);
+XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
+YTickIdxRev = numel(frequency)+1-YTickIdx;
+if ~isempty(gca)
+    axes(gca);  %#ok<MAXES>
+    %imagesc(fach(1:number_of_channels_to_display,:));
+    imagesc(fach_logscale);
+    axis xy
+    set(gca, 'YTick', YTickIdx);
+    set(gca, 'YTickLabel', num2str(   BFs(YTickIdx)', '%0.0f' ));
+    ylabel('frequency (Hz)')
+    set(gca, 'XTick', XTickIdx);
+    set(gca, 'XTickLabel', XTickIdx.*3);
+    xlabel('Time (ms)')
+end
+
+
 colorbar;
 
 %plot the rate output

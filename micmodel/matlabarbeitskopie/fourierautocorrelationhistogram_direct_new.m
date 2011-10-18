@@ -1,4 +1,4 @@
-function fach_logscale=fourierautocorrelationhistogram_direct_new(ANpattern,sfreq,BFs)
+function fach=fourierautocorrelationhistogram_direct_new(ANpattern,sfreq,BFs)
 
 
 time_axis = 0:1/sfreq:(size(ANpattern,2)-1)/sfreq;
@@ -6,30 +6,30 @@ time_axis = 0:1/sfreq:(size(ANpattern,2)-1)/sfreq;
 %find how many samples of AN_pattern are 10ms and 3ms
 %one_sample_is_a_time_of = time_axis(2);
 [tmp, start_time_index] = min(abs(0-time_axis));
-[tmp, stop25_time_index] = min(abs(0.025-time_axis));
-number_of_samples25ms = stop25_time_index - start_time_index;
+[tmp, stop20_time_index] = min(abs(0.020-time_axis));
+number_of_samples20ms = stop20_time_index - start_time_index;
 
-[tmp, stop10_time_index] = min(abs(0.010-time_axis));
-number_of_samples10ms = stop10_time_index - start_time_index;
-every_10ms = 1:number_of_samples10ms:size(ANpattern,2)-number_of_samples25ms;
+[tmp, stop3_time_index] = min(abs(0.003-time_axis));
+number_of_samples3ms = stop3_time_index - start_time_index;
+every_3ms = 1:number_of_samples3ms:size(ANpattern,2)-number_of_samples20ms;
 
 hamm_window = hamming(11);
 halfHamming = (length(hamm_window)-1)/2;
 
 % window normalization
 
-norm = conv(ones(1,floor(number_of_samples25ms/2)),hamm_window);
+norm = conv(ones(1,floor(number_of_samples20ms/2)),hamm_window);
 norm = norm(5+1:end-5)';
-win_size = number_of_samples25ms;
+win_size = number_of_samples20ms;
 half_win_size = floor(win_size/2);
-hop_size = number_of_samples10ms;
+hop_size = number_of_samples3ms;
 
 %preallocation due to speed
 fftbinlength = 1000;
-fach = zeros(fftbinlength/2,size(every_10ms,2)+1);
+fach = zeros(fftbinlength/2,size(every_3ms,2)+1);
 
 for iCounter = 1:size(ANpattern,1) %each channel
-    %fprintf('Channel No. %i\n',iCounter);
+    fprintf('Channel No. %i\n',iCounter);
     %time_counter = 1;
     %for jCounter = every_3ms %every 3ms time segment
     

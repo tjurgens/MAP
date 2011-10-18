@@ -1,4 +1,4 @@
-function IFpattern = getIFpattern(ANpattern,sfreq,plothandle,BFlist)
+function IFpattern = getreassignedpattern(ANpattern,sfreq,plothandle,BFlist)
 % function that calculates the instantaneous frequency in time slices of the ANpattern
 % and stores it into a histogram
 
@@ -27,7 +27,7 @@ hop_size = number_of_samples3ms;
 
 %preallocation due to speed
 %fach = zeros(half_win_size,size(every_3ms,2)+1);
-numChannels = 41;
+numChannels = 61;
 BFlist=round(logspace(log10(min(BFlist)),log10(max(BFlist)),numChannels));
 IFpattern = zeros(length(BFlist),size(every_3ms,2)+1);
 
@@ -71,9 +71,14 @@ for iCounter = 1:size(ANpattern,1) %each channel
 % %         idx = (idx-1+a./(a-b));
 %         [sorted,sortedindex]=sort(fsra(idx),'descend');
 
-        h=hilbert(smoothed_frame-mean(smoothed_frame));
-        p=unwrap(angle(h));
-        IF = mean(diff(p)*sfreq/(2*pi)); %calculate the instantaneous frequency
+        h = hann(length(smoothed_frame)-1);
+        %t = 1:length(smoothed_frame);
+        N = length(smoothed_frame);
+
+        [tfr,rtfr] = tfrrsp(hilbert(smoothed_frame-mean(smoothed_frame))',1,N,h,0);
+        %h=hilbert(smoothed_frame-mean(smoothed_frame));
+        %p=unwrap(angle(h));
+        %IF = mean(diff(p)*sfreq/(2*pi)); %calculate the instantaneous frequency
         %take the mean rate across this frame as a value to be stored in
         %the histogram
         amp = mean(smoothed_frame);
@@ -121,4 +126,3 @@ if ~isempty(gca)
     set(gca, 'XTickLabel', XTickIdx.*3);
     xlabel('Time (ms)')
 end
-

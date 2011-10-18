@@ -199,7 +199,7 @@ for j = 1:nFiles,
                 % schelles hearing-impaired model
             elseif strcmp(pcondition.auditorymodel,'MAP')
                 MAP1_14(testsignal,sfreq,-1,pcondition.parameterfile,'probability')
-                global ANprobRateOutput %savedBFlist
+                global ANprobRateOutput savedBFlist
                 %take only the HSR fibers
                 AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
                 %calculate rate pattern
@@ -213,7 +213,14 @@ for j = 1:nFiles,
                     f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
                     ANsmooth(chan,:) = mean(f,2)';
                 end
-                IR_testsignal = ANsmooth;
+                
+                %calculate timing pattern
+                formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
+                
+                %concatenate the features
+                IR_testsignal = [ANsmooth(:,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
+                    1/10.*formantpattern(:,1:min([size(ANsmooth,2) size(formantpattern,2)]))];
+                
             else
                 error('auditory model not found!')
             end
