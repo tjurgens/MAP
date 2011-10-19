@@ -1,0 +1,78 @@
+Time Stamp: 2011 10 12 17 42 31.7723
+
+
+Speech Level: 60 dB
+Noise Level: 75 dB
+
+
+Audiogram data: 0  0  0  0  0  0  0  0  0  0  0 
+Audiogram Freqs: default
+Subject ID: 
+Additional subject specific parameters: 
+k_fit: 0  0  0  0
+
+
+
+Repetition session: 1
+Working directory path: /scratch/tjurgens/MAP/micmodel/demomicmodel/daten/identicalrunninglorentz1/S02M_NO/
+Chance number to check status of rand: 0.2524
+Chance number to check status of randn: -0.3545
+Choice of the recognized response alternative: Least distance
+Speech Recognizer: DTW
+Perceptual Distance Measure: Lorentz
+
+
+Auditory Model: PEMO
+Perception Model Details:
+Time Stamp: 2011 10 12 17 47 24.2721
+
+
+Speech Level: 60 dB
+Noise Level: 75 dB
+
+
+Audiogram data: 0  0  0  0  0  0  0  0  0  0  0 
+Audiogram Freqs: default
+Subject ID: 
+Additional subject specific parameters: 
+k_fit: 0  0  0  0
+
+
+
+Repetition session: 1
+Working directory path: /scratch/tjurgens/MAP/micmodel/demomicmodel/daten/identicalrunninglorentz1/S02M_NO/
+Chance number to check status of rand: 0.9517
+Chance number to check status of randn: -0.6963
+Choice of the recognized response alternative: Least distance
+Speech Recognizer: DTW
+Perceptual Distance Measure: Lorentz
+
+
+Auditory Model: PEMO
+Perception Model Details:
+Time Stamp: 2011 10 12 17 56 23.5415
+
+
+Speech Level: 60 dB
+Noise Level: 75 dB
+
+
+Audiogram data: 0  0  0  0  0  0  0  0  0  0  0 
+Audiogram Freqs: default
+Subject ID: 
+Additional subject specific parameters: 
+k_fit: 0  0  0  0
+
+
+
+Repetition session: 1
+Working directory path: /scratch/tjurgens/MAP/micmodel/demomicmodel/daten/identicalrunninglorentz1/S02M_NO/
+Chance number to check status of rand: 0.1667
+Chance number to check status of randn: 1.3920
+Choice of the recognized response alternative: Least distance
+Speech Recognizer: DTW
+Perceptual Distance Measure: Lorentz
+
+
+Auditory Model: PEMO
+Perception Model Details:

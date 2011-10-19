@@ -1,0 +1,26 @@
+Time Stamp: 2011 10 12 19 2 47.8798
+
+
+Speech Level: 60 dB
+Noise Level: 75 dB
+
+
+Audiogram data: 0  0  0  0  0  0  0  0  0  0  0 
+Audiogram Freqs: default
+Subject ID: tz10
+Additional subject specific parameters: 
+k_fit: 0  0  0  0
+
+
+
+Repetition session: 10
+Working directory path: /scratch/tjurgens/MAP/micmodel/demomicmodel/daten/identicalrunninglorentz10/S02M_NO/
+Chance number to check status of rand: 0.7400
+Chance number to check status of randn: -0.2247
+Choice of the recognized response alternative: Least distance
+Speech Recognizer: DTW
+Perceptual Distance Measure: Lorentz
+
+
+Auditory Model: PEMO
+Perception Model Details:

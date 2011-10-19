@@ -1,0 +1,26 @@
+Time Stamp: 2009 9 17 15 15 18.5769
+
+
+Speech Level: 30 dB
+Noise Level: nobackgroundnoise 
+
+
+Audiogram data: 0  0  0  0  0  0  0  0  0  0  0 
+Audiogram Freqs: default
+Subject ID: 
+Additional subject specific parameters: 
+Flag "Hearing Impairment": []
+
+
+
+Number of repetitions: 1
+Working directory path: /net/medisan/home/tim/pemotesttemplateLPC/daten/identicalrunninglorentz1/S02M_NO/
+Chance number to check status of rand: 0.0881
+Chance number to check status of randn: 1.0199
+Choice of the recognized response alternative: Least distance
+Speech Recognizer: DTW
+Perceptual Distance Measure: Lorentzian
+
+
+Auditory Model: PeMo
+Perception Model Details:
