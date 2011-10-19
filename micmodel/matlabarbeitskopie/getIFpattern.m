@@ -1,4 +1,4 @@
-function IFpattern = getIFpattern(ANpattern,sfreq,plothandle,BFlist)
+function downsampledIFpattern = getIFpattern(ANpattern,sfreq,BFlist)
 % function that calculates the instantaneous frequency in time slices of the ANpattern
 % and stores it into a histogram
 
@@ -27,12 +27,13 @@ hop_size = number_of_samples3ms;
 
 %preallocation due to speed
 %fach = zeros(half_win_size,size(every_3ms,2)+1);
-numChannels = 41;
-BFlist=round(logspace(log10(min(BFlist)),log10(max(BFlist)),numChannels));
-IFpattern = zeros(length(BFlist),size(every_3ms,2)+1);
+numChannels = 100;
+BFlist100=round(logspace(log10(min(BFlist)),log10(3500),numChannels)); %3500 Hz 
+%is the assumed upper limit for formant frequencies and for locking in the AN
+IFpattern = zeros(length(BFlist100),size(every_3ms,2)+1);
 
 for iCounter = 1:size(ANpattern,1) %each channel
-    fprintf('Channel No. %i\n',iCounter);
+    %fprintf('Channel No. %i\n',iCounter);
     %time_counter = 1;
     %for jCounter = every_3ms %every 3ms time segment
     
@@ -73,13 +74,13 @@ for iCounter = 1:size(ANpattern,1) %each channel
 
         h=hilbert(smoothed_frame-mean(smoothed_frame));
         p=unwrap(angle(h));
-        IF = mean(diff(p)*sfreq/(2*pi)); %calculate the instantaneous frequency
+        IF = median(diff(p)*sfreq/(2*pi)); %calculate the instantaneous frequency
         %take the mean rate across this frame as a value to be stored in
         %the histogram
         amp = mean(smoothed_frame);
         
         %find the closest value of BFlist to put it into the histogram
-        [tmp,idx] = min(abs(IF-BFlist));
+        [tmp,idx] = min(abs(IF-BFlist100));
         % just take the highest value of the fourier-transform
          %valid_peak_index = sortedindex(1:min([length(sortedindex) 1]));
          %amp = sorted(1:min([length(sortedindex) 1]));
@@ -98,27 +99,41 @@ for iCounter = 1:size(ANpattern,1) %each channel
     end
 end
 
+%'downsample' the highly resolved pattern by picking out the maximum in
+%each desired bin (should be more robust than just taking the average)
+%find the index of the BFlist that fits to 3500 Hz
+
+downsampledIFpattern = zeros(floor(size(IFpattern,1)/5),size(frames,1));
+for iCounter = 1:floor(size(IFpattern,1)/5) %loop over BFlist channels
+    for frame=1:size(frames,1)
+        %take the maximum in every 5 channels for the new pattern
+       downsampledIFpattern(iCounter,frame) = max(IFpattern((iCounter-1)*5+1:iCounter*5,frame));
+    end
+end
+
+
+
 
 %plot the result
-if ~exist('plothandle'), plothandle=figure; end
-%maxfrequency = 4000;
-%[tmp,number_of_channels_to_display] = min(abs(frequency-maxfrequency));
-%frequency = frequency(1:number_of_channels_to_display);
-
-set(gcf,'Currentaxes',plothandle);
-
-YTickIdx = 1:floor(numel(BFlist)/6):numel(BFlist);
-XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
-YTickIdxRev = numel(BFlist)+1-YTickIdx;
-if ~isempty(gca)
-    axes(gca);  %#ok<MAXES>
-    imagesc(IFpattern);
-    axis xy
-    set(gca, 'YTick', YTickIdx);
-    set(gca, 'YTickLabel', num2str(BFlist(YTickIdx)', '%0.0f' ));
-    ylabel('frequency (Hz)')
-    set(gca, 'XTick', XTickIdx);
-    set(gca, 'XTickLabel', XTickIdx.*3);
-    xlabel('Time (ms)')
-end
+% if ~exist('plothandle'), plothandle=figure; end
+% %maxfrequency = 4000;
+% %[tmp,number_of_channels_to_display] = min(abs(frequency-maxfrequency));
+% %frequency = frequency(1:number_of_channels_to_display);
+% 
+% set(gcf,'Currentaxes',plothandle);
+% 
+% YTickIdx = 1:floor(numel(BFlist)/6):numel(BFlist);
+% XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
+% YTickIdxRev = numel(BFlist)+1-YTickIdx;
+% if ~isempty(gca)
+%     axes(gca);  %#ok<MAXES>
+%     imagesc(IFpattern);
+%     axis xy
+%     set(gca, 'YTick', YTickIdx);
+%     set(gca, 'YTickLabel', num2str(BFlist(YTickIdx)', '%0.0f' ));
+%     ylabel('frequency (Hz)')
+%     set(gca, 'XTick', XTickIdx);
+%     set(gca, 'XTickLabel', XTickIdx.*3);
+%     xlabel('Time (ms)')
+% end
 

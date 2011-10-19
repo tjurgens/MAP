@@ -500,19 +500,19 @@ formantpattern = getIFpattern(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 
 set(gcf,'Currentaxes',handles.axes5);
 
-YTickIdx = 1:floor(numel(BFs)/6):numel(BFs);
-XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
-YTickIdxRev = numel(frequency)+1-YTickIdx;
+YTickIdx = 1:floor(numel(savedBFlist)/6):numel(savedBFlist);
+%XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
+YTickIdxRev = numel(savedBFlist)+1-YTickIdx;
 if ~isempty(gca)
     axes(gca);  %#ok<MAXES>
     %imagesc(fach(1:number_of_channels_to_display,:));
-    imagesc(fach_logscale);
+    imagesc(formantpattern);
     axis xy
     set(gca, 'YTick', YTickIdx);
-    set(gca, 'YTickLabel', num2str(   BFs(YTickIdx)', '%0.0f' ));
+    set(gca, 'YTickLabel', num2str(savedBFlist(YTickIdx)', '%0.0f' ));
     ylabel('frequency (Hz)')
-    set(gca, 'XTick', XTickIdx);
-    set(gca, 'XTickLabel', XTickIdx.*3);
+    %set(gca, 'XTick', XTickIdx);
+    %set(gca, 'XTickLabel', XTickIdx.*3);
     xlabel('Time (ms)')
 end
 

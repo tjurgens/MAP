@@ -198,11 +198,12 @@ for i = 1:nFiles,
                 end
                 
                 %calculate timing pattern
-                formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
+                %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
+                formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
                 
                 %concatenate the features
-                IR_vocabul = [ANsmooth(:,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
-                    1/10.*formantpattern(:,1:min([size(ANsmooth,2) size(formantpattern,2)]))];
+                IR_vocabul = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
+                    1/70.*formantpattern(:,1:min([size(ANsmooth,2) size(formantpattern,2)]))];
             else
                 error('auditory model not found!')
             end

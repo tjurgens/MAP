@@ -1,4 +1,4 @@
-function MMparentscript(parentdir)
+function MMparentscript(parentdir,repetitionno)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Skript
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -16,7 +16,7 @@ subject = 'Normal'; %take the parameter file of a normal-hearing listener
 auditorymodel = 'MAP';
 speechlevel = 60; %dB SPL
 
-no_repetitions = 10; %number of repetitions (temporal passages of the noise) to obtain variability
+%no_repetitions = 10; %number of repetitions (temporal passages of the noise) to obtain variability
 subpath_to_save = 'MMtest'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
 %parentdir = 'C:\MAP\micmodel\';%'/scratch/tjurgens/MAP/micmodel/'; 
 addpath([parentdir 'matlabarbeitskopie' filesep]);
@@ -38,13 +38,13 @@ addpath([parentdir 'matlabarbeitskopie' filesep]);
  end
 
 %% Do the model calculations
-for iCounter = 1:no_repetitions
+%for iCounter = 1:no_repetitions
     for jCounter = 1:length(SNR)
         noiselevel = speechlevel-SNR(jCounter);
-        complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunninglorentz' num2str(iCounter) filesep 'S02M_NO' filesep];
-        microscopic_model_demo_train(speechlevel,noiselevel,iCounter,parentdir,complete_path,auditorymodel,subject);
+        complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunninglorentz' num2str(repetitionno) filesep 'S02M_NO' filesep];
+        microscopic_model_demo_train(speechlevel,noiselevel,repetitionno,parentdir,complete_path,auditorymodel,subject);
     end
-end
+%end
 
 
 %% Evaluate

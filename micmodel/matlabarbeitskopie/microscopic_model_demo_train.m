@@ -12,7 +12,7 @@ function microscopic_model_demo_train(speech_level,noise_level,workingdirectoryn
 %%%
 
 if strcmp(subject,'Normal')
-    pcondition.parameterfile = 'Normal';
+    pcondition.parameterfile = 'Normal100';
     pcondition.audiogram = zeros(1,11);
 end
 pcondition.auditorymodel = auditorymodel; %'MAP', 'PEMO', %CASP_Diss, CASP_2011, PEMO, or PEMOSH%
