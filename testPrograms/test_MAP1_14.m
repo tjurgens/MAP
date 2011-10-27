@@ -57,7 +57,7 @@ duration=0.500;                 % seconds
 rampDuration=.005;              % raised cosine ramp (seconds)
 beginSilence=0.250;               
 endSilence=0.250;                  
-toneFrequency= 1000;            % or a pure tone (Hz)
+toneFrequency= 500;            % or a pure tone (Hz)
 
 %   or
 % harmonic sequence (Hz)
@@ -65,7 +65,7 @@ toneFrequency= 1000;            % or a pure tone (Hz)
 % toneFrequency= F0:F0:8000;    
 
 
- signalType= 'file';
+ %signalType= 'file';
  fileName='new-da-44khz';%'twister_44kHz';
 
 
@@ -102,7 +102,7 @@ paramChanges={};
 showMapOptions.printModelParameters=1;   % prints all parameters
 showMapOptions.showModelOutput=1;       % plot of all stages
 showMapOptions.printFiringRates=1;      % prints stage activity levels
-showMapOptions.showACF=1;               % shows SACF (probability only)
+showMapOptions.showACF=0;               % shows SACF (probability only)
 showMapOptions.showEfferent=1;          % tracks of AR and MOC
 showMapOptions.surfProbability=1;       % 2D plot of HSR response 
 showMapOptions.surfSpikes=1;            % 2D plot of spikes histogram

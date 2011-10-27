@@ -1,5 +1,15 @@
-function fach_logscale=fourierautocorrelationhistogram_direct_new(ANpattern,sfreq,BFs)
-
+function fth_logscale=fouriertransform_histogram_log(ANpattern,sfreq,BFs)
+% this function computes the logarithmized fourier transform of winsize
+% long slices of each frequency channel in ANpattern.
+% the highest peak in the FFT is identified and the value stored in a
+% histogram. the weight for this histogram is the logarithmized
+% fft-amplitude.
+% input: ANpattern: auditory nerve probability pattern with dimension
+%                           channels x samples
+%        sfreq: sampling frequency
+%        BFs: Best frequencies of the channels of ANpattern
+% output fth_logscale: fouriertransformhistogram on a logarithmic frequency
+% scale that is basically equal to the input BF frequency scale.
 
 time_axis = 0:1/sfreq:(size(ANpattern,2)-1)/sfreq;
 
@@ -16,38 +26,21 @@ every_10ms = 1:number_of_samples10ms:size(ANpattern,2)-number_of_samples25ms;
 hamm_window = hamming(11);
 halfHamming = (length(hamm_window)-1)/2;
 
-% window normalization
-
-norm = conv(ones(1,floor(number_of_samples25ms/2)),hamm_window);
-norm = norm(5+1:end-5)';
+% window specification
 win_size = number_of_samples25ms;
-half_win_size = floor(win_size/2);
 hop_size = number_of_samples10ms;
 
 %preallocation due to speed
 fftbinlength = 1000;
-fach = zeros(fftbinlength/2,size(every_10ms,2)+1);
+fth = zeros(fftbinlength/2,size(every_10ms,2)+1);
 
 for iCounter = 1:size(ANpattern,1) %each channel
     %fprintf('Channel No. %i\n',iCounter);
-    %time_counter = 1;
-    %for jCounter = every_3ms %every 3ms time segment
-    
-    
-    
-    %% Guy's code
+        
     % enframe this signal
-    
     frames = enframe(ANpattern(iCounter,:),win_size,hop_size);
     
-    % compute the autocorrelation
-    
-    %acf = real(ifft(abs(fft(frames,[],2)).^2,[],2));
-    %acf(acf<0)=0;
-    %acf = sqrt(acf(:,1:half_win_size));
-    
-    % smooth with hamming window and take the root
-    
+
     for frame=1:size(frames,1)
         
                
@@ -62,43 +55,30 @@ for iCounter = 1:size(ANpattern,1) %each channel
         %identify peaks in the fft
         df = [0 ; diff(fsra')];
         idx = find((df(1:end-1)>=0)&(df(2:end)<0));
-%         % interpolate
-%         a=df(idx);
-%         b=df(idx+1);
-%         idx = (idx-1+a./(a-b));
+%    
         [sorted,sortedindex]=sort(fsra(idx),'descend');
         % just take the highest value of the fourier-transform
          valid_peak_index = sortedindex(1:min([length(sortedindex) 1]));
          amp = sorted(1:min([length(sortedindex) 1]));
          
-         %valid_peak_index
-         %amp
-         
-         %store valid peaks according to amplitude in a histogram
+         %store the amplitude of only one peak of the FFT in a histogram
          if (~isempty(valid_peak_index))
             for k=1:length(valid_peak_index),
-                fach(idx(valid_peak_index(k)),frame) = fach(idx(valid_peak_index(k)),frame)+amp(k);            
+                fth(idx(valid_peak_index(k)),frame) = fth(idx(valid_peak_index(k)),frame)+amp(k);            
             end
         end
-         %transform index into frequencies
          
     end
 end
 
-%summarize channels so that the frequency axis matches best to the BF axis
-%double the accuracy of the savedBfs axis
-% zaehler =1;
-% for iCounter = 1:length(BFs)-1;
-%     BFs_new(zaehler) = BFs(iCounter); 
-%     zaehler = zaehler+1;
-%     BFs_new(zaehler) = 10^((log10(BFs(iCounter))+log10(BFs(iCounter+1)))/2);
-%     zaehler = zaehler+1;
-% end
-fach_logscale = zeros(length(BFs),size(fach,2));
-for iCounter = 1:length(frequency);
+
+fth_logscale = zeros(length(BFs),size(fth,2));
+%find lowest frequency value to look after >200Hz:
+[tmp,firstindex]=min(abs(200-frequency));
+for iCounter = firstindex:length(frequency);
     %find that BF that fits best to the fft-frequency
     [tmp,tmpindex]=min(abs(BFs-frequency(iCounter)));
     %store result over here
-    fach_logscale(tmpindex,:) = fach_logscale(tmpindex,:)+fach(iCounter,:);
+    fth_logscale(tmpindex,:) = fth_logscale(tmpindex,:)+fth(iCounter,:);
 end
 
