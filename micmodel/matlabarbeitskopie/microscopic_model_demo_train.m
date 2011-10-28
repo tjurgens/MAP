@@ -11,40 +11,43 @@ function microscopic_model_demo_train(speech_level,noise_level,workingdirectoryn
 % Tim Jürgens, 2009
 %%%
 
+
+pcondition = initialize_auditorymodel(subject, auditorymodel,parentdir);
+
 %ask for additional comment on the measurements
 pcondition.additionalcomment = input('Additional comment on the measurements (Enter for none):','s');
 
 
-if strcmp(subject,'Normal')
-    pcondition.parameterfile = 'Normal100';
-    pcondition.audiogram = zeros(1,11);
-end
-
-
-pcondition.auditorymodel = auditorymodel; %'MAP', 'PEMO', %CASP_Diss, CASP_2011, PEMO, or PEMOSH%
-%% PATH & RANDOM INITIALIZE
-addpath([parentdir 'matlabarbeitskopie' filesep]);
-
-if strcmp(pcondition.auditorymodel,'PeMO')
-    addpath([parentdir 'matlabarbeitskopie' filesep 'PEMO' filesep 'gfb_new']); 
-elseif strcmp(pcondition.auditorymodel,'CASP_Diss')
-    addpath([parentdir 'AFC_june2008' filesep 'AFC_june2008' filesep 'models']);
-    addpath([parentdir 'AFC_june2008' filesep 'AFC_june2008']);
-elseif strcmp(pcondition.auditorymodel,'CASP_2011')
-    addpath([parentdir 'CASP_2011']);
-    addpath([parentdir 'CASP_2011' filesep 'accessoires']);
-elseif strcmp(pcondition.auditorymodel,'PEMO')
-    addpath([parentdir 'matlabarbeitskopie' filesep 'PEMO']);
-elseif strcmp(pcondition.auditorymodel,'PEMOSH')
-    addpath([parentdir 'matlabarbeitskopie' filesep 'PEMOSH']);
-elseif strcmp(pcondition.auditorymodel, 'MAP')
-    addpath([parentdir '..' filesep 'MAP']);
-    addpath([parentdir '..' filesep 'parameterStore']);
-    addpath([parentdir '..' filesep 'userProgramsTim']);
-    addpath([parentdir '..' filesep 'utilities']);
-else error('auditory model not found')
-end
-
+% if strcmp(subject,'Normal')
+%     pcondition.parameterfile = 'Normal100';
+%     pcondition.audiogram = zeros(1,11);
+% end
+% 
+% 
+% pcondition.auditorymodel = auditorymodel; %'MAP', 'PEMO', %CASP_Diss, CASP_2011, PEMO, or PEMOSH%
+% %% PATH & RANDOM INITIALIZE
+% addpath([parentdir 'matlabarbeitskopie' filesep]);
+% 
+% if strcmp(pcondition.auditorymodel,'PeMO')
+%     addpath([parentdir 'matlabarbeitskopie' filesep 'PEMO' filesep 'gfb_new']); 
+% elseif strcmp(pcondition.auditorymodel,'CASP_Diss')
+%     addpath([parentdir 'AFC_june2008' filesep 'AFC_june2008' filesep 'models']);
+%     addpath([parentdir 'AFC_june2008' filesep 'AFC_june2008']);
+% elseif strcmp(pcondition.auditorymodel,'CASP_2011')
+%     addpath([parentdir 'CASP_2011']);
+%     addpath([parentdir 'CASP_2011' filesep 'accessoires']);
+% elseif strcmp(pcondition.auditorymodel,'PEMO')
+%     addpath([parentdir 'matlabarbeitskopie' filesep 'PEMO']);
+% elseif strcmp(pcondition.auditorymodel,'PEMOSH')
+%     addpath([parentdir 'matlabarbeitskopie' filesep 'PEMOSH']);
+% elseif strcmp(pcondition.auditorymodel, 'MAP')
+%     addpath([parentdir '..' filesep 'MAP']);
+%     addpath([parentdir '..' filesep 'parameterStore']);
+%     addpath([parentdir '..' filesep 'userProgramsTim']);
+%     addpath([parentdir '..' filesep 'utilities']);
+% else error('auditory model not found')
+% end
+% 
 
 tmp_clock = clock;
 rand('twister',sum(10000*tmp_clock(6))); %Tageszeitabhängiger Zustand des Zufallsgenerators 
@@ -73,42 +76,42 @@ pcondition.subjectID = workingdirectory(initial_index_of_subjectID:initial_index
 
 %% SET MODEL CONFIGURATION
 %pcondition.audiogram = audiogram;
-if exist('k_fit')
-    pcondition.k_fit = k_fit;
-else
-    pcondition.k_fit = [0 0 0 0];
-end
-pcondition.audiogramfreqs = [];
-pcondition.nrmodchan = 4;
-fluctuating_htsn = 0;  %1 == fluctuating hearing threshold enabled
+% if exist('k_fit')
+%     pcondition.k_fit = k_fit;
+% else
+%     pcondition.k_fit = [0 0 0 0];
+% end
+% pcondition.audiogramfreqs = [];
+% pcondition.nrmodchan = 4;
+% fluctuating_htsn = 0;  %1 == fluctuating hearing threshold enabled
 backnoiseshift = workingdirectorynumber;
-pcondition.speechrecognizer = 'DTW';
+% pcondition.speechrecognizer = 'DTW';
 speaker = 'S02M_NO';
 pcondition.noiselevel = noise_level;
 pcondition.speechlevel = speech_level;
 speech_material = 'normal_auswahl';
 
-pcondition.distancemeasure = 'Euklid'; %Lorentz, Euklid, Absolut
+%pcondition.distancemeasure = 'Euklid'; %Lorentz, Euklid, Absolut
 
-if strcmp(pcondition.auditorymodel,'CASP_Diss') || strcmp(pcondition.auditorymodel,'CASP_2011')
-    % INITIALIZE
-    if strcmp(pcondition.auditorymodel,'CASP_2011')
-        micmodel_casp_cfg;
-        casp_cfg;
-    end
-    casp_initialize;
-%     simwork.CASP_use_abs_thres = 'no';%'yes'; %use absolute threshold prediction by Morten in CASP
-%      
-%     if strcmp(simwork.CASP_use_abs_thres,'yes')
-%         load('minlim.mat');
-%         simwork.minlim = minlim;
+% if strcmp(pcondition.auditorymodel,'CASP_Diss') || strcmp(pcondition.auditorymodel,'CASP_2011')
+%     % INITIALIZE
+%     if strcmp(pcondition.auditorymodel,'CASP_2011')
+%         micmodel_casp_cfg;
+%         casp_cfg;
 %     end
-
-    simwork.CASP_use_internalnoise = 'yes';%'no';
-    simwork.CASP_internalnoise_var = 38;
-elseif strcmp(pcondition.auditorymodel,'PeMo_SH')
-    hearing_impairment.internalnoise_var = 9;
-end
+%     casp_initialize;
+% %     simwork.CASP_use_abs_thres = 'no';%'yes'; %use absolute threshold prediction by Morten in CASP
+% %      
+% %     if strcmp(simwork.CASP_use_abs_thres,'yes')
+% %         load('minlim.mat');
+% %         simwork.minlim = minlim;
+% %     end
+% 
+%     simwork.CASP_use_internalnoise = 'yes';%'no';
+%     simwork.CASP_internalnoise_var = 38;
+% elseif strcmp(pcondition.auditorymodel,'PeMo_SH')
+%     hearing_impairment.internalnoise_var = 9;
+% end
 pcondition.workingdirectory = workingdirectory;
 pcondition.use_lpc = 0; 
 pcondition.lpc_order = 7;

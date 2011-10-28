@@ -96,57 +96,57 @@ for j = 1:nFiles,
             plot(ones(1:500,1)*(length(testsignal)-(length(testsignal)-0.4*sfreq)*0.25)/sfreq,(0:1/500:1-1/500),'k');
         end
 
-        
-        if strcmp(pcondition.noiselevel,'nobackgroundnoise')
-               ;
-        else
-            backgroundnoise = backnoise.icranoise_test{getnr_fromvocabularyset(vocabularyset)};
-            % set noise level
-            if strcmp(pcondition.auditorymodel,'MAP')
-                backgroundnoise = backgroundnoise./sqrt(mean(backgroundnoise.^2)).*10^(-(94-pcondition.noiselevel)/20);
-                %20*log10(sqrt(mean(backgroundnoise.^2))/20e-6) %reference pressure: 20uPa
-            else
-                backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
-            end
-            % set initial sample at random for creating random noise.
-            in_samp = 1;%ceil(500*rand);
-            backgroundnoise = backgroundnoise(in_samp:length(testsignal)+in_samp-1);
-            testsignal = testsignal + backgroundnoise;
-        end
-            
-        testsignal = soft_onset(testsignal, sfreq, 0.05); %50 ms fade in für soften onset am anfang
-        
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % ab hier hören!
-        %
-        % hörschwellensimulierendes rauschen
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        if fluctuating_htsn == 1;
-            %Gleichgewichtung aller Frequenzen
-            %actual_audiogram = pcondition.audiogram+pcondition.fluctuating_to_add(loga_number);
-            
-            %Tiefe Frequenzen staerker verrauscht
-            %actual_audiogram = pcondition.audiogram+(2*pcondition.fluctuating_to_add(loga_number)-...
-            %    [0:1/10*2*pcondition.fluctuating_to_add(loga_number):2*pcondition.fluctuating_to_add(loga_number)]);
-            
-            %Hohe Frequenzen staerker verrauscht
-            actual_audiogram = pcondition.audiogram+(2*pcondition.fluctuating_to_add(loga_number)-...
-                [2*pcondition.fluctuating_to_add(loga_number):-1/10*2*pcondition.fluctuating_to_add(loga_number):0]);
-                       
-        else
-            actual_audiogram = pcondition.audiogram;
-        end
-        if strcmp(pcondition.auditorymodel,'MAP')
-        else
-            if ~isfield(hearing_impairment,'internalnoise')
-                %add hearing threshold simulating noise
-                hear_thres_noise = masknoise(actual_audiogram,length(testsignal),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
-                %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
-                hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
-                testsignal = hear_thres_noise + testsignal;
-            end
-        end
+        testsignal = process_with_noise(testsignal,sfreq,pcondition,backnoise,vocabularyset);
+%         if strcmp(pcondition.noiselevel,'nobackgroundnoise')
+%                ;
+%         else
+%             backgroundnoise = backnoise.icranoise_test{getnr_fromvocabularyset(vocabularyset)};
+%             % set noise level
+%             if strcmp(pcondition.auditorymodel,'MAP')
+%                 backgroundnoise = backgroundnoise./sqrt(mean(backgroundnoise.^2)).*10^(-(94-pcondition.noiselevel)/20);
+%                 %20*log10(sqrt(mean(backgroundnoise.^2))/20e-6) %reference pressure: 20uPa
+%             else
+%                 backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
+%             end
+%             % set initial sample at random for creating random noise.
+%             in_samp = 1;%ceil(500*rand);
+%             backgroundnoise = backgroundnoise(in_samp:length(testsignal)+in_samp-1);
+%             testsignal = testsignal + backgroundnoise;
+%         end
+%             
+%         testsignal = soft_onset(testsignal, sfreq, 0.05); %50 ms fade in für soften onset am anfang
+%         
+%         
+%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         % ab hier hören!
+%         %
+%         % hörschwellensimulierendes rauschen
+%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         if fluctuating_htsn == 1;
+%             %Gleichgewichtung aller Frequenzen
+%             %actual_audiogram = pcondition.audiogram+pcondition.fluctuating_to_add(loga_number);
+%             
+%             %Tiefe Frequenzen staerker verrauscht
+%             %actual_audiogram = pcondition.audiogram+(2*pcondition.fluctuating_to_add(loga_number)-...
+%             %    [0:1/10*2*pcondition.fluctuating_to_add(loga_number):2*pcondition.fluctuating_to_add(loga_number)]);
+%             
+%             %Hohe Frequenzen staerker verrauscht
+%             actual_audiogram = pcondition.audiogram+(2*pcondition.fluctuating_to_add(loga_number)-...
+%                 [2*pcondition.fluctuating_to_add(loga_number):-1/10*2*pcondition.fluctuating_to_add(loga_number):0]);
+%                        
+%         else
+%             actual_audiogram = pcondition.audiogram;
+%         end
+%         if strcmp(pcondition.auditorymodel,'MAP')
+%         else
+%             if ~isfield(hearing_impairment,'internalnoise')
+%                 %add hearing threshold simulating noise
+%                 hear_thres_noise = masknoise(actual_audiogram,length(testsignal),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
+%                 %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
+%                 hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
+%                 testsignal = hear_thres_noise + testsignal;
+%             end
+%         end
 %         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         % control of preprocessing by printing pemo-input
@@ -164,72 +164,73 @@ for j = 1:nFiles,
             close(f_preproc);
         end
         
+        IR_testsignal = computeIR_using_auditorymodel(testsignal,sfreq,pcondition);
         
-        if pcondition.use_mfb == 1
-            %%%%%%%%%%%% PEMO %%%%%%%%%%%%%%%%%%%%%
-            if strcmp(pcondition.auditorymodel,'CASP_Diss')
-                IR_testtmp = pemo_preproc(testsignal,sfreq);%, sfreq,pcondition.nrmodchan);
-                if iscell(IR_testtmp)
-                    IR_testsignal = IR_testtmp;
-                else
-                    IR_testsignal{1} = IR_testtmp(:,:,1)';
-                    IR_testsignal{2} = IR_testtmp(:,:,2)';
-                    IR_testsignal{3} = IR_testtmp(:,:,3)';
-                    IR_testsignal{4} = IR_testtmp(:,:,4)';
-                    %             if ~isempty(IR_vocabultmp(:,:,5))
-                    %                 error('IR_vocabul hat mehr Modulationsfilterbankkanäle als ausgewertet werden.')
-                end
-            elseif strcmp(pcondition.auditorymodel,'CASP_2011')
-                IR_testtmp = casp_preproc(testsignal,0);%, sfreq,pcondition.nrmodchan);
-                if iscell(IR_testtmp)
-                    IR_testsignal = IR_testtmp;
-                else
-                    IR_testsignal{1} = IR_testtmp(:,:,1)';
-                    IR_testsignal{2} = IR_testtmp(:,:,2)';
-                    IR_testsignal{3} = IR_testtmp(:,:,3)';
-                    IR_testsignal{4} = IR_testtmp(:,:,4)';
-                    %             if ~isempty(IR_vocabultmp(:,:,5))
-                    %                 error('IR_vocabul hat mehr Modulationsfilterbankkanäle als ausgewertet werden.')
-                end
-            elseif strcmp(pcondition.auditorymodel,'PEMO')
-                IR_testsignal = pemo_mfb_tim(testsignal,sfreq,pcondition.nrmodchan);
-                % the original normal-hearing model
-            elseif strcmp(pcondition.auditorymodel,'PEMOSH')
-                IR_testsignal = pemo_mfb_hi_schelle1_tim(testsignal,sfreq,hearing_impairment.audiogram,pcondition.nrmodchan);
-                % schelles hearing-impaired model
-            elseif strcmp(pcondition.auditorymodel,'MAP')
-                MAP1_14(testsignal,sfreq,-1,pcondition.parameterfile,'probability')
-                global ANprobRateOutput savedBFlist
-                %take only the HSR fibers
-                AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
-                %calculate rate pattern
-                ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
-                hopSize = 10; %ms
-                winSize = 25; %ms
-                winSizeSamples = round(winSize*sfreq/1000);
-                hann = hanning(winSizeSamples);
-                hopSizeSamples = round(hopSize*sfreq/1000);
-                for chan = 1:size(AN_HSRoutput,1)
-                    f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
-                    ANsmooth(chan,:) = mean(f,2)';
-                end
-                
-                %calculate timing pattern
-                %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
-                formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
-                
-                %concatenate the features
-                IR_testsignal = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
-                    1/70.*formantpattern(:,1:min([size(ANsmooth,2) size(formantpattern,2)]))];
-                
-            else
-                error('auditory model not found!')
-            end
-
-        elseif pcondition.use_mfb == 0
-            IR_testsignal{1} = pemo_tim(testsignal,sfreq);
-
-        end
+%        if pcondition.use_mfb == 1
+%             %%%%%%%%%%%% PEMO %%%%%%%%%%%%%%%%%%%%%
+%             if strcmp(pcondition.auditorymodel,'CASP_Diss')
+%                 IR_testtmp = pemo_preproc(testsignal,sfreq);%, sfreq,pcondition.nrmodchan);
+%                 if iscell(IR_testtmp)
+%                     IR_testsignal = IR_testtmp;
+%                 else
+%                     IR_testsignal{1} = IR_testtmp(:,:,1)';
+%                     IR_testsignal{2} = IR_testtmp(:,:,2)';
+%                     IR_testsignal{3} = IR_testtmp(:,:,3)';
+%                     IR_testsignal{4} = IR_testtmp(:,:,4)';
+%                     %             if ~isempty(IR_vocabultmp(:,:,5))
+%                     %                 error('IR_vocabul hat mehr Modulationsfilterbankkanäle als ausgewertet werden.')
+%                 end
+%             elseif strcmp(pcondition.auditorymodel,'CASP_2011')
+%                 IR_testtmp = casp_preproc(testsignal,0);%, sfreq,pcondition.nrmodchan);
+%                 if iscell(IR_testtmp)
+%                     IR_testsignal = IR_testtmp;
+%                 else
+%                     IR_testsignal{1} = IR_testtmp(:,:,1)';
+%                     IR_testsignal{2} = IR_testtmp(:,:,2)';
+%                     IR_testsignal{3} = IR_testtmp(:,:,3)';
+%                     IR_testsignal{4} = IR_testtmp(:,:,4)';
+%                     %             if ~isempty(IR_vocabultmp(:,:,5))
+%                     %                 error('IR_vocabul hat mehr Modulationsfilterbankkanäle als ausgewertet werden.')
+%                 end
+%             elseif strcmp(pcondition.auditorymodel,'PEMO')
+%                 IR_testsignal = pemo_mfb_tim(testsignal,sfreq,pcondition.nrmodchan);
+%                 % the original normal-hearing model
+%             elseif strcmp(pcondition.auditorymodel,'PEMOSH')
+%                 IR_testsignal = pemo_mfb_hi_schelle1_tim(testsignal,sfreq,hearing_impairment.audiogram,pcondition.nrmodchan);
+%                 % schelles hearing-impaired model
+%             elseif strcmp(pcondition.auditorymodel,'MAP')
+%                 MAP1_14(testsignal,sfreq,-1,pcondition.parameterfile,'probability')
+%                 global ANprobRateOutput savedBFlist
+%                 %take only the HSR fibers
+%                 AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
+%                 %calculate rate pattern
+%                 ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+%                 hopSize = 10; %ms
+%                 winSize = 25; %ms
+%                 winSizeSamples = round(winSize*sfreq/1000);
+%                 hann = hanning(winSizeSamples);
+%                 hopSizeSamples = round(hopSize*sfreq/1000);
+%                 for chan = 1:size(AN_HSRoutput,1)
+%                     f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
+%                     ANsmooth(chan,:) = mean(f,2)';
+%                 end
+%                 
+%                 %calculate timing pattern
+%                 %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
+%                 formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
+%                 
+%                 %concatenate the features
+%                 IR_testsignal = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
+%                     1/70.*formantpattern(:,1:min([size(ANsmooth,2) size(formantpattern,2)]))];
+%                 
+%             else
+%                 error('auditory model not found!')
+%             end
+% 
+%         elseif pcondition.use_mfb == 0
+%             IR_testsignal{1} = pemo_tim(testsignal,sfreq);
+% 
+%         end
     
         if Verbose,
             figure;

@@ -91,50 +91,51 @@ for i = 1:nFiles,
     % check if file is spoken by the same speaker who is indicated in 'speaker'
     if File(i).name(1:4) == speaker,
         i
-        if strcmp(pcondition.noiselevel,'nobackgroundnoise')
-            ;
-        else
-            backgroundnoise = backnoise.icranoise_voc{getnr_fromvocabularyset(vocabularyset)};
-            % set noise level
-            if strcmp(pcondition.auditorymodel,'MAP')
-                backgroundnoise = backgroundnoise./sqrt(mean(backgroundnoise.^2)).*10^(-(94-pcondition.noiselevel)/20);
-                %20*log10(sqrt(mean(backgroundnoise.^2))/20e-6) %reference pressure: 20uPa
-            else
-                backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
-            end
-            backgroundnoise = backgroundnoise(1:length(vocabul{i}));
-            vocabul{i} = vocabul{i} + backgroundnoise;
-        end
-        %%
-        vocabul{i} = soft_onset(vocabul{i}, sfreq, 0.05); %50 ms fade in für soften onset am anfang
-        
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %% ab hier hören!
-        %%
-        %% hörschwellensimulierendes rauschen
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        %hier kein fluktuierendes rauschen, da davon ausgegangen wird, dass
-        %das gelernte optimal ist und nicht zufaellig ein logatom
-        %schlechter im speicher ist als ein anderes.
-        %         if fluctuating_htsn == 1;
-        %             pcondition.audiogram = pcondition.audiogram+pcondition.fluctuating_to_add(vocab(i).number);
-        %         else
-        %             actual_audiogram = pcondition.audiogram;
-        %         end
-        if strcmp(pcondition.auditorymodel,'MAP')
-        else
-            if ~isfield(hearing_impairment,'internalnoise')
-                %         %add hearing threshold simulating noise
-                hear_thres_noise = masknoise(pcondition.audiogram,length(vocabul{i}),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
-                %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
-                hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
-                vocabul{i} = hear_thres_noise + vocabul{i};
-            end
-        end
-        %         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        
+        vocabul{i} = process_with_noise(vocabul{i},sfreq,pcondition,backnoise,vocabularyset);
+%         if strcmp(pcondition.noiselevel,'nobackgroundnoise')
+%             ;
+%         else
+%             backgroundnoise = backnoise.icranoise_voc{getnr_fromvocabularyset(vocabularyset)};
+%             % set noise level
+%             if strcmp(pcondition.auditorymodel,'MAP')
+%                 backgroundnoise = backgroundnoise./sqrt(mean(backgroundnoise.^2)).*10^(-(94-pcondition.noiselevel)/20);
+%                 %20*log10(sqrt(mean(backgroundnoise.^2))/20e-6) %reference pressure: 20uPa
+%             else
+%                 backgroundnoise = backgroundnoise./rms(backgroundnoise)/db2factor(pcondition.noiselevel);
+%             end
+%             backgroundnoise = backgroundnoise(1:length(vocabul{i}));
+%             vocabul{i} = vocabul{i} + backgroundnoise;
+%         end
+%         %%
+%         vocabul{i} = soft_onset(vocabul{i}, sfreq, 0.05); %50 ms fade in für soften onset am anfang
+%         
+%         
+%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         %% ab hier hören!
+%         %%
+%         %% hörschwellensimulierendes rauschen
+%         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         %hier kein fluktuierendes rauschen, da davon ausgegangen wird, dass
+%         %das gelernte optimal ist und nicht zufaellig ein logatom
+%         %schlechter im speicher ist als ein anderes.
+%         %         if fluctuating_htsn == 1;
+%         %             pcondition.audiogram = pcondition.audiogram+pcondition.fluctuating_to_add(vocab(i).number);
+%         %         else
+%         %             actual_audiogram = pcondition.audiogram;
+%         %         end
+%         if strcmp(pcondition.auditorymodel,'MAP')
+%         else
+%             if ~isfield(hearing_impairment,'internalnoise')
+%                 %         %add hearing threshold simulating noise
+%                 hear_thres_noise = masknoise(pcondition.audiogram,length(vocabul{i}),pcondition.audiogramfreqs,sfreq)./1e5;   %HERE SET IN THE AUDIOGRAM
+%                 %1e5 is the factor to come from rainer beutelmanns implementation to pemo-level
+%                 hear_thres_noise = hear_thres_noise(:,1); % take only the left ears threshold simulating noise
+%                 vocabul{i} = hear_thres_noise + vocabul{i};
+%             end
+%         end
+%         %         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%         
+%         
         % control of preprocessing by once saving pemo-input
         if (i == 2) && strcmp(vocabularyset,'a_a'),
           f_preproc = figure,plot(vocabul{i});
@@ -150,79 +151,80 @@ for i = 1:nFiles,
           close(f_preproc);
         end
         
-        if pcondition.use_mfb == 1
-            %%%%%%%%%%%%%%% AUDITORY MODELS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            if strcmp(pcondition.auditorymodel,'CASP_Diss')
-                IR_vocabultmp = pemo_preproc(vocabul{i},sfreq);%, sfreq,pcondition.nrmodchan);
-                if iscell(IR_vocabultmp)
-                    IR_vocabul = IR_vocabultmp;
-                else
-                    IR_vocabul{1} = IR_vocabultmp(:,:,1)';
-                    IR_vocabul{2} = IR_vocabultmp(:,:,2)';
-                    IR_vocabul{3} = IR_vocabultmp(:,:,3)';
-                    IR_vocabul{4} = IR_vocabultmp(:,:,4)';
-                    
-                end
-            elseif strcmp(pcondition.auditorymodel,'CASP_2011')
-                IR_vocabultmp = casp_preproc(vocabul{i},0);%, sfreq,pcondition.nrmodchan);
-                if iscell(IR_vocabultmp)
-                    IR_vocabul = IR_vocabultmp;
-                else
-                    IR_vocabul{1} = IR_vocabultmp(:,:,1)';
-                    IR_vocabul{2} = IR_vocabultmp(:,:,2)';
-                    IR_vocabul{3} = IR_vocabultmp(:,:,3)';
-                    IR_vocabul{4} = IR_vocabultmp(:,:,4)';
-                    
-                end
-            elseif strcmp(pcondition.auditorymodel,'PEMO')
-                IR_vocabul = pemo_mfb_tim(vocabul{i},sfreq,pcondition.nrmodchan);
-                % the original normal-hearing model
-            elseif strcmp(pcondition.auditorymodel,'PEMOSH')
-                IR_vocabul = pemo_mfb_hi_schelle1_tim(vocabul{i},sfreq,hearing_impairment.audiogram,pcondition.nrmodchan);
-                % schelles hearing-impaired model
-            elseif strcmp(pcondition.auditorymodel,'MAP')
-                MAP1_14(vocabul{i},sfreq,-1,pcondition.parameterfile,'probability')
-                global ANprobRateOutput savedBFlist
-                %take only the HSR fibers
-                AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
-                %calculate rate pattern
-                ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
-                hopSize = 10; %ms
-                winSize = 25; %ms
-                winSizeSamples = round(winSize*sfreq/1000);
-                hann = hanning(winSizeSamples);
-                hopSizeSamples = round(hopSize*sfreq/1000);
-                for chan = 1:size(AN_HSRoutput,1)
-                    f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
-                    ANsmooth(chan,:) = mean(f,2)';
-                end
-                
-                %calculate timing pattern
-                %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
-                formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
-                
-                %concatenate the features
-                IR_vocabul = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
-                    1/70.*formantpattern(:,1:min([size(ANsmooth,2) size(formantpattern,2)]))];
-            else
-                error('auditory model not found!')
-            end
-
-
-            if Verbose,
-                figure;
-                surf(IR_vocabul{1});
-                view(2);
-            end
-
-           
-            
-        elseif pcondition.use_mfb == 0
-            if strcmp(pcondition.auditorymodel,'PeMo')
-                IR_vocabul{1} = pemo_tim(vocabul{i},sfreq);
-                % the original normal-hearing model without mfb
-            end
-        end
+        IR_vocabul = computeIR_using_auditorymodel(vocabul{i},sfreq,pcondition);
+%         if pcondition.use_mfb == 1
+%             %%%%%%%%%%%%%%% AUDITORY MODELS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%             if strcmp(pcondition.auditorymodel,'CASP_Diss')
+%                 IR_vocabultmp = pemo_preproc(vocabul{i},sfreq);%, sfreq,pcondition.nrmodchan);
+%                 if iscell(IR_vocabultmp)
+%                     IR_vocabul = IR_vocabultmp;
+%                 else
+%                     IR_vocabul{1} = IR_vocabultmp(:,:,1)';
+%                     IR_vocabul{2} = IR_vocabultmp(:,:,2)';
+%                     IR_vocabul{3} = IR_vocabultmp(:,:,3)';
+%                     IR_vocabul{4} = IR_vocabultmp(:,:,4)';
+%                     
+%                 end
+%             elseif strcmp(pcondition.auditorymodel,'CASP_2011')
+%                 IR_vocabultmp = casp_preproc(vocabul{i},0);%, sfreq,pcondition.nrmodchan);
+%                 if iscell(IR_vocabultmp)
+%                     IR_vocabul = IR_vocabultmp;
+%                 else
+%                     IR_vocabul{1} = IR_vocabultmp(:,:,1)';
+%                     IR_vocabul{2} = IR_vocabultmp(:,:,2)';
+%                     IR_vocabul{3} = IR_vocabultmp(:,:,3)';
+%                     IR_vocabul{4} = IR_vocabultmp(:,:,4)';
+%                     
+%                 end
+%             elseif strcmp(pcondition.auditorymodel,'PEMO')
+%                 IR_vocabul = pemo_mfb_tim(vocabul{i},sfreq,pcondition.nrmodchan);
+%                 % the original normal-hearing model
+%             elseif strcmp(pcondition.auditorymodel,'PEMOSH')
+%                 IR_vocabul = pemo_mfb_hi_schelle1_tim(vocabul{i},sfreq,hearing_impairment.audiogram,pcondition.nrmodchan);
+%                 % schelles hearing-impaired model
+%             elseif strcmp(pcondition.auditorymodel,'MAP')
+%                 MAP1_14(vocabul{i},sfreq,-1,pcondition.parameterfile,'probability')
+%                 global ANprobRateOutput savedBFlist
+%                 %take only the HSR fibers
+%                 AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
+%                 %calculate rate pattern
+%                 ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+%                 hopSize = 10; %ms
+%                 winSize = 25; %ms
+%                 winSizeSamples = round(winSize*sfreq/1000);
+%                 hann = hanning(winSizeSamples);
+%                 hopSizeSamples = round(hopSize*sfreq/1000);
+%                 for chan = 1:size(AN_HSRoutput,1)
+%                     f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
+%                     ANsmooth(chan,:) = mean(f,2)';
+%                 end
+%                 
+%                 %calculate timing pattern
+%                 %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
+%                 formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
+%                 
+%                 %concatenate the features
+%                 IR_vocabul = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
+%                     1/70.*formantpattern(:,1:min([size(ANsmooth,2) size(formantpattern,2)]))];
+%             else
+%                 error('auditory model not found!')
+%             end
+% 
+% 
+%             if Verbose,
+%                 figure;
+%                 surf(IR_vocabul{1});
+%                 view(2);
+%             end
+% 
+%            
+%             
+%         elseif pcondition.use_mfb == 0
+%             if strcmp(pcondition.auditorymodel,'PeMo')
+%                 IR_vocabul{1} = pemo_tim(vocabul{i},sfreq);
+%                 % the original normal-hearing model without mfb
+%             end
+%         end
         
         % cut IR of (white,ol) noise / silence in front
         if strcmp(pcondition.auditorymodel,'MAP')
