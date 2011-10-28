@@ -11,10 +11,16 @@ function microscopic_model_demo_train(speech_level,noise_level,workingdirectoryn
 % Tim Jürgens, 2009
 %%%
 
+%ask for additional comment on the measurements
+pcondition.additionalcomment = input('Additional comment on the measurements (Enter for none):','s');
+
+
 if strcmp(subject,'Normal')
     pcondition.parameterfile = 'Normal100';
     pcondition.audiogram = zeros(1,11);
 end
+
+
 pcondition.auditorymodel = auditorymodel; %'MAP', 'PEMO', %CASP_Diss, CASP_2011, PEMO, or PEMOSH%
 %% PATH & RANDOM INITIALIZE
 addpath([parentdir 'matlabarbeitskopie' filesep]);

@@ -85,6 +85,7 @@ fprintf(prot_file_ID,'Perceptual Distance Measure: %s\n\n\n', pcondition.distanc
 fprintf(prot_file_ID,'Auditory Model: %s\n', pcondition.auditorymodel);
 fprintf(prot_file_ID,'Perception Model Details:\n');
 
+
 if strcmp(pcondition.auditorymodel,'CASP_Diss') 
     temp_fid = fopen('ToneInNoise2_cfg.m','r');
     temp_rows = textscan(temp_fid,'%s','Delimiter','\n');
@@ -115,6 +116,18 @@ elseif strcmp(pcondition.auditorymodel,'CASP_2011')
     end
 
     fclose(temp_fid);
+    
+elseif strcmp(pcondition.auditorymodel,'MAP')
+    parameterfilename = ['MAPparams' pcondition.parameterfile '.m'];
+    temp_fid = fopen(parameterfilename,'r');
+    temp_rows = textscan(temp_fid,'%s','Delimiter','\n');
+    for i = 1:length(temp_rows{1})
+        fprintf(prot_file_ID,'%s\n',temp_rows{1}{i});
+    end
+    fclose(temp_fid);
 end
+
+%additional comment on this model realization
+fprintf(prot_file_ID,'Additional comments: %s\n', pcondition.additionalcomment);
 fclose(prot_file_ID);
 %%%% End Writing Protocol File %%%
