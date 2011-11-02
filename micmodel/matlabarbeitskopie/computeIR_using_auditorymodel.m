@@ -43,21 +43,24 @@ if pcondition.use_mfb == 1
         %take only the HSR fibers
         AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
         %calculate rate pattern
-        ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
-        hopSize = 10; %ms
-        winSize = 25; %ms
-        winSizeSamples = round(winSize*sfreq/1000);
-        hann = hanning(winSizeSamples);
-        hopSizeSamples = round(hopSize*sfreq/1000);
-        for chan = 1:size(AN_HSRoutput,1)
-            f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
-            ANsmooth(chan,:) = mean(f,2)';
-        end
-        
-        IR = ANsmooth;
+%         ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+%         hopSize = 10; %ms
+%         winSize = 25; %ms
+%         winSizeSamples = round(winSize*sfreq/1000);
+%         hann = hanning(winSizeSamples);
+%         hopSizeSamples = round(hopSize*sfreq/1000);
+%         for chan = 1:size(AN_HSRoutput,1)
+%             f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
+%             ANsmooth(chan,:) = mean(f,2)';
+%         end
+%         
+%         IR = ANsmooth;
         %calculate timing pattern
-        %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
+        formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
         %formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
+        
+        %just take the timing features
+        IR = formantpattern;
         
         %concatenate the features
         %IR = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
