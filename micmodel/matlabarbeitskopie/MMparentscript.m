@@ -37,12 +37,15 @@ addpath([parentdir 'matlabarbeitskopie' filesep]);
      error('result file structure could not be copied. check permission rights');
  end
 
+ %get additional comment
+ additionalcomment = input('Additional comment on the measurements (Enter for none):','s');
+ 
 %% Do the model calculations
 for iCounter = 1:no_repetitions
     for jCounter = 1:length(SNR)
         noiselevel = speechlevel-SNR(jCounter);
         complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunninglorentz' num2str(repetitionno) filesep 'S02M_NO' filesep];
-        microscopic_model_demo_train(speechlevel,noiselevel,repetitionno,parentdir,complete_path,auditorymodel,subject);
+        microscopic_model_demo_train(speechlevel,noiselevel,repetitionno,parentdir,complete_path,auditorymodel,subject,additionalcomment);
     end
 end
 

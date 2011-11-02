@@ -1,4 +1,4 @@
-function microscopic_model_demo_train(speech_level,noise_level,workingdirectorynumber,parentdir,workingdirectory,auditorymodel,subject)
+function microscopic_model_demo_train(speech_level,noise_level,workingdirectorynumber,parentdir,workingdirectory,auditorymodel,subject,additionalcomment)
 
 %% Microscopic Model outer Routine
 % input: speech_level
@@ -15,7 +15,7 @@ function microscopic_model_demo_train(speech_level,noise_level,workingdirectoryn
 pcondition = initialize_auditorymodel(subject, auditorymodel,parentdir);
 
 %ask for additional comment on the measurements
-pcondition.additionalcomment = input('Additional comment on the measurements (Enter for none):','s');
+pcondition.additionalcomment = additionalcomment;
 
 
 % if strcmp(subject,'Normal')
