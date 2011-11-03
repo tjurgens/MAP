@@ -56,7 +56,7 @@ if pcondition.use_mfb == 1
 %         
 %         IR = ANsmooth;
         %calculate timing pattern
-        formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,sfreq,savedBFlist);
+        formantpattern = fouriertransform_histogram_log(AN_HSRoutput,sfreq,savedBFlist);
         %formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
         
         %just take the timing features
