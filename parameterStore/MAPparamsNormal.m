@@ -28,7 +28,7 @@ if nargin<3, showParams=0; end
 if nargin<2, sampleRate=50000; end
 if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
     %lowestBF=300; 	highestBF= 1500; 	numChannels=41;
-    lowestBF=250; 	highestBF= 8000; 	numChannels=21;
+    lowestBF=250; 	highestBF= 8000; 	numChannels=41;
     % 21 chs (250-8k)includes BFs at 250 500 1000 2000 4000 8000
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
