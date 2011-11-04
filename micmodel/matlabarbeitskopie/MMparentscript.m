@@ -11,7 +11,7 @@ function MMparentscript(parentdir,repetitionno)
 %  described in Juergens and Brand, JASA 2009 with the MAP model of Meddis
 %  (2006) for different level and noise conditions
 
-SNR = -25:5:5; %dB
+SNR = -15:5:5; %dB
 subject = 'Normal'; %take the parameter file of a normal-hearing listener
 auditorymodel = 'MAP';
 speechlevel = 60; %dB SPL

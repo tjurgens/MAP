@@ -61,8 +61,8 @@ FittedCurve = @(SNR,params) 1./(1+exp(4*params(2)*(params(1)-SNR))).*(1-ratewahr
 gefittete_kurve = FittedCurve(xdata,estimates);%1./(1+exp(4*estimates(2)*(estimates(1)-xdata))).*(1-ratewahrscheinlichkeit)+ratewahrscheinlichkeit;
 
 plot(xdata, 100.*gefittete_kurve, 'k')
-xlabel('Pegel / dB SPL');
-ylabel('Verständlichkeit / %');
+xlabel('SNR (dB)');
+ylabel('Recognition rate (%)');
 %legend('Messdaten','Gefittete psychometrische Funktion','Location','SouthEast');
  
 estimates(2) = estimates(2)*(1-ratewahrscheinlichkeit); %auch die steigung wurde durch das ansetzen der ratewahrscheinlichkeit gestaucht.
