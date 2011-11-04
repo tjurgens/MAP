@@ -474,6 +474,7 @@ actualsignal.waveform = actualsignal.waveform./sqrt(mean(actualsignal.waveform.^
 MAP1_14(actualsignal.waveform,actualsignal.sfreq,-1,parameterfile, ...
     'probability',paramChanges);
 global ANprobRateOutput savedBFlist
+BFs = savedBFlist;
 
 %take only the HSR fibers
 AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
@@ -486,7 +487,7 @@ set(handles.edit11,'String',num2str(1000*size(AN_HSRoutput,2)/2/actualsignal.sfr
 
 %plot the fourierhistogram as image plot
 %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,actualsignal.sfreq,handles.axes5);
-formantpattern = fouriertransform_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
+[formantpattern,BFs] = fouriertransform_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 %formantpattern = getIFpattern(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 %formantpattern = get_timing_after_kim2006(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 %not working currently: formantpattern = getreassignedpattern(AN_HSRoutput,actualsignal.sfreq,handles.axes5,savedBFlist);
@@ -501,16 +502,16 @@ formantpattern = fouriertransform_histogram_log(AN_HSRoutput,actualsignal.sfreq,
 %formantpattern=dct_smooth(formantpattern,15);
 set(gcf,'Currentaxes',handles.axes5);
 
-YTickIdx = 1:floor(numel(savedBFlist)/6):numel(savedBFlist);
+YTickIdx = 1:floor(numel(BFs)/6):numel(BFs);
 %XTickIdx = 1:floor(numel(every_3ms)/6):numel(every_3ms);
-YTickIdxRev = numel(savedBFlist)+1-YTickIdx;
+YTickIdxRev = numel(BFs)+1-YTickIdx;
 if ~isempty(gca)
     axes(gca);  %#ok<MAXES>
     %imagesc(fach(1:number_of_channels_to_display,:));
     imagesc(formantpattern);
     axis xy
     set(gca, 'YTick', YTickIdx);
-    set(gca, 'YTickLabel', num2str(savedBFlist(YTickIdx)', '%0.0f' ));
+    set(gca, 'YTickLabel', num2str(BFs(YTickIdx)', '%0.0f' ));
     ylabel('frequency (Hz)')
     %set(gca, 'XTick', XTickIdx);
     %set(gca, 'XTickLabel', XTickIdx.*3);

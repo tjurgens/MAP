@@ -1,4 +1,4 @@
-function fth_logscale=fouriertransform_histogram_log(ANpattern,sfreq,BFs)
+function [fth_logscale,BFs]=fouriertransform_histogram_log(ANpattern,sfreq,BFs)
 % this function computes the logarithmized fourier transform of winsize
 % long slices of each frequency channel in ANpattern.
 % the highest peak in the FFT is identified and the value stored in a
@@ -70,6 +70,10 @@ for iCounter = 1:size(ANpattern,1) %each channel
          
     end
 end
+
+%choose the frequency resolution and spacing
+lowestBF=250; 	highestBF= 2500; 	numChannels=41;
+BFs=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 
 
 fth_logscale = zeros(length(BFs),size(fth,2));
