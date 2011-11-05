@@ -56,8 +56,9 @@ if pcondition.use_mfb == 1
          
          %IR = ANsmooth;
         %calculate timing pattern
-        formantpattern = fouriertransform_histogram_log(AN_HSRoutput,sfreq,savedBFlist);
-        formantpattern = formantpattern./max(max(formantpattern));
+        %formantpattern = fouriertransform_histogram_log(AN_HSRoutput,sfreq,savedBFlist);
+        %formantpattern = formantpattern./max(max(formantpattern));
+        formantpattern=track_formants_from_IPI_guy(AN_HSRoutput, sfreq);
         %formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
         
         %just take the timing features

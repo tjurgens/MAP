@@ -17,35 +17,35 @@ function [iih,IPIhisttime,IPIhistweight]=track_formants_from_IPI_guy(IFRAN_patte
 
 time_axis = 0:1/sfreq:(size(IFRAN_pattern,2)-1)/sfreq;
 
-%find how many samples of AN_pattern are 10ms and 3ms
+%find how many samples of AN_pattern are 25ms and 10ms
 %one_sample_is_a_time_of = time_axis(2);
 [tmp, start_time_index] = min(abs(0-time_axis));
-[tmp, stop10_time_index] = min(abs(0.01-time_axis));
-number_of_samples10ms = stop10_time_index - start_time_index;
+[tmp, stop_time_index] = min(abs(0.025-time_axis));
+number_of_sampleswindow_ms = stop_time_index - start_time_index;
 
-[tmp, stop3_time_index] = min(abs(0.003-time_axis));
-number_of_samples3ms = stop3_time_index - start_time_index;
-every_3ms = 1:number_of_samples3ms:size(IFRAN_pattern,2)-number_of_samples10ms;
+[tmp, stophop_time_index] = min(abs(0.01-time_axis));
+number_of_sampleshopms = stophop_time_index - start_time_index;
+hopspacing = 1:number_of_sampleshopms:size(IFRAN_pattern,2)-number_of_sampleswindow_ms;
 
 hamm_window = hamming(11);
 halfHamming = (length(hamm_window)-1)/2;
 
 % window normalization
 
-norm = conv(ones(1,floor(number_of_samples10ms/2)),hamm_window);
+norm = conv(ones(1,floor(number_of_sampleswindow_ms/2)),hamm_window);
 norm = norm(5+1:end-5)';
-win_size = number_of_samples10ms;
+win_size = number_of_sampleswindow_ms;
 half_win_size = floor(win_size/2);
-hop_size = number_of_samples3ms;
+hop_size = number_of_sampleshopms;
 
 
 %pre-allocation due to speed
-%Acorr = zeros(size(IFRAN_pattern,1),size(every_3ms,2),number_of_samples10ms*2+1);
-%RAcorr = zeros(size(IFRAN_pattern,1),size(every_3ms,2),number_of_samples10ms*2+1);
-%SRAcorr = zeros(size(IFRAN_pattern,1),size(every_3ms,2),number_of_samples10ms*2+1-10);
-IPIhisttime = zeros(size(IFRAN_pattern,1),size(every_3ms,2),3);
-IPIhistweight = zeros(size(IFRAN_pattern,1),size(every_3ms,2),3);  %maximum 3 peaks from the SRA
-iih = zeros(half_win_size,size(every_3ms,2)+1);
+%Acorr = zeros(size(IFRAN_pattern,1),size(hopspacing,2),number_of_samples10ms*2+1);
+%RAcorr = zeros(size(IFRAN_pattern,1),size(hopspacing,2),number_of_samples10ms*2+1);
+%SRAcorr = zeros(size(IFRAN_pattern,1),size(hopspacing,2),number_of_samples10ms*2+1-10);
+IPIhisttime = zeros(size(IFRAN_pattern,1),size(hopspacing,2),3);
+IPIhistweight = zeros(size(IFRAN_pattern,1),size(hopspacing,2),3);  %maximum 3 peaks from the SRA
+iih = zeros(round(1/250*sfreq),size(hopspacing,2)+1);
 
 
 
@@ -53,7 +53,7 @@ iih = zeros(half_win_size,size(every_3ms,2)+1);
 for iCounter = 1:size(IFRAN_pattern,1) %each channel
     fprintf('Channel No. %i\n',iCounter);
     %time_counter = 1;
-    %for jCounter = every_3ms %every 3ms time segment
+    %for jCounter = hopspacing %every 3ms time segment
     
     
     
@@ -104,7 +104,9 @@ for iCounter = 1:size(IFRAN_pattern,1) %each channel
         % now histogram the intervals
         if (~isempty(interval))
             for k=1:length(interval),
-                iih(round(interval(k)),frame) = iih(round(interval(k)),frame)+amp(k);
+                if round(interval(k)) <= size(iih,1)
+                    iih(round(interval(k)),frame) = iih(round(interval(k)),frame)+amp(k);
+                end
                 IPIhisttime(iCounter,frame,k) = interval(k)/sfreq;
                 IPIhistweight(iCounter,frame,k) = amp(k);
             end
