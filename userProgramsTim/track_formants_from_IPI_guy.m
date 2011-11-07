@@ -1,4 +1,4 @@
-function [iih,IPIhisttime,IPIhistweight]=track_formants_from_IPI_guy(IFRAN_pattern, sfreq)
+function [iih_logscale,IPIhisttime,IPIhistweight]=track_formants_from_IPI_guy(IFRAN_pattern, sfreq)
 % 
 % tracks the formants according to an analysis proposed in Secker-Walker
 % JASA 1990, section V.A
@@ -45,7 +45,8 @@ hop_size = number_of_sampleshopms;
 %SRAcorr = zeros(size(IFRAN_pattern,1),size(hopspacing,2),number_of_samples10ms*2+1-10);
 IPIhisttime = zeros(size(IFRAN_pattern,1),size(hopspacing,2),3);
 IPIhistweight = zeros(size(IFRAN_pattern,1),size(hopspacing,2),3);  %maximum 3 peaks from the SRA
-iih = zeros(round(1/250*sfreq),size(hopspacing,2)+1);
+lower_cutofffrequency = 250;
+iih = zeros(round(1/lower_cutofffrequency*sfreq),size(hopspacing,2)+1);
 
 
 
@@ -113,8 +114,25 @@ for iCounter = 1:size(IFRAN_pattern,1) %each channel
         end
         
     end
+end    
+    %get the frequencies on the y-axis of this internal representation
+   ipihfreqaxis=1./[1/sfreq:1/sfreq:size(iih,1)/sfreq]; 
+    %provide log-spaced bands
     
-    
+    %choose the frequency resolution and spacing
+lowestBF=250; 	highestBF= 8000; 	numChannels=30;
+BFs=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
+
+
+iih_logscale = zeros(length(BFs),size(iih,2));
+%find lowest frequency value to look after >200Hz:
+
+for iCounter = 1:length(ipihfreqaxis);
+    %find that BF that fits best to the ipih-freqaxis
+    [tmp,tmpindex]=min(abs(BFs-ipihfreqaxis(iCounter)));
+    %store result over here
+    iih_logscale(tmpindex,:) = iih_logscale(tmpindex,:)+iih(iCounter,:);
+end
     
     
     %% end Guy's code
@@ -180,5 +198,5 @@ for iCounter = 1:size(IFRAN_pattern,1) %each channel
     %         end
     
     %time_counter = time_counter+1;
-end
+
 
