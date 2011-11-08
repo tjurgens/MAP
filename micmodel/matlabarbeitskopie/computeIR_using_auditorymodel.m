@@ -61,8 +61,12 @@ if pcondition.use_mfb == 1
         formantpattern=track_formants_from_IPI_guy(AN_HSRoutput, sfreq);
         %formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
         
+        %calculate cepstral coefficients
+        cepstralformantpattern = dct(formantpattern);
+        cepstralformantpattern = cepstralformantpattern(2:19,:);
+        
         %just take the timing features
-        IR = formantpattern;
+        IR = cepstralformantpattern; %formantpattern
         
         %concatenate the features
         %IR = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
