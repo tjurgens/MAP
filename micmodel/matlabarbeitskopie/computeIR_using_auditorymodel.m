@@ -63,10 +63,11 @@ if pcondition.use_mfb == 1
         
         %calculate cepstral coefficients
         cepstralformantpattern = dct(formantpattern);
-        cepstralformantpattern = cepstralformantpattern(2:19,:);
+        cepstralformantpattern(16:end,:) = 0;
+        formantpattern = idct(cepstralformantpattern);
         
         %just take the timing features
-        IR = cepstralformantpattern; %formantpattern
+        IR = formantpattern; %cepstralformantpattern; %
         
         %concatenate the features
         %IR = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...
