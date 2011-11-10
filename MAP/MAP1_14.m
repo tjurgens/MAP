@@ -77,7 +77,7 @@ end
 % Beware, 'BFlist=-1' is a legitimate argument for MAPparams<>
 %  It means that the calling program allows MAPparams to specify the list
 cmd=['method=MAPparams' MAPparamsName ...
-    '(BFlist, sampleRate, 1, paramChanges);'];
+    '(BFlist, sampleRate, 0, paramChanges);'];
 eval(cmd);
 BFlist=DRNLParams.nonlinCFs;
 
