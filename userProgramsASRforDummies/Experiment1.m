@@ -1,4 +1,4 @@
-function Exp_Tutorial_1(isMasterNode)
+function Experiment1(isMasterNode)
 
 % Some description of the experiment goes here
 
