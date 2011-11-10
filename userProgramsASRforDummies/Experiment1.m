@@ -5,7 +5,7 @@ function Experiment1(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'New1000';
+expName = 'Baseline_rate_features';
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -25,7 +25,7 @@ learnFolder = fullfile(expFolder,'featL');
 xL = cJob('L', learnFolder);
 
 xL.participant = 'Normal';
-xL.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;', 'OMEParams.rateToAttenuationFactorProb=0;' };
+%xL.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;', 'OMEParams.rateToAttenuationFactorProb=0;' };
 
 xL.noiseLevToUse   =  -200;
 xL.speechLevToUse  =  60;
@@ -71,7 +71,7 @@ for nn = 0*recConditions+1:1*recConditions
     %These are the interesting differences between training and testing
     xR{nn}.numWavs = testWavs; %MAX = 358
     xR{nn}.noiseLevToUse = nzLevel(tmpIdx);
-    xR{nn}.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;'};
+    %xR{nn}.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;'};
     
     
     %Now just to wrap it up ready for processing
@@ -83,27 +83,27 @@ for nn = 0*recConditions+1:1*recConditions
     end
 end
 
-tmpIdx=0;
-for nn = 1*recConditions+1:2*recConditions    
-    tmpIdx=tmpIdx+1;
-    xR{nn} = xL; %simply copy the "Learn" object and change it a bit below
-    recFolder = fullfile(expFolder,[dataFolderPrefix num2str(nn)]);
-    xR{nn}.opFolder = recFolder;    
-    
-    %These are the interesting differences between training and testing
-    xR{nn}.numWavs = testWavs; %MAX = 358
-    xR{nn}.noiseLevToUse = nzLevel(tmpIdx);
-    xR{nn}.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=-10^(-10/20);'};
-    
-    
-    %Now just to wrap it up ready for processing
-    if isMasterNode && ~isdir(xR{nn}.opFolder)
-        mkdir(xR{nn}.opFolder);
-        xR{nn} = xR{nn}.assignWavPaths('R');
-        xR{nn} = xR{nn}.assignFiles;
-        xR{nn}.storeSelf;
-    end
-end
+% tmpIdx=0;
+% for nn = 1*recConditions+1:2*recConditions    
+%     tmpIdx=tmpIdx+1;
+%     xR{nn} = xL; %simply copy the "Learn" object and change it a bit below
+%     recFolder = fullfile(expFolder,[dataFolderPrefix num2str(nn)]);
+%     xR{nn}.opFolder = recFolder;    
+%     
+%     %These are the interesting differences between training and testing
+%     xR{nn}.numWavs = testWavs; %MAX = 358
+%     xR{nn}.noiseLevToUse = nzLevel(tmpIdx);
+%     xR{nn}.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=-10^(-10/20);'};
+%     
+%     
+%     %Now just to wrap it up ready for processing
+%     if isMasterNode && ~isdir(xR{nn}.opFolder)
+%         mkdir(xR{nn}.opFolder);
+%         xR{nn} = xR{nn}.assignWavPaths('R');
+%         xR{nn} = xR{nn}.assignFiles;
+%         xR{nn}.storeSelf;
+%     end
+% end
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
