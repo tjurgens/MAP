@@ -155,7 +155,7 @@ classdef cJob
                     if ismac
                         obj.opFolder = '~/ASR/exps/_foo';
                     else
-                        obj.opFolder = '/scratch/nrclark/exps/_foo';
+                        obj.opFolder = '/scratch/tjurgens/exps/_foo';
                     end
                 else
                     obj.opFolder = 'C:\exps\_foo';
@@ -178,9 +178,9 @@ classdef cJob
                     rWAVpath  = '~/ASR/reducedAURORA/TripletTestData/';
                     obj.noiseFolder = '~/ASR/noises';
                 else                    
-                    lWAVpath = '/scratch/nrclark/corpora/AURORA digits (wav)/TrainingData-Clean/';
-                    rWAVpath  = '/scratch/nrclark/corpora/AURORA digits (wav)/TripletTestData/';
-                    obj.noiseFolder = '/scratch/nrclark/corpora/noises';
+                    lWAVpath = '/scratch/tjurgens/corpora/AURORA2_0/TrainingData-Clean/';
+                    rWAVpath  = '/scratch/tjurgens/corpora/AURORA2_0/TripletTestData/';
+                    obj.noiseFolder = '/scratch/tjurgens/corpora/noises';
                 end
             else
                 lWAVpath = 'C:\MAP\MEGAreducedAURORA\TrainingData-Clean';

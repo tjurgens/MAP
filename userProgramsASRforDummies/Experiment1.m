@@ -8,7 +8,7 @@ function Exp_Tutorial_1(isMasterNode)
 expName = 'Tutorial';
 dataFolderPrefix = 'hello_world';
 if isunix
-    expFolderPrefix = '/scratch/nrclark/exps/';
+    expFolderPrefix = '/scratch/tjurgens/hmmexps/';
 else
     expFolderPrefix = 'C:\Exps';
 end
