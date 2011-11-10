@@ -178,9 +178,9 @@ classdef cJob
                     rWAVpath  = '~/ASR/reducedAURORA/TripletTestData/';
                     obj.noiseFolder = '~/ASR/noises';
                 else                    
-                    lWAVpath = '/scratch/tjurgens/corpora/AURORA2_0/TrainingData-Clean/';
-                    rWAVpath  = '/scratch/tjurgens/corpora/AURORA2_0/TripletTestData/';
-                    obj.noiseFolder = '/scratch/tjurgens/corpora/noises';
+                    lWAVpath = '/scratch/tjurgens/AURORA2_0/TrainingData-Clean/';
+                    rWAVpath  = '/scratch/tjurgens/AURORA2_0/TripletTestData/';
+                    obj.noiseFolder = '/scratch/tjurgens/MAP/wavFileStore';
                 end
             else
                 lWAVpath = 'C:\MAP\MEGAreducedAURORA\TrainingData-Clean';
