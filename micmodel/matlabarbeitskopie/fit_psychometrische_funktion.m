@@ -32,6 +32,7 @@ saettigungsdifferenz_zu_1 = 0;
 start_point = rand(1, 2);
 
 start_point(1) = start_point(1)*mean(SNR);
+start_point(2) = start_point(2)*0.2;
 %start_point(3) = start_point(3)*0.1;
 model = @psy_fun;
 estimates = fminsearch(model, start_point);

@@ -164,7 +164,7 @@ classdef cJob
 
             obj = obj.assignWavPaths(LearnOrRecWavs);
             obj = obj.initMAP;
-            
+            addpath(fullfile('..','userProgramsTim'));
             
         end % ------ OF CONSTRUCTOR
         
@@ -644,8 +644,11 @@ classdef cJob
             end
             
                 
-            finalFeatures = obj.makeANfeatures(  ...
-                obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );            
+            %finalFeatures = obj.makeANfeatures(  ...
+            %    obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );            
+            %this is changed for timing features now
+            finalFeatures = obj.makeANfeatures( ...
+                obj.makeANtiming(ANprobabilityResponse, 1/dt), obj.numCoeff);
             
             if obj.removeEnergyStatic
                 finalFeatures = finalFeatures(2:end,:);
@@ -714,6 +717,15 @@ classdef cJob
             features = GJB_dct(ANrate);
             ANfeatures = features(1:numCoeff,:);            
         end % ------ OF makeANfeatures
+        
+        %% ********************************************************
+        % Timing features
+        %********************************************************
+        function ANtiming = makeANtiming(ANrate, sampleRate)
+           %here put in various timing features
+           
+           ANtiming = fouriertransform_histogram_log(ANrate,sampleRate);
+        end
         
     end % ------ OF STATIC METHODS
     
