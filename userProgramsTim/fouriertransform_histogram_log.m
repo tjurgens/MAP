@@ -72,7 +72,7 @@ for iCounter = 1:size(ANpattern,1) %each channel
 end
 
 %choose the frequency resolution and spacing
-lowestBF=250; 	highestBF= 2500; 	numChannels=41;
+lowestBF=250; 	highestBF= 3500; 	numChannels=21;
 BFs=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 
 
