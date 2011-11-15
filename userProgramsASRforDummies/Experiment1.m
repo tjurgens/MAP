@@ -39,8 +39,8 @@ xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 1000; %MAX=8440
-testWavs = 200; %MAX = 358
+xL.numWavs = 10;%1000; %MAX=8440
+testWavs = 5;%200; %MAX = 358
 nzLevel = [-200 40:10:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -112,7 +112,7 @@ end
 % Nodes that are not the master node are only interested in the opFolder
 % member of the jobjects.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%worker(xL.opFolder);
+worker(xL.opFolder);
 maxConds = nn;
 if ~isMasterNode %dont bother wasting master node effort on generating testing features (for now)
     for nn = 1:maxConds

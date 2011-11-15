@@ -6,14 +6,13 @@ function Exp_Tutorial_1(isMasterNode)
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 expName = 'Tutorial';
-dataFolderPrefix = 'hello_world';
+dataFolderPrefix = 'featR';
 if isunix
     expFolderPrefix = '/scratch/nrclark/exps/';
 else
-    expFolderPrefix = 'C:\Exps';
+    expFolderPrefix = 'D:\Exps';
 end
 
-% expFolderPrefix = pwd;
 expFolder = fullfile(expFolderPrefix,expName);
 hmmFolder = fullfile(expFolder,'hmm');
 
@@ -24,7 +23,7 @@ learnFolder = fullfile(expFolder,'featL');
 
 xL = cJob('L', learnFolder);
 
-xL.participant = 'Normal';
+xL.participant = 'NormalDIFF';
 xL.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;', 'OMEParams.rateToAttenuationFactorProb=0;' };
 
 xL.noiseLevToUse   =  -200;
@@ -39,20 +38,21 @@ xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 20; %MAX=8440
-testWavs = 5; %MAX = 358
+xL.numWavs = 12; %MAX=8440
+testWavs = 6; %MAX = 358
 nzLevel = [-200 40:10:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 xL.noisePreDur = 1;
 xL.noisePostDur = 0.1;
 xL.truncateDur  = xL.noisePreDur-0.1; 
-xL.noiseName = 'factory1';
+
+xL.noiseName = 'pink_demo';
 
 if isMasterNode && ~isdir(xL.opFolder)
     mkdir(xL.opFolder);
     xL = xL.assignFiles;
-    xL.storeSelf;
+    xL.storeSelf; % This is a call to a member function and is not a pointless line of code!
 end
 
 
@@ -72,8 +72,7 @@ for nn = 0*recConditions+1:1*recConditions
     xR{nn}.numWavs = testWavs; %MAX = 358
     xR{nn}.noiseLevToUse = nzLevel(tmpIdx);
     xR{nn}.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;'};
-    
-    
+        
     %Now just to wrap it up ready for processing
     if isMasterNode && ~isdir(xR{nn}.opFolder)
         mkdir(xR{nn}.opFolder);

@@ -1,6 +1,23 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   This program is free software; you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation; either version 2 of the License, or
+%   (at your option) any later version.
+%
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%   GNU General Public License for more details.
+%
+%   You can obtain a copy of the GNU General Public License from
+%   http://www.gnu.org/copyleft/gpl.html or by writing to
+%   Free Software Foundation, Inc.,675 Mass Ave, Cambridge, MA 02139, USA.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 classdef cHMM
     %HMMCLASS Handles all of the HTK related gubbins
-    %   Detailed explanation goes here
+    %   Please see the documentation located in a separate file for further
+    %   information.     
     
     %%  *********************************************************
     %  properties                      _   _
@@ -20,14 +37,13 @@ classdef cHMM
         hmmFolder
         paramType               = 'USER_D_A'; %DELTAS and ACCELERATIONS
         numCoeff                = 27; %9*3 THIS IS FOR PROBABILITY MODEL (not high spont+low spont which would be 18*3=54)
-        
-        
+                
         HERestDataPath      = fullfile(pwd, 'def', 'HERest_digit');
         binPath             = fullfile(pwd, 'def', 'bin');
-        configFile          = fullfile(pwd, 'def', 'config_tr_zcpa12');
+        configFile          = fullfile(pwd, 'def', 'config_STANDARD');
         trainWordListFile   = fullfile(pwd, 'def', 'Grammar_digit', 'words3');
         testWordListFile    = fullfile(pwd, 'def', 'Grammar_digit', 'wordsNoSevenZero');
-        wordNetFile         = fullfile(pwd, 'def', 'Grammar_digit', 'wdnetNRCnoSP.slf');
+        wordNetFile         = fullfile(pwd, 'def', 'Grammar_digit', 'wdnetNoSP.slf');
         dictFile            = fullfile(pwd, 'def', 'Grammar_digit', 'noSevenZeroDict');
     end
     
@@ -63,16 +79,7 @@ classdef cHMM
         function genProto(obj)
             % models_1mixsil.exe - takes input (hmmdef) and copies it making a
             % basis of one, two three etc. etc.
-            
-            %Thing I had to add because of the dodgy Motorola progs
-            if isunix
-                binExt = [];
-            else
-                binExt = '.exe';
-            end
-            
-            cmd = [obj.binPath filesep 'models_1mixsil' binExt ' ' obj.hmmFolder filesep 'hmm0' filesep 'hmmdef ' obj.hmmFolder filesep 'hmm0' filesep 'models'];
-            system(cmd);
+            obj.models_1mixsilMat(fullfile(obj.hmmFolder,'hmm0','hmmdef'), fullfile(obj.hmmFolder,'hmm0','models'));            
         end % ------ OF GENPROTO
         
         %% **********************************************************
@@ -86,17 +93,10 @@ classdef cHMM
         % Train
         %************************************************************
         function train(obj, trainFeatureFolder)
-            
-            %Thing I had to add because of the dodgy Motorola progs
-            if isunix
-                binExt = [];
-            else
-                binExt = '.exe';
-            end
-            
+                       
             % Most of the following code block can be replaced by doing a
-            % find and replace across the Sheffield code below. I didn't
-            % want to mess with the Sheffield code too much so I just
+            % find and replace across the  code below. I didn't
+            % want to mess with the working code too much, so I just
             % copied the object properties needed into the variable names
             % expected.
             
@@ -108,29 +108,26 @@ classdef cHMM
             
             NUM_COEF        = obj.numCoeff;
             PAR_TYPE        = obj.paramType;
-            BINDIR          = obj.binPath;
             LIST_FILE       = fullfile(obj.hmmFolder, 'tmp.list');
             
             word_list       = obj.trainWordListFile;%fullfile(obj.grammarPath, 'words');
             word_listSP     = word_list; % for use in hmm4 onwards - UGLY HACK NOW SP ABANDONED
-            proto           = obj.protoFile;
+            proto           = obj.protoFile;%Does not exist on disk just yet probably - see a few lines down
             config          = obj.configFile;
             train_list      = fullfile(trainFeatureFolder, 'list.scp');
             labels          = fullfile(trainFeatureFolder, 'labels.mlf');
             labelssp        = labels; % for use in hmm4 onwards - UGLY HACK NOW SP ABANDONED
             hmm_dir         = obj.hmmFolder;
             
-            trainSet        = trainFeatureFolder;
             FEAT_ROOT       = trainFeatureFolder;
             
-            % Now for the actual HMM training code
-            % Now for the actual HMM training code
             % Now for the actual HMM training code
             mkdir(hmm_dir)
             for I = 0:36
                 h = fullfile(hmm_dir,['hmm' num2str(I)]);
                 mkdir(h);
             end
+            obj.makeProtoHmm(proto, obj.paramType, obj.numCoeff, 18);
             
             fid = fopen(train_list,'r');
             disp(train_list)
@@ -147,19 +144,16 @@ classdef cHMM
             
             % HCompV just gets the vfloor stuff out so we can begin approximating
             cmd = ['"HCompV" -T 2 -D -C "' config '" -o hmmdef -f 0.01 -m -S "' LIST_FILE '" -M "' hmm_dir filesep 'hmm0" "' proto '"'];
-            system(cmd);
+            system(cmd);                        
             
-            disp('Seed HMM successfully Produced.....');
-            
-            %not sure about macro just jet but it is dictionary independent, so
-            %leave it for now
-            cmd = [BINDIR filesep 'macro' binExt ' ' num2str(NUM_COEF) ' ' PAR_TYPE ' ' '"' hmm_dir filesep 'hmm0' filesep 'vFloors' '" "' hmm_dir filesep 'hmm0' filesep 'macros' '"'];
-            system(cmd);
+            %cmd = [BINDIR filesep 'macro' binExt ' ' num2str(NUM_COEF) ' ' PAR_TYPE ' ' '"' hmm_dir filesep 'hmm0' filesep 'vFloors' '" "' hmm_dir filesep 'hmm0' filesep 'macros' '"'];
+            %system(cmd);            
+            obj.macroMat(NUM_COEF,PAR_TYPE, fullfile(hmm_dir, 'hmm0', 'vFloors'), fullfile(hmm_dir, 'hmm0', 'macros'));
             
             %MAKE THE INITIAL MODEL PROTOTYPE
             genProto(obj);
-            
-            
+                        
+            disp('Seed HMM successfully Produced.....');
             
             %Training
             for I = 1:3
@@ -173,40 +167,23 @@ classdef cHMM
             disp('3 iterations complete');
             
             rmdir ([hmm_dir filesep 'hmm4'],'s')
-            copyfile ([hmm_dir filesep 'hmm3'], [hmm_dir filesep 'hmm4'])
+            copyfile ([hmm_dir filesep 'hmm3'], [hmm_dir filesep 'hmm4'])                                                
             
-            % From: http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7
-            %  In the last step you created HMM models that did not include an "sp"
-            %  (short pause) silence model - which refers to the types of short pauses
-            %  that occur between words in normal speech.  However, you did create a
-            %  "sil" silence model - sil silence models are typically of longer
-            %  duration, and refer to the pauses occur at the end of a sentence.
-            %
-            % The HTK book says that the sp model needs to have its "emitting state
-            % tied to the centre state of the silence model".  What this means is that
-            % you need to create a new sp model in your hmmdefs, that it will use the
-            % centre state of sil, and then they both need to be 'tied' together.  For
-            % a bit of background on HMMs and states, see this example.
-            %
-            % This can be done by copying the centre state from the sil model in your
-            % hmmdefs file and adding it to the sp model, and then running a special
-            % tool called HHED to 'tie' the sp model to the sil model so that they
-            % share the same centre state.  The HTK book provides some background on
-            % what this means, but you need an understanding of the basics of Hidden
-            % Markov Modelling before tackling the HTK Book explanations (the
-            % University of Leeds HMM tutorial provides a very good tutorial on Hidden
-            % Markov Modelling).
-            
-            cmd = [BINDIR filesep 'spmodel_gen' binExt ' ' hmm_dir filesep 'hmm3' filesep 'models ' hmm_dir filesep 'hmm4' filesep 'models'];
-            system(cmd);
-            %             pause
-            
-            % after the spmodel_gen command - the word_list is changed to
-            % word_listSP. The sp model is just ignored in the Y/N task
+            % The following command takes state 3 from the silence model
+            % and appends it to the end of the model as state 2 of the
+            % short pause model.
+            % Original:
+            % cmd = [BINDIR filesep 'spmodel_gen' binExt ' ' hmm_dir filesep 'hmm3' filesep 'models ' hmm_dir filesep 'hmm4' filesep 'models'];
+            % system(cmd);
+            % New:
+            obj.spmodel_genMat(fullfile(hmm_dir,'hmm3','models'), fullfile(hmm_dir,'hmm4','models'));                                     
             
             cmd = ['HHEd  -T 2 -H ' hmm_dir filesep 'hmm4' filesep 'macros -H ' hmm_dir filesep 'hmm4' filesep 'models -M ' hmm_dir filesep 'hmm5 ' ED_CMDFILE1 ' ' word_listSP ];
             system(cmd);
             disp ('SP model fixed')
+            
+            % after the spmodel_gen command - the word_list is changed to
+            % word_listSP. The sp model is just ignored currently
             
             for I = 6:8
                 disp(I)
@@ -313,19 +290,7 @@ classdef cHMM
         % Get methods determining feature vector related gubbins
         %************************************************************
         function value = get.protoFile(obj)
-            if (obj.numCoeff == 27) && strcmpi(obj.paramType, 'USER_D_A')
-                value  = fullfile(pwd, 'def', 'proto_RobANonly_9'); %probability/HSR/LSR only
-            elseif (obj.numCoeff == 26) && strcmpi(obj.paramType, 'USER_E_D_A_N')
-                value  = fullfile(pwd, 'def', 'proto_NickManualANonly_9noEng'); %probability both HSR AND LSR
-            elseif (obj.numCoeff == 24) && strcmpi(obj.paramType, 'USER_D_A')
-                value  = fullfile(pwd, 'def', 'proto_Nick8'); 
-            elseif (obj.numCoeff == 60) && strcmpi(obj.paramType, 'USER_D_A')
-                value  = fullfile(pwd, 'def', 'proto_Nick20'); 
-            elseif (obj.numCoeff == 14*3) && strcmpi(obj.paramType, 'USER_D_A')
-                value  = fullfile(pwd, 'def', 'proto_Nick14'); 
-            else
-                error('No appropriate prototype')
-            end
+            value = fullfile(obj.hmmFolder, 'proto_AutoGen');
         end
         
     end % ------ OF METHODS
@@ -339,7 +304,219 @@ classdef cHMM
     % |___/\__\__,_|\__|_|\___| |_| |_| |_|\___|\__|_| |_|\___/ \__,_|___/
     %************************************************************
     
-    methods(Static)
+    methods(Static)        
+        %% **********************************************************
+        % macroMat (matlab port of macro C code)
+        % ported by NC - Nov 2011
+        %************************************************************
+        function macroMat(VECSIZE, PARAMETER_TYPE, infile, outfile)
+          % This function takes the vFloors file that is created after
+          % invoking HCompV and generates a Macro file required for further  
+          % HMM training 
+            
+            ofp = fopen(outfile,'w');
+                        
+            fprintf(ofp, '~o\n<STREAMINFO> 1 %d\n', VECSIZE);
+            fprintf(ofp, '<VECSIZE> %d\n', VECSIZE);
+            fprintf(ofp, '<NULLD>\n<%s>\n', PARAMETER_TYPE);
+            
+            fp = fopen(infile);            
+            tline = fgets(fp);
+            while ischar(tline)
+                fprintf(ofp,tline);
+                tline = fgets(fp);
+            end
+            fclose(fp);
+            fclose(ofp);
+        end %---- of MACROMAT
+        
+        %% **********************************************************
+        % spmodel_genMat (matlab port of spmodel_gen C code)
+        % ported by NC - Nov 2011
+        %************************************************************
+        function spmodel_genMat(infile, outfile)
+          % This function copies the middle state (3) from the silence model
+          % and makes a sp model out of it by copying it to state 2 of the sp model.
+          
+          % From: http://www.voxforge.org/home/dev/acousticmodels/linux/create/htkjulius/tutorial/monophones/step-7
+            %  In the last step you created HMM models that did not include an "sp"
+            %  (short pause) silence model - which refers to the types of short pauses
+            %  that occur between words in normal speech.  However, you did create a
+            %  "sil" silence model - sil silence models are typically of longer
+            %  duration, and refer to the pauses occur at the end of a sentence.
+            %
+            % The HTK book says that the sp model needs to have its "emitting state
+            % tied to the centre state of the silence model".  What this means is that
+            % you need to create a new sp model in your hmmdefs, that it will use the
+            % centre state of sil, and then they both need to be 'tied' together.  For
+            % a bit of background on HMMs and states, see this example.
+            %
+            % This can be done by copying the centre state from the sil model in your
+            % hmmdefs file and adding it to the sp model, and then running a special
+            % tool called HHED to 'tie' the sp model to the sil model so that they
+            % share the same centre state.  The HTK book provides some background on
+            % what this means, but you need an understanding of the basics of Hidden
+            % Markov Modelling before tackling the HTK Book explanations 
+            
+            ofp = fopen(outfile,'a+'); % we append this time
+            
+            fprintf(ofp,'~h "sp"\n');
+            fprintf(ofp,'<BEGINHMM>\n<NUMSTATES> 3\n<STATE> 2\n');
+            
+            %-- This block gets the hmmdef file to the MODEL
+            lNow = [];
+            fp = fopen(infile);
+            while ~(strcmpi(lNow, '~h "sil"'))
+                lNow = fgetl(fp);
+            end
+            %------------------------------
+            
+            %-- This block gets the hmmdef file to the STATE
+            lNow = [];
+            fp = fopen(infile);
+            while ~(strcmpi(lNow, ['<STATE> ' num2str(3)]))
+                lNow = fgetl(fp);
+            end
+            %------------------------------
+            
+            %%% This block puts a copy of the hmmdef file in from the
+            %%% correct line as found above
+            tline = fgetl(fp);
+            while ~(strcmpi(tline, ['<STATE> ' num2str(4)]))
+                fprintf(ofp,'%s\n', tline);
+                tline = fgetl(fp);
+            end
+            fclose(fp);
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            
+            fprintf(ofp,'<TRANSP> 3\n0.000000e+00 1.000000e+00 0.000000e+00\n');
+            fprintf(ofp,'0.000000e+00 5.000000e-01 5.000000e-01\n');
+            fprintf(ofp,'0.000000e+00 0.000000e+00 0.000000e+00\n<ENDHMM>\n');                        
+
+            fclose(ofp);
+        end %---- of spmodel_genMat
+        
+        %% **********************************************************
+        % models_1mixsilMat (matlab port of models_1mixsil C code)
+        % ported by NC - Nov 2011
+        %************************************************************
+        function models_1mixsilMat(infile, outfile)
+            % This function takes the hmmdef file and      
+            % generates a HMM Model file       
+            
+            ofp = fopen(outfile,'w');
+            for ii = 1:11
+                
+                %%% This block gets the hmmdef file to the correct line
+                lNow = [];                                
+                fp = fopen(infile);
+                while ~(strcmpi(lNow, '~h "hmmdef"'))
+                    lNow = fgetl(fp);
+                end
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                
+                %%% This block puts a numbered header
+                if ii==1;  fprintf(ofp,'~h "one"\n'); end
+                if ii==2;  fprintf(ofp,'~h "two"\n'); end
+                if ii==3;  fprintf(ofp,'~h "three"\n'); end
+                if ii==4;  fprintf(ofp,'~h "four"\n'); end
+                if ii==5;  fprintf(ofp,'~h "five"\n'); end
+                if ii==6;  fprintf(ofp,'~h "six"\n'); end
+                if ii==7;  fprintf(ofp,'~h "seven"\n'); end
+                if ii==8;  fprintf(ofp,'~h "eight"\n'); end
+                if ii==9;  fprintf(ofp,'~h "nine"\n'); end
+                if ii==10; fprintf(ofp,'~h "oh"\n'); end
+                if ii==11; fprintf(ofp,'~h "zero"\n'); end
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                
+                %%% This block puts a copy of the hmmdef file in from the
+                %%% correct line as found above
+                tline = fgets(fp);
+                while ischar(tline)
+                    fprintf(ofp,tline);
+                    tline = fgets(fp);
+                end                
+                fclose(fp); %close it as we reached EOF
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            end
+            
+            %%% THIS IS THE SILENCE MODEL @ THE END
+            fprintf(ofp,'~h "sil"\n');
+            fprintf(ofp,'<BEGINHMM>\n<NUMSTATES> 5\n');
+            for kk = 2:4
+                fprintf(ofp,'<STATE> %d\n<NUMMIXES> 1\n', kk);
+                %-- This block gets the hmmdef file to the correct line
+                lNow = [];                                
+                fp = fopen(infile);
+                while ~(strcmpi(lNow, ['<STATE> ' num2str(kk)]))
+                    lNow = fgetl(fp);
+                end
+                %------------------------------
+                
+                %%% This block puts a copy of the hmmdef file in from the
+                %%% correct line as found above
+                tline = fgetl(fp);
+                while ~(strcmpi(tline, ['<STATE> ' num2str(kk+1)]))
+                    fprintf(ofp,'%s\n', tline);
+                    tline = fgetl(fp);
+                end                 
+                fclose(fp);
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            end
+            
+            fprintf(ofp,'<TRANSP> 5\n0.000000e+00 1.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00\n');
+            fprintf(ofp,'0.000000e+00 6.000000e-01 4.000000e-01 0.000000e+00 0.000000e+00\n');
+            fprintf(ofp,'0.000000e+00 0.000000e+00 6.000000e-01 4.000000e-01 0.000000e+00\n');
+            fprintf(ofp,'0.000000e+00 0.000000e+00 0.000000e+00 7.000000e-01 3.000000e-01\n');
+            fprintf(ofp,'0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00\n<ENDHMM>\n');
+            
+            fclose(ofp);
+        end %---- of models_1mixsilMat
+        
+        %% **********************************************************
+        % makeProtoHmm (Make a prototype HMM)
+        %************************************************************
+        function makeProtoHmm(filename,featureType,numFeatures,numStates)
+            % filename is obvious
+            % featureType is usually USER_D_A
+            % numFeatures is number of features (including differences if used)
+            % numStates is usually 18
+            
+            ofp = fopen(filename,'w');
+            
+            fprintf(ofp,'<BeginHMM>\n');
+            fprintf(ofp,' <NumStates> %d <VecSize> %d <%s> <nullD> <diagC>\n',numStates,numFeatures,featureType');
+            fprintf(ofp,' <StreamInfo> 1 %d\n',numFeatures);
+            for state=2:numStates-1,
+                fprintf(ofp,' <State> %d <NumMixes> 1\n',state);
+                fprintf(ofp,'  <Stream> 1\n');
+                fprintf(ofp,'  <Mixture> 1 1.0\n');
+                fprintf(ofp,'    <Mean> %d\n',numFeatures);
+                fprintf(ofp,'      ');
+                fprintf(ofp,'%1.1f ',zeros(1,numFeatures));
+                fprintf(ofp,'\n');
+                fprintf(ofp,'   <Variance> %d\n',numFeatures);
+                fprintf(ofp,'      ');
+                fprintf(ofp,'%1.1f ',ones(1,numFeatures));
+                fprintf(ofp,'\n');
+            end
+            fprintf(ofp,'<TransP> %d\n',numStates);
+            transp = zeros(numFeatures);
+            transp(1,2)=1;
+            for state=2:numStates-2,
+                transp(state,state)=0.6;
+                transp(state,state+1)=0.4;
+            end
+            transp(numStates-1,numStates-1)=0.9;
+            transp(numStates-1,numStates)=0.1;
+            for state=1:numStates,
+                fprintf(ofp,'%1.3e  ',transp(state,1:numStates));
+                fprintf(ofp,'\n');
+            end
+            fprintf(ofp,'<EndHMM>\n');                      
+            fclose(ofp);
+        end %---- of MAKEPROTOHMM
+        
         %% **********************************************************
         % createMLF - master label file - belongs with hmm class
         %************************************************************
@@ -497,10 +674,8 @@ classdef cHMM
         function scoreWholeFolder(folderToScore, searchString)
             if nargin < 2
                 searchString = '*featR*';
-            end
-            
+            end            
             dirInfo = dir(fullfile(folderToScore, searchString));
-%              dirInfo.name
             numFolders = numel(dirInfo);
             for nn = 1:numFolders;
                 currentScoring = fullfile(folderToScore, dirInfo(nn).name);
@@ -513,8 +688,7 @@ classdef cHMM
         %**************************************************************************
         % htk_str2num - Convert strings to integers
         %**************************************************************************
-        function opNum = htk_str2num(ipString)
-            
+        function opNum = htk_str2num(ipString)            
             switch ipString
                 case {'oh' , 'O'}
                     opNum = 0;
@@ -537,7 +711,7 @@ classdef cHMM
                 otherwise
                     assert(0) % throw error
             end
-        end % ------ OF htk_str2num
+        end % ------ OF htk_str2num                      
         
     end % ------ OF STATIC METHODS
     
