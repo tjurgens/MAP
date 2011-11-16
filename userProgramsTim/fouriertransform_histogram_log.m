@@ -47,7 +47,7 @@ for iCounter = 1:size(ANpattern,1) %each channel
         smoothed_frame = conv(frames(frame,:),hamm_window);
         smoothed_frame = smoothed_frame(halfHamming+1:end-halfHamming);
         %fsra = 20*log10(abs(fft(smoothed_frame-mean(smoothed_frame),fftbinlength)));
-        fsra = abs(fft(smoothed_frame-mean(smoothed_frame)));
+        fsra = abs(fft(smoothed_frame-mean(smoothed_frame),1000));
         fsra = fsra(1:floor(length(fsra)/2));
         
         t = [0:1/sfreq:fftbinlength/sfreq-1/sfreq];
@@ -64,7 +64,7 @@ for iCounter = 1:size(ANpattern,1) %each channel
          %store the amplitude of only one peak of the FFT in a histogram
          if (~isempty(valid_peak_index))
             for k=1:length(valid_peak_index),
-                fth(idx(valid_peak_index(k)),frame) = fth(idx(valid_peak_index(k)),frame)+amp(k);            
+                fth(idx(valid_peak_index(k)),frame) = fth(idx(valid_peak_index(k)),frame)+amp(k)*BFs(iCounter);            
             end
         end
          
@@ -72,9 +72,9 @@ for iCounter = 1:size(ANpattern,1) %each channel
 end
 
 %choose the frequency resolution and spacing
-lowestBF=250; 	highestBF= 3500; 	numChannels=41;
+lowestBF=250; 	highestBF= 3500; 	numChannels=47;
 BFs=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-BFs = [250:42:586 BFs(15:end)];
+BFs = [250:42:586 BFs(17:end)];
 
 fth_logscale = zeros(length(BFs),size(fth,2));
 %find lowest frequency value to look after >200Hz:
