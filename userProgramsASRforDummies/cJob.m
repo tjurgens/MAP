@@ -182,6 +182,9 @@ classdef cJob
             obj = obj.assignWavPaths(LearnOrRecWavs);
             obj = obj.initMAP;
             addpath(fullfile('..','userProgramsTim'));
+            tmp_clock = clock;
+            rand('twister',sum(10000*tmp_clock(6))); %Tageszeitabhängiger Zustand des Zufallsgenerators 
+            randn('state',sum(10000*tmp_clock(6)));
             
         end % ------ OF CONSTRUCTOR
         
