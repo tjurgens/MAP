@@ -653,8 +653,9 @@ classdef cJob
             
             %finalFeatures = obj.makeANfeatures(  ...
             %    obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
-            finalFeatures = obj.makeANfeatures( ...
-                obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
+            %finalFeatures = obj.makeANfeatures( ...
+            %    obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
+            finalFeatures = obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist);
             
             if obj.removeEnergyStatic
                 finalFeatures = finalFeatures(2:end,:);
