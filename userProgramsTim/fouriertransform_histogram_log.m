@@ -72,9 +72,9 @@ for iCounter = 1:size(ANpattern,1) %each channel
 end
 
 %choose the frequency resolution and spacing
-lowestBF=250; 	highestBF= 3500; 	numChannels=21;
+lowestBF=250; 	highestBF= 3500; 	numChannels=41;
 BFs=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-
+BFs = [250:42:586 BFs(15:end)];
 
 fth_logscale = zeros(length(BFs),size(fth,2));
 %find lowest frequency value to look after >200Hz:
