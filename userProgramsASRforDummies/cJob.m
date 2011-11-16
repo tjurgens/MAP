@@ -651,7 +651,7 @@ classdef cJob
             %finalFeatures = obj.makeANfeatures(  ...
             %    obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
             finalFeatures = obj.makeANfeatures( ...
-                obj.makeANtiming(ANprobabilityResponse, 1/dt), obj.numCoeff);
+                obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
             
             if obj.removeEnergyStatic
                 finalFeatures = finalFeatures(2:end,:);
@@ -940,10 +940,10 @@ classdef cJob
         %% ********************************************************
         % Timing features
         %********************************************************
-        function ANtiming = makeANtiming(ANrate, sampleRate)
+        function ANtiming = makeANtiming(ANrate, sampleRate, BFs)
            %here put in various timing features
            
-           ANtiming = fouriertransform_histogram_log(ANrate,sampleRate);
+           ANtiming = fouriertransform_histogram_log(ANrate,sampleRate, BFs);
         end
         
     end % ------ OF STATIC METHODS
