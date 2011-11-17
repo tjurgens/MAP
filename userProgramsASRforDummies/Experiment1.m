@@ -112,7 +112,7 @@ end
 % Nodes that are not the master node are only interested in the opFolder
 % member of the jobjects.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%worker(xL.opFolder);
+worker(xL.opFolder);
 maxConds = nn;
 if ~isMasterNode %dont bother wasting master node effort on generating testing features (for now)
     for nn = 1:maxConds
@@ -133,7 +133,7 @@ if isMasterNode
     end
     y = cHMM(hmmFolder);    
     %y.numCoeff = (xL.numCoeff-logical(xL.removeEnergyStatic)) * 3;
-    y.numCoeff = 40*3;
+    y.numCoeff = 40;
     y.createSCP(xL.opFolder)
     y.createMLF(xL.opFolder)
     y.train(xL.opFolder) %This node can be busy training, even if other jobs are being processed for testing
