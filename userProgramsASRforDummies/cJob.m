@@ -723,7 +723,7 @@ classdef cJob
             % make feature vectors
             features = DFLT(ANrate);
             %features = cJob.GJB_dct(ANrate);
-            %ANfeatures = features(1:numCoeff,:);
+            ANfeatures = features(1:numCoeff,:);
         end % ------ OF makeANfeatures
         
         %% ************************************************************************
