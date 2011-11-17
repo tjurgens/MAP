@@ -5,7 +5,7 @@ function Experiment1(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'Fourier_timing_features40_noDCT';
+expName = 'Fourier_timing_features40_DFLT';
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -35,12 +35,12 @@ xL.MAPopMSR = 0;
 xL.MAPopLSR = 0;
 
 
-xL.numCoeff = 34;
+xL.numCoeff = 20;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 1000; %10;%MAX=8440
-testWavs = 200;%5;MAX = 358
+xL.numWavs = 1;%1000; %10;%MAX=8440
+testWavs = 1;%200;%5;MAX = 358
 nzLevel = [-200 40:10:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -132,8 +132,8 @@ if isMasterNode
         xL.unlockJobList;
     end
     y = cHMM(hmmFolder);    
-    %y.numCoeff = (xL.numCoeff-logical(xL.removeEnergyStatic)) * 3;
-    y.numCoeff = 40;
+    y.numCoeff = (xL.numCoeff-logical(xL.removeEnergyStatic)) * 3;
+    %y.numCoeff = 40;
     y.createSCP(xL.opFolder)
     y.createMLF(xL.opFolder)
     y.train(xL.opFolder) %This node can be busy training, even if other jobs are being processed for testing

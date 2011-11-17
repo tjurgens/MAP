@@ -35,12 +35,12 @@ classdef cHMM
     %************************************************************
     properties(Access = public)
         hmmFolder
-        paramType               = 'USER';%'USER_D_A'; %DELTAS and ACCELERATIONS
+        paramType               = 'USER_D_A';%'USER';% %DELTAS and ACCELERATIONS
         numCoeff                = 27; %9*3 THIS IS FOR PROBABILITY MODEL (not high spont+low spont which would be 18*3=54)
                 
         HERestDataPath      = fullfile(pwd, 'def', 'HERest_digit');
         binPath             = fullfile(pwd, 'def', 'bin');
-        configFile          = fullfile(pwd, 'def', 'config_noDELTAS');%'config_STANDARD');
+        configFile          = fullfile(pwd, 'def', 'config_STANDARD');%'config_noDELTAS');%
         trainWordListFile   = fullfile(pwd, 'def', 'Grammar_digit', 'words3');
         testWordListFile    = fullfile(pwd, 'def', 'Grammar_digit', 'wordsNoSevenZero');
         wordNetFile         = fullfile(pwd, 'def', 'Grammar_digit', 'wdnetNoSP.slf');

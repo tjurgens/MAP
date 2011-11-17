@@ -653,9 +653,9 @@ classdef cJob
             
             %finalFeatures = obj.makeANfeatures(  ...
             %    obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
-            %finalFeatures = obj.makeANfeatures( ...
-            %    obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
-            finalFeatures = obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist);
+            finalFeatures = obj.makeANfeatures( ...
+                obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
+            %finalFeatures = obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist);
             
             if obj.removeEnergyStatic
                 finalFeatures = finalFeatures(2:end,:);
@@ -721,8 +721,9 @@ classdef cJob
         %**********************************************************
         function ANfeatures = makeANfeatures(ANrate, numCoeff)
             % make feature vectors
-            features = cJob.GJB_dct(ANrate);
-            ANfeatures = features(1:numCoeff,:);
+            features = DFLT(ANrate);
+            %features = cJob.GJB_dct(ANrate);
+            %ANfeatures = features(1:numCoeff,:);
         end % ------ OF makeANfeatures
         
         %% ************************************************************************
