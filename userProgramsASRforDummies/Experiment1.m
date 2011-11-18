@@ -5,7 +5,7 @@ function Experiment1(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'Fourier_timing_features47_DFLT';
+expName = 'Fourier_timing_features47_EXP10';
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -35,7 +35,7 @@ xL.MAPopMSR = 0;
 xL.MAPopLSR = 0;
 
 
-xL.numCoeff = 20;
+xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%

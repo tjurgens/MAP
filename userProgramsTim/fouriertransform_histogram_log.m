@@ -31,7 +31,7 @@ win_size = number_of_samples25ms;
 hop_size = number_of_samples10ms;
 
 %preallocation due to speed
-fftbinlength = 1000;
+fftbinlength = 2048;
 fth = zeros(fftbinlength/2,size(every_10ms,2)+1);
 
 for iCounter = 1:size(ANpattern,1) %each channel
@@ -47,7 +47,7 @@ for iCounter = 1:size(ANpattern,1) %each channel
         smoothed_frame = conv(frames(frame,:),hamm_window);
         smoothed_frame = smoothed_frame(halfHamming+1:end-halfHamming);
         %fsra = 20*log10(abs(fft(smoothed_frame-mean(smoothed_frame),fftbinlength)));
-        fsra = abs(fft(smoothed_frame-mean(smoothed_frame),1000));
+        fsra = abs(fft(smoothed_frame-mean(smoothed_frame),fftbinlength));
         fsra = fsra(1:floor(length(fsra)/2));
         
         t = [0:1/sfreq:fftbinlength/sfreq-1/sfreq];
