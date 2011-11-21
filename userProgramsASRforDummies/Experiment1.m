@@ -47,7 +47,7 @@ nzLevel = [-200 40:10:70];
 xL.noisePreDur = 1;
 xL.noisePostDur = 0.1;
 xL.truncateDur  = xL.noisePreDur-0.1; 
-xL.noiseName = 'factory';%'20TalkerBabble_bp';
+xL.noiseName = 'factory1';%'20TalkerBabble_bp';
 
 if isMasterNode && ~isdir(xL.opFolder)
     mkdir(xL.opFolder);
