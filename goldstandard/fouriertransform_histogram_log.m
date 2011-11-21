@@ -24,7 +24,6 @@ number_of_samples10ms = stop10_time_index - start_time_index;
 every_10ms = 1:number_of_samples10ms:size(ANpattern,2)-number_of_samples25ms;
 
 hamm_window = hamming(11);
-hamm_window = hamm_window./sum(hamm_window);
 halfHamming = (length(hamm_window)-1)/2;
 
 % window specification
@@ -48,14 +47,8 @@ for iCounter = 1:size(ANpattern,1) %each channel
         smoothed_frame = conv(frames(frame,:),hamm_window);
         smoothed_frame = smoothed_frame(halfHamming+1:end-halfHamming);
         %fsra = 20*log10(abs(fft(smoothed_frame-mean(smoothed_frame),fftbinlength)));
-        fsra = abs(fft(2*(smoothed_frame-mean(smoothed_frame)),fftbinlength))./length(smoothed_frame)*sqrt(2); %scaling, to actually add up firing rates
-        %factor 2 is in order to compensate for the subtraction of the mean
-        %length and sqrt are scaling factor in order to compensate for
-        %matlabs (stupid) fft function
+        fsra = abs(fft(smoothed_frame-mean(smoothed_frame),fftbinlength));
         fsra = fsra(1:floor(length(fsra)/2));
-        
-        %divide again by 2 in order to get "average" firing rates added...
-        fsra=fsra./2;
         
         t = [0:1/sfreq:fftbinlength/sfreq-1/sfreq];
         frequency = [0:1/t(end):1/(2*(t(2)-t(1)))];
