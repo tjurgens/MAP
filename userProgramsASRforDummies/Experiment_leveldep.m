@@ -1,4 +1,4 @@
-function Experiment1(isMasterNode)
+function Experiment_leveldep(isMasterNode)
 
 % Some description of the experiment goes here
 
@@ -41,7 +41,8 @@ xL.removeEnergyStatic = 0;
 %%%%% Group of params that will influence simulation run time %%%%%%%
 xL.numWavs = 1000; %10;%MAX=8440
 testWavs = 200;%5;MAX = 358
-nzLevel = [-200 40:10:70];
+%nzLevel = [-200 40:10:70];
+speechLevel = [30:15:90];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 xL.noisePreDur = 1;
@@ -59,7 +60,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Sort out the testing (RECOGNITION) conditions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-recConditions = numel(nzLevel);
+recConditions = numel(speechLevel);
 
 tmpIdx=0;
 for nn = 0*recConditions+1:1*recConditions    
@@ -70,7 +71,7 @@ for nn = 0*recConditions+1:1*recConditions
     
     %These are the interesting differences between training and testing
     xR{nn}.numWavs = testWavs; %MAX = 358
-    xR{nn}.noiseLevToUse = nzLevel(tmpIdx);
+    xR{nn}.speechLevToUse = speechLevel(tmpIdx);
     %xR{nn}.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;'};
     
     

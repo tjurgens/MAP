@@ -44,6 +44,9 @@ for iCounter = 1:number_of_AURORAfiles %for each file
     speech = speech./sqrt(mean(speech.^2)); %Normalize RMS to 1
     speech = speech * 20e-6 * 10^(currentSpeechLevel/20); %Convert RMS to pascals at desired level
     
+    %cut the silence preceding and subsequently to the utterance
+    speech = cutsignal_aurora(speech,speechSampleRate,'a_a');
+    
     % here put in YOUR FEATURE EXTRACTION %%%%%%%%
     [ANprobabilityResponse, dt, myBFlist] = MAPwrap(speech, speechSampleRate, -1, MAPparameterfile, AN_spikesOrProbability, MAPparamChanges);
     nChannels = numel(myBFlist);

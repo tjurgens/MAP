@@ -487,8 +487,8 @@ set(handles.edit11,'String',num2str(1000*size(AN_HSRoutput,2)/2/actualsignal.sfr
 
 %plot the fourierhistogram as image plot
 %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,actualsignal.sfreq,handles.axes5);
-%[formantpattern,BFs] = fouriertransform_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
-[formantpattern,BFs] = zerocrossings_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
+[formantpattern,BFs] = fouriertransform_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
+%[formantpattern,BFs] = zerocrossings_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 %formantpattern = getIFpattern(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 %formantpattern = get_timing_after_kim2006(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 %not working currently: formantpattern = getreassignedpattern(AN_HSRoutput,actualsignal.sfreq,handles.axes5,savedBFlist);
