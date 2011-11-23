@@ -64,7 +64,7 @@ for iCounter = 1:size(ANpattern,1) %each channel
          %store the amplitude of only one peak of the FFT in a histogram
          if (~isempty(valid_peak_index))
             for k=1:length(valid_peak_index),
-                fth(idx(valid_peak_index(k)),frame) = fth(idx(valid_peak_index(k)),frame)+amp(k)*BFs(iCounter);            
+                fth(idx(valid_peak_index(k)),frame) = fth(idx(valid_peak_index(k)),frame)+BFs(iCounter);%amp(k)*BFs(iCounter);            
             end
         end
          
