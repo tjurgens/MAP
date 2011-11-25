@@ -697,8 +697,11 @@ switch experiment.paradigm
 
 %         save profile longTone shortTone gaps BFs TMC offBFs IFMCs
 fileName=['MTprofile' Util_timeStamp];
+act_path = pwd;
+cd(['..' filesep 'profiles']);
 profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
-    fileName)
+     fileName)
+ cd(act_path);
 while ~fopen(fileName), end
 plotProfile(fileName, 'profile_CMA_L')
 %% xx

@@ -21,7 +21,7 @@ end
 currentSpeechLevel = speechlevel;
 
 %how many AURORA files
-number_of_AURORAfiles = 100;
+number_of_AURORAfiles = 1;
 
 %model parameters
 AN_spikesOrProbability = 'probability';
