@@ -71,6 +71,7 @@ for iCounter = 1:number_of_AURORAfiles %for each file
     ANfeatures = features(1:numDCTcoeff,:);
     %%%%%%%%%% end of YOUR FEATURE EXTRACTION %%%%%%%%
     
+    
     %set up a histogram
     for jCounter = 1:size(ANfeatures,2) %for each time step in the internal representation
         histogrammatrix(featurecounter,:) = ANfeatures(:,jCounter);
@@ -78,6 +79,9 @@ for iCounter = 1:number_of_AURORAfiles %for each file
     end
 end
 histogrammatrix = histogrammatrix(1:featurecounter,:);
+
+%build the covariance matrix
+covariancematrix = cov(histogrammatrix);
 
 close all;
 fighandle = figure;
@@ -93,3 +97,4 @@ for iCounter = 1:size(histogrammatrix,2)
 end
 
 saveas(fighandle,filename,'fig');
+save(filename);
