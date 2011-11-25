@@ -52,22 +52,22 @@ for iCounter = 1:number_of_AURORAfiles %for each file
     nChannels = numel(myBFlist);
     ANprobabilityResponse = ANprobabilityResponse(end-nChannels+1:end, :);
     
-%     winSize = 25; %default 25 ms window
-%     hopSize = 10; %default 10 ms jump between windows
-%     winSizeSamples = round(winSize*speechSampleRate/1000);
-%     hopSizeSamples = round(hopSize*speechSampleRate/1000);
-%     % smooth
-%     hann = hanning(winSizeSamples);
-%     
-%     ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
-%     for chan = 1:size(ANprobabilityResponse,1)
-%         f = enframe(ANprobabilityResponse(chan,:), hann, hopSizeSamples);
-%         ANsmooth(chan,:) = mean(f,2)'; %#ok<AGROW> see above comment
-%     end
+     winSize = 25; %default 25 ms window
+     hopSize = 10; %default 10 ms jump between windows
+     winSizeSamples = round(winSize*speechSampleRate/1000);
+     hopSizeSamples = round(hopSize*speechSampleRate/1000);
+     % smooth
+     hann = hanning(winSizeSamples);
+     
+     ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+     for chan = 1:size(ANprobabilityResponse,1)
+         f = enframe(ANprobabilityResponse(chan,:), hann, hopSizeSamples);
+         ANsmooth(chan,:) = mean(f,2)'; %#ok<AGROW> see above comment
+     end
     
         
-    ANtiming = fouriertransform_histogram_log(ANprobabilityResponse,speechSampleRate, myBFlist);
-    features = DCT(ANtiming);%(ANsmooth);
+    %ANtiming = fouriertransform_histogram_log(ANprobabilityResponse,speechSampleRate, myBFlist);
+    features = DCT(ANsmooth);%(ANtiming);%
     ANfeatures = features(1:numDCTcoeff,:);
     %%%%%%%%%% end of YOUR FEATURE EXTRACTION %%%%%%%%
     
