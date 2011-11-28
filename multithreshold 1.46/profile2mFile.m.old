@@ -1,8 +1,10 @@
 function profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, ...
     IFMCs, mFileName)
+act_path = pwd;
+cd(['..' filesep 'profiles']);
 
 St = ['function x = ' mFileName ];
-fid = fopen(['..' filesep 'profiles' filesep mFileName '.m'],'w');
+fid = fopen([mFileName '.m'],'w');
 fprintf(fid, '%s\n', St);
 
 St = ['%created: ' UTIL_timeStamp];
@@ -59,7 +61,7 @@ fprintf(fid, '%s\n', St);
 
 fclose(fid);
 
-
+ cd(act_path);
 
 
 
