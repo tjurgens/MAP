@@ -112,6 +112,7 @@ classdef cJob
         %************************************************************
         % Portable EssexAid params
         %************************************************************
+
 %         bwOct = 1/1;
 %         filterOrder  = 2;
 %         
@@ -128,6 +129,7 @@ classdef cJob
 %         numSamples = 1024; %MAX=6912
         useAid = 0;
         aidInstance
+
     end
     
     %%  *********************************************************
@@ -173,21 +175,25 @@ classdef cJob
                     if ismac
                         obj.opFolder = '~/ASR/exps/_foo';
                     else
+
                         obj.opFolder = '/scratch/tjurgens/exps/_foo';
                     end
                 else
                     obj.opFolder = 'C:\exps\_foo';
+
                 end
             end
             
             obj = obj.assignWavPaths(LearnOrRecWavs);
             obj = obj.initMAP;
+
             addpath(fullfile('..','userProgramsTim'));
             tmp_clock = clock;
             rand('twister',sum(10000*tmp_clock(6))); %Tageszeitabhängiger Zustand des Zufallsgenerators 
             randn('state',sum(10000*tmp_clock(6)));
             
             obj.aidInstance = cEssexAid;
+
             
         end % ------ OF CONSTRUCTOR
         
@@ -201,6 +207,7 @@ classdef cJob
                     rWAVpath = fullfile('demo_wavs', 'TripletTestData');
                     obj.noiseFolder = fullfile('demo_wavs', 'noises');
                 else
+
                     lWAVpath = '/scratch/tjurgens/AURORA2_0/TrainingData-Clean/';
                     rWAVpath = '/scratch/tjurgens/AURORA2_0/TripletTestData/';
                     obj.noiseFolder = '/scratch/tjurgens/MAP/wavFileStore';
@@ -209,6 +216,7 @@ classdef cJob
                 lWAVpath = 'C:\MAP\MEGAreducedAURORA\TrainingData-Clean';
                 rWAVpath = 'C:\MAP\MEGAreducedAURORA\TripletTestData';
                 obj.noiseFolder = 'C:\MAP\wavFileStore';
+
             end
             
             if strcmpi(LearnOrRecWavs, 'l')
@@ -548,6 +556,7 @@ classdef cJob
             % NOW TO LOAD IN THE HEARING AID
             %**********************************************************
             if obj.useAid
+
 %                 stimulus = [stimulus; stimulus]'; %EsxAid requires stereo stim
 %                 stimulus = EssexAid_guiEmulatorWrapper(stimulus, sampleRate, obj);
 %                 stimulus = stimulus(1,:); %convert back to mono
@@ -555,6 +564,7 @@ classdef cJob
                 obj.aidInstance = obj.aidInstance.processStim;
                 stimulus = obj.aidInstance.aidOPnice;
                 
+
             end
             
             AN_spikesOrProbability = 'probability';
@@ -658,11 +668,13 @@ classdef cJob
             end
             
             
+
             %finalFeatures = obj.makeANfeatures(  ...
             %    obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
             finalFeatures = obj.makeANfeatures( ...
                 obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
             %finalFeatures = obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist);
+
             
             if obj.removeEnergyStatic
                 finalFeatures = finalFeatures(2:end,:);
@@ -728,6 +740,7 @@ classdef cJob
         %**********************************************************
         function ANfeatures = makeANfeatures(ANrate, numCoeff)
             % make feature vectors
+
             %features = DFLT(ANrate);
             features = cJob.GJB_dct(ANrate);
             ANfeatures = features(1:numCoeff,:);
@@ -949,6 +962,7 @@ classdef cJob
             htkdata = reshape(htkdata,sampSize/4,nframes);
             fclose(fid);
         end % ------ OF READHTK
+
         %% ********************************************************
         % Timing features
         %********************************************************
@@ -957,6 +971,7 @@ classdef cJob
            
            ANtiming = fouriertransform_histogram_log(ANrate,sampleRate, BFs);
         end
+
         
     end % ------ OF STATIC METHODS
     

@@ -23,7 +23,9 @@ learnFolder = fullfile(expFolder,'featL');
 
 xL = cJob('L', learnFolder);
 
-xL.participant = 'NormalDIFF';
+
+xL.participant = 'Normal';
+
 xL.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;', 'OMEParams.rateToAttenuationFactorProb=0;' };
 
 xL.noiseLevToUse   =  -200;

@@ -90,8 +90,11 @@ toneFrequency= [3*F0 4*F0 5*F0];
 
 %   or
 % B. file input
-%signalType= 'file';
-%fileName='Oh No';
+
+signalType= 'file';
+fileName='Oh No';
+fileName='1z67931a_44kHz';
+
 
 %% #4 rms level
 leveldBSPL= 60;                  % dB SPL (80 for Lieberman)
@@ -110,6 +113,7 @@ BFlist=round(logspace(log10(lowestBF), log10(highestBF), numChannels));
 %  The filteredACF parameters are set in the MAPparamsNormal file
 %  However, it is convenient to change them here leving the file intacta
     minPitch=	80; maxPitch=	500; numPitches=50;  
+
     maxLag=1/minPitch; minLag=1/maxPitch;
     lags= linspace(minLag, maxLag, numPitches);
     
@@ -227,10 +231,12 @@ title(['stimulus: ' num2str(leveldBSPL, '%4.0f') ' dB SPL']);
 % plot SACF
 figure(96)
 subplot(2,1,1)
+
 imagesc(P)
 colormap bone
 ylabel('periodicities (Hz)'), xlabel('time (s)')
 title(['smoothed SACF. (periodicity x time)'])
+
 % y-axis specifies pitches (1/lags)
 % Force MATLAB to show the lowest pitch
 postedYvalues=[1 get(gca,'ytick')]; set(gca,'ytick',postedYvalues)

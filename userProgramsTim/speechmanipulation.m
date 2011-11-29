@@ -195,7 +195,9 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 global actualsignal
 global toplay
 
+
 toplay = audioplayer(actualsignal.waveform./(max(abs(actualsignal.waveform))-.01),actualsignal.sfreq);
+
 play(toplay);
 
 
@@ -250,6 +252,7 @@ switch filtertype
             [a,b] = butter(filterorder,cutofffreq*2/actualsignal.sfreq,'low');
             actualsignal.waveform=filter(a,b,actualsignal.waveform);
         end
+
     case 'Band pass'
         if isempty(cutofffreq)|| isempty(filterorder)
             error('Please specify cutoff frequency')
@@ -261,6 +264,7 @@ switch filtertype
             [a,b] = butter(filterorder,cutofffreq*2/actualsignal.sfreq,'high');
             actualsignal.waveform=filter(a,b,actualsignal.waveform);
         end 
+
 end
 
 %additive noise
@@ -370,7 +374,9 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+
 function popupmenu2_Callback(hObject, eventdata, handles)
+
 
 % --- Executes on button press in pushbutton4.
 function pushbutton4_Callback(hObject, eventdata, handles)
@@ -380,7 +386,9 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 %% PLAY THE ORIGINAL WAVEFORM
 global originalsignal
 global toplay
+
 toplay = audioplayer(originalsignal.waveform./(max(abs(originalsignal.waveform))-.01),originalsignal.sfreq);
+
 play(toplay)
 
 
@@ -391,6 +399,16 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global toplay
 stop(toplay);
+
+
+
+function edit6_Callback(hObject, eventdata, handles)
+% hObject    handle to edit6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit6 as text
+%        str2double(get(hObject,'String')) returns contents of edit6 as a double
 
 
 
@@ -461,11 +479,13 @@ paramChanges=get(handles.edit8,'string');
 if ~strcmp(paramChanges, ';'), paramChanges=[paramChanges ';']; end
 eval(paramChanges);
 
+
 % set sampling rate to at least 16 kHz
 if actualsignal.sfreq < 16000
     actualsignal.waveform = resample(actualsignal.waveform,16000,actualsignal.sfreq);
     actualsignal.sfreq = 16000;
 end
+
 
 %set level
 actualsignal.waveform = actualsignal.waveform./sqrt(mean(actualsignal.waveform.^2)).*10^(-(94-level4MAP)/20);
@@ -474,7 +494,9 @@ actualsignal.waveform = actualsignal.waveform./sqrt(mean(actualsignal.waveform.^
 MAP1_14(actualsignal.waveform,actualsignal.sfreq,-1,parameterfile, ...
     'probability',paramChanges);
 global ANprobRateOutput savedBFlist
+
 BFs = savedBFlist;
+
 
 %take only the HSR fibers
 AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
@@ -486,6 +508,7 @@ plotIFRAN(AN_HSRoutput,start_time,end_time,actualsignal.sfreq,savedBFlist,handle
 set(handles.edit11,'String',num2str(1000*size(AN_HSRoutput,2)/2/actualsignal.sfreq));
 
 %plot the fourierhistogram as image plot
+
 %formantpattern = fourierautocorrelationhistogram_direct_new(AN_HSRoutput,actualsignal.sfreq,handles.axes5);
 [formantpattern,BFs] = fouriertransform_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
 %[formantpattern,BFs] = zerocrossings_histogram_log(AN_HSRoutput,actualsignal.sfreq,savedBFlist);
@@ -518,6 +541,7 @@ if ~isempty(gca)
     %set(gca, 'XTickLabel', XTickIdx.*3);
     xlabel('Time (ms)')
 end
+
 
 
 colorbar;
@@ -554,12 +578,14 @@ method.nonlinCF=savedBFlist;
 minPitch=	80; maxPitch=	4000; numPitches=100;    % specify lags
 pitches=10.^ linspace(log10(minPitch), log10(maxPitch),numPitches);
 pitches=fliplr(pitches);
+
 %filteredSACFParams.lags=1./pitches;     % autocorrelation lags vector
 filteredSACFParams.lags=[method.dt:method.dt:9e-3];
 %filteredSACFParams.lags=[0.5e-3:method.dt:25e-3];
 pitches=1./filteredSACFParams.lags;
 %filteredSACFParams.acfTau=	.003;       % time constant of running ACF
 filteredSACFParams.acfTau=	.006;       % time constant of running ACF
+
 filteredSACFParams.lambda=	0.12;       % slower filter to smooth ACF
 filteredSACFParams.lambda=	0.01;       % slower filter to smooth ACF
 
@@ -593,15 +619,18 @@ imagesc(P)
 ylabel('periodicities (Hz)')
 xlabel('time (s)')
 %title(['running smoothed (root) SACF. ' saveAN_spikesOrProbability ' input'])
+
 YTickIdx = 1:floor(numel(pitches)/6):numel(pitches);
 set(gca,'ytick',YTickIdx)
 set(gca,'ytickLabel', round(pitches(YTickIdx)))
 [tmp,tmpindex] = min(abs(pitches-800)); %just plot up to 800 Hz
 ylim([tmpindex length(pitches)]);
+
 tt=get(gca,'xtick');
 tt=tt(tt<length(t));
 set(gca,'xtickLabel', round(100*t(tt))/100)
 colorbar;
+
 
 FFTACF = zeros(size(sacf,1),size(sacf,2));
 %additionally plot the fourier-transform of the SACF, which is close to the
@@ -630,6 +659,7 @@ end
 % tt=tt(tt<length(t));
 % set(gca,'xtickLabel', round(100*t(tt))/100)
 % colorbar;
+
 
 
 % --- Executes on button press in pushbutton7.

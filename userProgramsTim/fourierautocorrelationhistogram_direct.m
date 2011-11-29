@@ -53,7 +53,10 @@ for iCounter = 1:size(ANpattern,1) %each channel
         smoothed_frame = conv(frames(frame,:),hamm_window);
         smoothed_frame = smoothed_frame(halfHamming+1:end-halfHamming);
         fsra = 20*log10(abs(fft(smoothed_frame-mean(smoothed_frame))));
+
         %fsra = abs(fft(smoothed_frame-mean(smoothed_frame)));
+
+
         fsra = fsra(1:floor(length(fsra)/2));
         
         t = [0:1/sfreq:length(smoothed_frame)/sfreq-1/sfreq];
@@ -66,6 +69,7 @@ for iCounter = 1:size(ANpattern,1) %each channel
 %         b=df(idx+1);
 %         idx = (idx-1+a./(a-b));
         [sorted,sortedindex]=sort(fsra(idx),'descend');
+
         % just take the highest value of the fourier-transform
          valid_peak_index = sortedindex(1:min([length(sortedindex) 1]));
          amp = sorted(1:min([length(sortedindex) 1]));
@@ -73,6 +77,7 @@ for iCounter = 1:size(ANpattern,1) %each channel
          %valid_peak_index
          %amp
          
+
          %store valid peaks according to amplitude in a histogram
          if (~isempty(valid_peak_index))
             for k=1:length(valid_peak_index),
