@@ -1438,11 +1438,15 @@ global paramChanges
 
 savePath=path;
 addpath(['..' filesep 'MAP'], ['..' filesep 'utilities'])
+addpath(['..' filesep 'userprogramsASRforDummies'], ['..' filesep 'Aidparameters']);
 modelResponse=[];
 MacGregorResponse=[];
 
 % mono only (column vector)
 audio=audio(:,1)';
+
+
+
 
 % if stop button pressed earlier
 if experiment.stop
@@ -1470,6 +1474,31 @@ end
 paramChanges=get(expGUIhandles.editparamChanges,'string');
 % convert from string to a cell array
 eval(paramChanges);
+
+%call the hearing aid (if necessary)
+%look, if there is a paramChange enabling the hearing aid
+nChanges=length(paramChanges);
+for idx=1:nChanges
+    tmp = paramChanges{idx};
+    if strfind(tmp,'inputStimulusParams.useAid = 1;')
+        useAid = 1;
+    end
+end
+%only call the aid if it is set in the paramChanges
+if exist('useAid','var')
+    if useAid
+        %set the aid's parameters
+        aidparameterfile = ['Aidparameters' MAPparamsName];
+        xT = cJob;
+        eval(['xT.aidInstance = ' aidparameterfile ';']);
+        xT.aidInstance.sr = stimulusParameters.sampleRate;
+        
+        %call the aid
+        xT.aidInstance.stimulusUSER = audio;
+        xT.aidInstance = xT.aidInstance.processStim;
+        audio = xT.aidInstance.aidOPnice;
+    end
+end
 
 MAP1_14(audio, stimulusParameters.sampleRate, BFlist,...
     MAPparamsName, AN_spikesOrProbability, paramChanges);
