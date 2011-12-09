@@ -2,7 +2,7 @@ function aidparams = AidparametersKFrright
 
 aidparams = cEssexAid;
 %aidparams.sr         = 48e3;
-aidparams.numSamples = 1024; %MAX=6912, LAB_USE=48
+aidparams.numSamples = 48;%1024; %MAX=6912, LAB_USE=48
 
 
 %------------------------------------------------------------------
@@ -10,16 +10,16 @@ aidparams.numSamples = 1024; %MAX=6912, LAB_USE=48
 %------------------------------------------------------------------
 %aidparams.audiometry_dB= [ 25;    28;    45;    45;    10;   35];   %Pure tone threshold in dB SPL
 aidparams.mainGain_dB  = [ 7;    7;    24;    24;    -1;   22];   %Gain applied at audiometric frequencies
-aidparams.TC_dBHL      = [50;   50;   50;   50;   50;  50];   %Compression thresholds (in dB HL from 2nd filt)
-aidparams.TM_dBHL      = [20;   20;   20;   20;   20;  20];   %MOC thresholds (in dB OUTPUT from 2nd filt)
+aidparams.TC_dBSPL      = [67.4;   67.4;   50;   50;   76;  50];   %Compression thresholds (in dB HL from 2nd filt)
+aidparams.TM_dBSPL      = [20;   20;   20;   20;   20;  20];   %MOC thresholds (in dB OUTPUT from 2nd filt)
 aidparams.DRNLc        = [ 0.2;  0.2;  0.2;  0.2;  0.2; 0.2]; %Compression exponent at audiometric frequencies
 
 %------------------------------------------------------------------
 % Dynamic compression properties
 %------------------------------------------------------------------
 aidparams.ARtau = 60e-3;       %decay time constant
-aidparams.ARthreshold_dB = 70; %dB SPL (input signal level) =>200 to disable
-aidparams.MOCtau = 300e-3;     %Time constant in Seconds
+aidparams.ARthreshold_dB = 80; %dB SPL (input signal level) =>200 to disable
+aidparams.MOCtau = 50e-3;     %Time constant in Seconds
 aidparams.MOCfactor = 0.5;     %dB attenuation applied to the input per dB exceeding output threshold
 
 %------------------------------------------------------------------

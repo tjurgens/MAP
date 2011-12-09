@@ -25,6 +25,7 @@ if nargin==0, BFlist=1000; paramsName='Normal';
 
 savePath=path;
 addpath (['..' filesep 'utilities'],['..' filesep 'MAP'])
+addpath(['..' filesep 'userprogramsASRforDummies'], ['..' filesep 'Aidparameters']);
 tic
 
 levels=-10:10:100;   nLevels=length(levels);
@@ -88,6 +89,8 @@ for BF=BFlist
             doPlot=0;
             inputSignal=stimulusCreate(globalStimParams, stim, doPlot);
             inputSignal=inputSignal(:,1)';
+            
+            inputSignal = callEssexAid(inputSignal,paramsName,sampleRate,paramChanges);
 
             %% run the model
             MAPparamsName=paramsName;

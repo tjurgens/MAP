@@ -2,7 +2,7 @@ function aidparams = AidparametersCWaleft
 
 aidparams = cEssexAid;
 %aidparams.sr         = 48e3;
-aidparams.numSamples = 1024; %MAX=6912, LAB_USE=48
+aidparams.numSamples = 48;%1024; %MAX=6912, LAB_USE=48
 
 
 %------------------------------------------------------------------
@@ -10,18 +10,25 @@ aidparams.numSamples = 1024; %MAX=6912, LAB_USE=48
 %------------------------------------------------------------------
 %aidparams.audiometry_dB= [ 28;    27;    47;    48;    45;   0];   %Pure
 %           tone threshold in dB SPL
-aidparams.mainGain_dB  = [ 11;    8;    20;    33;    30;   0];   %Gain applied at audiometric frequencies
-aidparams.TC_dBHL      = [50;   50;   50;   50;   50;  50];   %Compression thresholds (in dB HL from 2nd filt)
-aidparams.TM_dBHL      = [20;   20;   20;   20;   20;  20];   %MOC thresholds (in dB OUTPUT from 2nd filt)
+% aidparams.mainGain_dB  = [ 11;    8;    20;    33;    30;   30];   %Gain applied at audiometric frequencies
+% aidparams.TC_dBSPL      = [50;   50;   60;   70;   100;  100];%200];   %Compression thresholds (in dB HL from 2nd filt)
+% %aidparams.TC_dBHL      = [50;   50;   50;   50;   50;  50];
+% aidparams.TM_dBSPL      = [20;   20;   30;   40;   60;  60];
+% %aidparams.TM_dBHL      = [20;   20;   20;   20;   20;  20];    %MOC thresholds (in dB OUTPUT from 2nd filt)
+% aidparams.DRNLc        = [ 0.2;  0.2;  0.2;  0.2;  0.2; 0.2]; %Compression exponent at audiometric frequencies
+
+aidparams.mainGain_dB  = [ 11;    8;    20;    33;    30;   30];   %Gain applied at audiometric frequencies
+aidparams.TC_dBSPL      = [63;   65;   55;   41.7;   45.1;  45];%200];   %Compression thresholds (in dB HL from 2nd filt)
+aidparams.TM_dBSPL      = [20;   20;   20;   20;   20;  20];
 aidparams.DRNLc        = [ 0.2;  0.2;  0.2;  0.2;  0.2; 0.2]; %Compression exponent at audiometric frequencies
 
 %------------------------------------------------------------------
 % Dynamic compression properties
 %------------------------------------------------------------------
 aidparams.ARtau = 60e-3;       %decay time constant
-aidparams.ARthreshold_dB = 70; %dB SPL (input signal level) =>200 to disable
-aidparams.MOCtau = 300e-3;     %Time constant in Seconds
-aidparams.MOCfactor = 1;     %dB attenuation applied to the input per dB exceeding output threshold
+aidparams.ARthreshold_dB = 80; %dB SPL (input signal level) =>200 to disable
+aidparams.MOCtau = 50e-3;     %Time constant in Seconds
+aidparams.MOCfactor = 0.5;     %dB attenuation applied to the input per dB exceeding output threshold
 
 %------------------------------------------------------------------
 % Band filtering properties

@@ -1,10 +1,18 @@
-function plotProfile(fgName, bgName)
+function plotProfile(fgName, bgName, figureNumber)
+%
+% all profiles should be located in the 'profiles' folder
+% example:
+% plotProfile('profile_JE_L', 'profile_CMA_L')
 
 addpath (['..' filesep 'profiles'])
 
 %% plot profile
+if nargin<3
+    figureNumber=90;
+end
+
 if nargin<1
-    fgName = 'profile_JSAN_R';
+    fgName = myFile;
     bgName = '';
 end
 
@@ -19,33 +27,36 @@ else
 end
 
 % absolute thresholds
-figure(90), clf
+figure(figureNumber), clf
 set(gcf, 'name', 'Profile')
 subplot(2,1,2)
-semilogx(foreground.BFs,foreground.LongTone,'ko-','lineWidth',2); hold on
-semilogx(foreground.BFs,foreground.ShortTone,'bo-','lineWidth',2); hold on
+[x y]=stripNaNs(foreground.BFs,foreground.LongTone);
+semilogx(x, y,'ko-','lineWidth',2,'markerSize', 2); hold on
+[x y]=stripNaNs(foreground.BFs,foreground.ShortTone);
+semilogx(x,y,'bo-','lineWidth',2,'markerSize', 2); hold on
 if ~isempty(bgName)
+    [x y]=stripNaNs(foreground.BFs,foreground.LongTone);
     semilogx(background.BFs,background.LongTone,'ko:'); hold on
+    [x y]=stripNaNs(foreground.BFs,foreground.LongTone);
     semilogx(background.BFs,background.ShortTone,'bo:'); hold on
 end
 ylim([0 100])
 
 % TMC
 for BFno=1:length(foreground.TMCFreq)
-    subplot(2,6,BFno)
-    % SL
-% plot(foreground.Gaps,foreground.TMC(BFno,:)-foreground.LongTone(BFno),'r','lineWidth',3), hold on
-    plot(foreground.Gaps,foreground.TMC(BFno,:),'b','lineWidth',3), hold on
+    subplot(2,max(6, length(foreground.TMCFreq)),BFno)
+    [x y]=stripNaNs(foreground.Gaps,foreground.TMC(BFno,:));
+    plot(x,y,x,y,'o-b','lineWidth',2,'markerSize', 2), hold on
     ylim([-10 110])
     xlim([0.01 0.1])
-%     grid on
+    %     grid on
     if BFno==1
-        ylabel('masker dB SL')
+        ylabel('masker (dB SPL)')
         xlabel('    gap (s)')
     end
     title([num2str(foreground.TMCFreq(BFno)) ' Hz'])
-    set(gca,'XTick',[ 0.02:0.02:0.1],'xTickLabel', { '', '0.04', '', '',  '0.1'})
-end
+    set(gca,'FontSize',14);
+ end
 
 if ~isempty(bgName)
     for BFno=1:length(background.TMCFreq)
@@ -53,10 +64,11 @@ if ~isempty(bgName)
         idx = find(BF == foreground.TMCFreq);
         if ~isempty(idx);
             
-            subplot(2,6,idx)
+            subplot(2,max(6, length(foreground.TMCFreq)),idx)
             % SL
-% plot(background.Gaps,background.TMC(BFno,:)-background.LongTone(BFno),'k:')
-            plot(background.Gaps,background.TMC(BFno,:),'k:')
+            % plot(background.Gaps,background.TMC(BFno,:)-background.LongTone(BFno),'k:')
+            [x y]=stripNaNs(background.Gaps,background.TMC(BFno,:));
+            plot(x,y,'k:')
             ylim([-10 110])
             xlim([0.01 0.1])
         end
@@ -67,32 +79,40 @@ end
 for BFno=1:length(foreground.IFMCFreq)
     freq=foreground.MaskerRatio'*foreground.IFMCFreq(BFno);
     subplot(2,1,2)
-    semilogx(freq,foreground.IFMCs(BFno,:),'r','lineWidth',3), hold on
-    ylim([-20 100])
+    [x y]=stripNaNs(freq,foreground.IFMCs(BFno,:));
+    semilogx(x,y,'o-r','lineWidth',2,'markerSize', 2), hold on
+    
+    % white circles for probe frequency
+    probeFreq=foreground.IFMCFreq(BFno);
+    idx=find(foreground.MaskerRatio==1);
+    tipThreshold=foreground.IFMCs(BFno,idx);
+    if ~isempty(tipThreshold)
+        plot(probeFreq, tipThreshold,'ro','markerFaceColor','w')
+    end
+    
+    ylim([0 100])
     xlim([100 12000])
-%     grid on
+    set(gca,'xTick',[250; 500; 1000; 2000; 4000; 8000]);
+    set(gca,'xTickLabel',{'250', '500', '1000', '2000', '4000', '8000'});
+    set(gca,'FontSize',14);
+    %     grid on
 end
 xlabel('frequency (Hz)')
-ylabel('masker dB / probe dB')
-set(gca,'XTick',foreground.IFMCFreq)
-set(gca,'Ytick', [-20 0 50 100])
-
+ylabel('level (dB SPL)')
 if ~isempty(bgName)
     for BFno=1:length(background.IFMCFreq)
         freq=background.MaskerRatio'*background.IFMCFreq(BFno);
         subplot(2,1,2)
-        semilogx(freq,background.IFMCs(BFno,:),'k:')
+        [x y]=stripNaNs(freq,background.IFMCs(BFno,:));
+        semilogx(x,y,'k:')
         ylim([0 100])
         xlim([100 12000])
     end
 end
+
 set(get(gca,'title'),'interpreter','None')
+title([' bold= ' fgName ';          dashed=  ' bgName])
 
-title([fgName ' / ' bgName])
-% mydate=datestr(now); idx=findstr(':',mydate); mydate(idx)='_';
 
-% fileName= ['savedData/' mydate ];
-% 
-% save (fileName)
-% set(gcf,'name', mydate)
-% disp(fileName)
+function [a b]=stripNaNs(a,b)
+idx=find(~isnan(b)); a=a(idx); b=b(idx);
