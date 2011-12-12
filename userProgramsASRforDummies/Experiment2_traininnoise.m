@@ -43,12 +43,12 @@ xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 1000; %10;%MAX=8440
-testWavs = 200;%5;MAX = 358
+xL.numWavs = 8440;%1000; %10;%MAX=8440
+testWavs = 358;%200;%5;MAX = 358
 nzLevel = [-200 40:10:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xL.noisePreDur = 1;
+xL.noisePreDur = 0.2;
 xL.noisePostDur = 0.1;
 xL.truncateDur  = xL.noisePreDur-0.1; 
 xL.noiseName = 'factory1';%'20TalkerBabble_bp';
