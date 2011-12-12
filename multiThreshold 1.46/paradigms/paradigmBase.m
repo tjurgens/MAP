@@ -1,7 +1,7 @@
 function paradigmBase(handles)
 global stimulusParameters experiment betweenRuns
 
-stimulusParameters.subjectSampleRate=44100; % compatible with file input
+stimulusParameters.subjectSampleRate=48000; % compatible with file input
 % stimulusParameters.subjectSampleRate=128000; % compatible with file input
 
 %  assessment method
