@@ -15,7 +15,10 @@ function method=MAPparamsPL ...
 % Output argument
 %  method passes a miscelleny of values
 %  the use of 'method' is being phased out. use globals
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  HYPOTHESIS
+%  1. DRNLParams.a is reduced
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
 global MacGregorParams MacGregorMultiParams  filteredSACFParams

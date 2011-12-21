@@ -1,4 +1,4 @@
-function method=MAPparamsJSanright ...
+function method=MAPparamsOHCloss8 ...
     (BFlist, sampleRate, showParams, paramChanges)
 % MAPparams<> establishes a complete set of MAP parameters
 % Parameter file names must be of the form <MAPparams><name>
@@ -11,11 +11,11 @@ function method=MAPparamsJSanright ...
 % Output argument
 %  method passes a miscelleny of values
 %  the use of 'method' is being phased out. use globals
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  HYPOTHESIS
-%  1. DRNLParams.a is set to zero
-%  2. Dead high-frequency region
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Generic profile: complete loss of OHCs: DRNLParams.a = 0;
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
 global MacGregorParams MacGregorMultiParams  filteredSACFParams
@@ -37,15 +37,7 @@ if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
 % BFlist=1000;  % single channel option
-lowestBF=250; 	highestBF= 8000; 	numChannels=41;
-availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = availableBFlist(1:27);
-if size(BFlist) == 1
-    [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
-    BFlist = availableBFlist(tmpindex);
-else
-    BFlist = availableBFlist;
-end
+
 % preserve for backward campatibility
 method.nonlinCF=BFlist; 
 method.dt=1/sampleRate; 
@@ -57,6 +49,7 @@ method.dt=1/sampleRate;
 %%  #1 inputStimulus
 inputStimulusParams=[];
 inputStimulusParams.sampleRate= sampleRate; 
+inputStimulusParams.useAid = 0;
 
 %%  #2 outerMiddleEar
 OMEParams=[];  % clear the structure first
@@ -87,9 +80,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-
 DRNLParams.a=0;       % DRNL.a=0 means no OHCs (no nonlinear path)
-
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement

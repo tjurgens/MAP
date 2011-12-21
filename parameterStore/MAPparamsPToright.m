@@ -37,7 +37,7 @@ if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
 % BFlist=1000;  % single channel option
-availableBFlist = 200;
+availableBFlist = [200 220 250 300 370];
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
@@ -88,7 +88,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a=0;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
@@ -141,7 +141,7 @@ IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 %  #5 IHC_RP
 IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
-IHC_cilia_RPParams.Et=	0.100;          % endocochlear potential (V)
+IHC_cilia_RPParams.Et=	0.055;          % endocochlear potential (V)
 
 IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential

@@ -1,8 +1,5 @@
 function method=MAPparamsOHCloss ...
     (BFlist, sampleRate, showParams, paramChanges)
-% MAPparamsOHCloss.m is a parameter file, similar in all respects to
-% MAPparamsNormal except that the parameter 'DRNLParams.a' is set to zero.
-%
 % MAPparams<> establishes a complete set of MAP parameters
 % Parameter file names must be of the form <MAPparams><name>
 %
@@ -14,7 +11,11 @@ function method=MAPparamsOHCloss ...
 % Output argument
 %  method passes a miscelleny of values
 %  the use of 'method' is being phased out. use globals
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Generic profile: complete loss of OHCs: DRNLParams.a = 0;
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
 global MacGregorParams MacGregorMultiParams  filteredSACFParams
@@ -30,7 +31,8 @@ method.segmentDuration=efferentDelay;
 if nargin<3, showParams=0; end
 if nargin<2, sampleRate=44100; end
 if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
-    lowestBF=250; 	highestBF= 8000; 	numChannels=21;
+    %lowestBF=300; 	highestBF= 1500; 	numChannels=41;
+    lowestBF=250; 	highestBF= 8000; 	numChannels=41;
     % 21 chs (250-8k)includes BFs at 250 500 1000 2000 4000 8000
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
@@ -47,6 +49,7 @@ method.dt=1/sampleRate;
 %%  #1 inputStimulus
 inputStimulusParams=[];
 inputStimulusParams.sampleRate= sampleRate; 
+inputStimulusParams.useAid = 0;
 
 %%  #2 outerMiddleEar
 OMEParams=[];  % clear the structure first
@@ -77,9 +80,9 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-% DRNLParams.a=2e4;     % normal value (commented out)
-DRNLParams.a=0;         % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a=0;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
+
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
 
 % filters
@@ -90,6 +93,7 @@ DRNLParams.p=0.2895;   DRNLParams.q=250;   % save p and q for printing only
 DRNLParams.nlBWs=  DRNLParams.p * BFlist + DRNLParams.q;
 
 %   *** DRNL linear path:
+
 DRNLParams.g=100;       % linear path gain factor
 DRNLParams.linOrder=3;  % order of linear gammatone filters
 % linCF is not necessarily the same as nonlinCF
@@ -247,17 +251,26 @@ MacGregorParams.wideband=0;         % special for wideband units
 % MacGregorParams.saveAllData=0;
 
 %%  #9 filteredSACF
-minPitch=	300; maxPitch=	3000; numPitches=60;    % specify lags
-pitches=100*log10(logspace(minPitch/100, maxPitch/100, numPitches));
-filteredSACFParams.lags=1./pitches;     % autocorrelation lags vector
-filteredSACFParams.acfTau=	.003;       % time constant of running ACF
-filteredSACFParams.lambda=	0.12;       % slower filter to smooth ACF
-filteredSACFParams.plotFilteredSACF=1;  % 0 plots unfiltered ACFs
-filteredSACFParams.plotACFs=0;          % special plot (see code)
-%  filteredSACFParams.usePressnitzer=0; % attenuates ACF at  long lags
-filteredSACFParams.lagsProcedure=  'useAllLags';
-% filteredSACFParams.lagsProcedure=  'omitShortLags';
-filteredSACFParams.criterionForOmittingLags=3;
+% identify periodicities to be logged
+    minPitch=	80; maxPitch=	500; numPitches=50;  
+    maxLag=1/minPitch; minLag=1/maxPitch;
+    lags= linspace(minLag, maxLag, numPitches);
+    pitches=10.^ linspace(log10(minPitch), log10(maxPitch),numPitches);
+    pitches=fliplr(pitches);
+    % convert to lags for ACF
+    filteredSACFParams.lags=lags;     % autocorrelation lags vector
+    filteredSACFParams.acfTau=	.003;       % time constant of running ACF
+    filteredSACFParams.lambda=	0.12;       % slower filter to smooth ACF
+    % request plot of within-channel ACFs at fixed intervals in time
+    filteredSACFParams.plotACFs=1;          
+    filteredSACFParams.plotACFsInterval=0.002;
+    filteredSACFParams.plotMoviePauses=.1;  
+
+    filteredSACFParams.usePressnitzer=0; % attenuates ACF at  long lags
+    filteredSACFParams.lagsProcedure=  'useAllLags';
+    %  'useAllLags' or 'omitShortLags'
+    filteredSACFParams.criterionForOmittingLags=3;
+
 
 % checks
 if AN_IHCsynapseParams.numFibers<MacGregorMultiParams.fibersPerNeuron
