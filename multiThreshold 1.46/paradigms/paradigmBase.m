@@ -1,7 +1,7 @@
 function paradigmBase(handles)
 global stimulusParameters experiment betweenRuns
 
-stimulusParameters.subjectSampleRate=48000; % compatible with file input
+stimulusParameters.subjectSampleRate=44100; % compatible with file input
 % stimulusParameters.subjectSampleRate=128000; % compatible with file input
 
 %  assessment method
@@ -45,6 +45,7 @@ stimulusParameters.maskerLevel= -50;
 stimulusParameters.maskerRelativeFrequency= 1 ; 
 
 stimulusParameters.gapDuration=0.0;
+stimulusParameters.notchedNoiseBW=0.0;
 
 % targetTypes={'tone','noise', 'pinkNoise','whiteNoise','OHIO'};
 stimulusParameters.targetType='tone';

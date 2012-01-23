@@ -14,8 +14,9 @@ function method=MAPparamsDPeleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. IHCciliaParams.Et is reduced to 63 mV
-%  2. Three dead regions: low frequency, mid and
-%  high-frequencies
+%  2. Three dead regions: low-frequency (channels below 400 Hz are missing), 
+%       mid-frequency (channels between 1000 Hz and 1800 Hz are missing) and
+%       high-frequencies (channels from 3000 Hz onwards are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

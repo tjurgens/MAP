@@ -192,7 +192,7 @@ maskerRelativeFrequency=  stimulusParameters.maskerRelativeFrequency;
 maskerFrequency=   maskerRelativeFrequency*targetFrequency;
 
 gapDuration=       stimulusParameters.gapDuration;
-
+notchwidth=        stimulusParameters.notchedNoiseBW;
 rampDuration=      stimulusParameters.rampDuration;
 AFCsilenceDuration=stimulusParameters.AFCsilenceDuration; % 2I2AFC gap
 backgroundLevel=   stimulusParameters.backgroundLevel;
@@ -232,13 +232,14 @@ switch experiment.threshEstMethod
         switch experiment.paradigm
             % cue target is more audible
             case {'training','absThreshold', 'absThreshold_8',  ...
+                    'forwardMasking','forwardMaskingD', 'notchedNoiseBW'...
                     'TENtest', 'threshold_duration','discomfort',...
                     'overShoot','overShootB','overShootMB1', ...
                     'overShootMB2', 'OHIO','OHIOabs','OHIOspect'...
                     'OHIOrand', 'OHIOtemp', 'OHIOspectemp'}
                 cueTargetLevel=targetLevel+cueTestDifference;
                 
-            case {'forwardMasking','forwardMaskingD','trainingIFMC', ...
+            case {'trainingIFMC', ...
                     'TMC','TMC_16ms', 'TMC - ELP', 'IFMC','IFMC_8ms', ...
                     'FMreProbe'}
                 % cue masker is weaker to make target more audible
@@ -640,6 +641,7 @@ stimComponents(maskerEar,componentNo).beginSilence=precedingSilence;
 stimComponents(maskerEar,componentNo).endSilence=-1;
 stimComponents(maskerEar,componentNo).AMfrequency=0;
 stimComponents(maskerEar,componentNo).AMdepth=0;
+stimComponents(targetEar,componentNo).notchwidth=notchwidth;
 if rampDuration<maskerDuration
     % ramps must be shorter than the signal
     stimComponents(maskerEar,componentNo).rampOnDur=rampDuration;

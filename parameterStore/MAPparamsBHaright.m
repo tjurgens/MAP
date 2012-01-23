@@ -13,7 +13,8 @@ function method=MAPparamsBHaright ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHC_cilia_RPParams.Et is reduced 
+%  1. IHC_cilia_RPParams.Et is reduced to 75 mV
+%  2. The 8000 Hz channel is missing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

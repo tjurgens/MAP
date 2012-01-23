@@ -13,9 +13,9 @@ function method=MAPparamsSForight ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHC_cilia_RPParams.Et is reduced 
-%  2. Dead high-frequency region
-%  3. Dead mid-frequency region
+%  1. IHC_cilia_RPParams.Et is reduced to 80 mV
+%  2. Dead high-frequency region (from 6200 Hz onwards)
+%  3. Dead mid-frequency region (1600 Hz to 4000 Hz)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

@@ -225,13 +225,17 @@ MOCattenuation=ones(nBFs,signalLength);
 DRNLlinearOrder= DRNLParams.linOrder;
 DRNLnonlinearOrder= DRNLParams.nonlinOrder;
 
-DRNLa=DRNLParams.a;
+if length(DRNLParams.a) == 1
+    DRNLa=ones(length(BFlist),1).*DRNLParams.a;
+else
+    DRNLa=DRNLParams.a;
+end
 % DRNLa2=DRNLParams.a2;
 % DRNLb=DRNLParams.b;
 DRNLc=DRNLParams.c;
 linGAIN=DRNLParams.g;
 ctBM=10e-9*10^(DRNLParams.ctBMdB/20);
-CtS=ctBM/DRNLa;
+CtS=ctBM./DRNLa;
 %
 % gammatone filter coefficients for linear pathway
 bw=DRNLParams.linBWs';
@@ -663,11 +667,11 @@ while segmentStartPTR<signalLength
         % Nick's compression algorithm
         abs_x= abs(nonlinOutput);
         signs= sign(nonlinOutput);
-        belowThreshold= abs_x<CtS;
-        nonlinOutput(belowThreshold)= DRNLa *nonlinOutput(belowThreshold);
+        belowThreshold= abs_x<CtS(BFno);
+        nonlinOutput(belowThreshold)= DRNLa(BFno) *nonlinOutput(belowThreshold);
         aboveThreshold=~belowThreshold;
         nonlinOutput(aboveThreshold)= signs(aboveThreshold) *ctBM .* ...
-            exp(DRNLc *log( DRNLa*abs_x(aboveThreshold)/ctBM ));
+            exp(DRNLc *log( DRNLa(BFno)*abs_x(aboveThreshold)/ctBM ));
                        
         
 %         %    original   broken stick instantaneous compression

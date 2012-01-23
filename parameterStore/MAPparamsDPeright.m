@@ -14,8 +14,10 @@ function method=MAPparamsDPeright ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. IHCciliaParams.Et is reduced to 75 mV
-%  2. Four dead regions: low frequency, mid-low, mid-high and
-%  high-frequencies
+%  2. Four dead regions: low frequency (channels below 400 Hz are missing), 
+%        mid-low-frequency (channels between 750 Hz and 1000 Hz are missing), 
+%        mid-high-frequency (channels between 1600 Hz and 2000 Hz are missing),
+%       and high-frequencies (channels from 3700 Hz onwards are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -44,7 +46,7 @@ end
 
 lowestBF=250; 	highestBF= 8000; 	numChannels=41;
 availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = [availableBFlist(8:13) availableBFlist(18:22) availableBFlist(25:32)]
+availableBFlist = [availableBFlist(8:13) availableBFlist(18:22) availableBFlist(25:32)];
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));

@@ -1,19 +1,24 @@
 function printReport(fileName, printTracks)
 
-% End of run report (no args)
-% *or*
-% reprint previous report from file
+% End of run report (no args) called from multithreshold
+%   data is assumed to be in mostRecentResults
+%
+%            *or*
+% Command line request to reprint previous report from file
+%   data is stored in 'savedData\<subjectName>\<subjectName date time>'
+%   'fileName' is only the actual file name
+%   The filepath is constructed from this information
 
 global experiment stimulusParameters betweenRuns withinRuns statsModel
-global LevittControl expGUIhandles
+global LevittControl 
 global paramChanges
 
 % NB all globals are used even though this is not obvious
 global inputStimulusParams OMEParams DRNLParams
 global IHC_VResp_VivoParams IHCpreSynapseParams  AN_IHCsynapseParams
 global MacGregorParams MacGregorMultiParams  filteredSACFParams
-global experiment % used by calls from multiThreshold only
 global IHC_cilia_RPParams
+global expGUIhandles
 
 printReportGuide.structures=1;
 printReportGuide.showPsychometric=0;
@@ -33,9 +38,20 @@ if nargin==0
 
 else
     % reprint request (i.e print out old data)
-    printReportGuide.fileName=fileName;
+    % The filename also idicates the folder name
+    % data is stored in 'savedData\<subjectName>\<subjectName date time>'
+        idx= 1:findstr(' ', fileName)-1;
+        subjectName=fileName(idx);
+        fileName=['savedData' filesep subjectName filesep  fileName ];
+    
+    try  % to fetch stored file
+    printReportGuide.fileName=fileName; 
     load(printReportGuide.fileName)
-    saveFileName=printReportGuide.fileName;
+    catch
+        error(['printReport: filename - ' fileName ...
+            ' - could not be not found'])
+    end
+
     if nargin>1
         printReportGuide.showTracks=printTracks;
     else
@@ -156,12 +172,6 @@ switch experiment.ear
             catch
             end
         end
-end
-
-if experiment.saveData
-    fprintf('\n')
-    disp('To reprint this report with tracks use:')
-    disp([ 'printReport(''' saveFileName ''',1)'])
 end
 
 % print final summary (repeat of above)
@@ -311,13 +321,10 @@ function [idx1, idx2, var1values, var2values]= ...
     sortVariables(var1values, var2values, var1Sequence, var2Sequence)
 
 [x idx1]= sort(var1Sequence);
-var1Sequence= x;
 var2Sequence= var2Sequence(idx1);
-depVarName= 'th';
 
 [x idx2]=sort(var2Sequence);
-var2Sequence=x;
-var1Sequence=var1Sequence(idx2);
 
 var1values=sort(var1values);
 var2values=sort(var2values);
+

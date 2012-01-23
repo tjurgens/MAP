@@ -4,7 +4,8 @@ function plotProfile(fgName, bgName, figureNumber)
 % example:
 % plotProfile('profile_JE_L', 'profile_CMA_L')
 
-addpath (['..' filesep 'profiles'])
+addpath (['..' filesep 'profiles']);
+addpath (['..' filesep 'profiles' filesep 'MTprofiles']);
 
 %% plot profile
 if nargin<3

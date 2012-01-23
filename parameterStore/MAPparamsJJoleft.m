@@ -13,10 +13,10 @@ function method=MAPparamsJJoleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHC_cilia_RPParams.Et is reduced 
-%  2. Dead high-frequency region
-%  3. Dead mid-frequency region
-%  3. Dead low-frequency region
+%  1. IHC_cilia_RPParams.Et is reduced to 83 mV
+%  2. Dead high-frequency region (channels from 3500 Hz onwards are missing)
+%  3. Dead mid-frequency region (channels from 2000 Hz to 3000 Hz are missing)
+%  4. Dead low-frequency region (channels below 580 Hz are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

@@ -14,7 +14,7 @@ function method=MAPparamsMFrleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. DRNLParams.a is set to 100
-%  2. Dead region at 2000-2200 Hz and from 5000 Hz onwards
+%  2. Dead region between 2000-2200 Hz and from 5000 Hz onwards
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

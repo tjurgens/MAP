@@ -14,7 +14,7 @@ function method=MAPparamsCWaleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. DRNLParams.a is reduced (frequency-dependent)
-%  2. Dead high-frequency region
+%  2. Dead high-frequency region from 6300 Hz onwards
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ATTENTION !!!!

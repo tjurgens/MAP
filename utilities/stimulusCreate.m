@@ -206,7 +206,8 @@ for ear=1:Nears % left/ right
 %                 dBSPLrms=stimComponents(ear,componentNo).amplitudesdB;
 %                 gain=10.^((dBSPLrms-rms)/20);
 %                 stimulus=stimulus'*gain;
-
+            case 'notchedNoise'
+                stimulus=makeNotchedNoise(globalStimParams, stimComponents);
             case 'speech'
                 [stimulus sampleRate]= wavread('speech');
                 stimulus=stimulus';
@@ -1323,6 +1324,80 @@ noise=noise*adjust;
 rms=(mean(noise.^2)^.5);
 amplitude=10.^(stimComponents.amplitudesdB/20);
 noise=amplitude*noise;
+% rms=(mean(noise.^2)^.5);
+% dBnoise=20*log10(rms/20e-6)
+
+%----------------------------------------------------------makeNotchNoise
+function noise=makeNotchedNoise(globalStimParams, stimComponents)
+% FS in Hz, noiseDuration in s, delay in s;
+% noise is bandpass filtered between 100 and 10000 Hz
+% spectrum level (dB/Hz) is 40 dB below nominal level.
+% noise is returned with dB(rms) = amplitudesdB
+%
+% % You need
+%
+% stim.type='noise'; % or 'IRN', or 'pinkNoise'
+% stim.toneDuration=.05;
+% stim.amplitudesdB=50;
+% stim.beginSilence=.01;
+% stim.endSilence=-1;
+% stim.rampOnDur=.002;
+% stim.rampOffDur=-1;
+%
+% % Mandatory structure fields
+% globalStimParams.FS=100000;
+% globalStimParams.overallDuration=.1;  % s
+% globalStimParams.doPlot=1;
+% globalStimParams.doPlay=1;
+%
+% [audio, msg]=stimulusCreate(globalStimParams, stim, );
+%
+% % local
+% stim.type='noise'; % or 'IRN'
+%
+FS=globalStimParams.FS;
+noiseDuration= stimComponents.toneDuration;
+npts=round(noiseDuration*FS);
+noise=randn(1,npts);
+
+noise=UTIL_Butterworth (noise,  1/FS, 100, 10000,6); %bandwidth of 9900Hz
+
+%adjust the level so that the SPECTRUM level is held constant
+broadbandlevel = stimComponents(1).amplitudesdB+10*log10(9900);
+rms=(mean(noise.^2)^.5);  %should be 20 microPascals for 0 dB SPL
+adjust=20e-6/rms;
+noise=noise*adjust;
+rms=(mean(noise.^2)^.5);
+amplitude=10.^(broadbandlevel/20);
+noise=amplitude*noise;
+
+%design the notch
+if stimComponents(1).notchwidth == 0
+    ;
+else
+    Wn = [stimComponents(1).frequencies-stimComponents(1).frequencies*stimComponents(1).notchwidth ...
+        stimComponents(1).frequencies+stimComponents(1).frequencies*stimComponents(1).notchwidth].*globalStimParams.dt*2;
+    %     [B,A] = butter(4,Wn(1),'low');
+    %     noise_l=filter(B,A,noise);
+    %     noise_l=filter(B,A,noise_l);
+    %     noise_l=filter(B,A,noise_l);
+    %     [B,A] = butter(4,Wn(2),'high');
+    %     noise_u=filter(B,A,noise);
+    %     noise_u=filter(B,A,noise_u);
+    %     noise_u=filter(B,A,noise_u);
+    %     noise = noise_l+noise_u;
+    if (Wn(2)-Wn(1))/4/globalStimParams.dt < 30
+        error('notch width is too narrow, designed filter is not stable');
+    else
+        [B,A] = butter(4,Wn,'stop');
+        noise = filter(B,A,noise);
+        noise = filter(B,A,noise);
+        noise = filter(B,A,noise);
+        noise = filter(B,A,noise); %four times filtering to get steep filter edges
+    end
+end
+
+
 % rms=(mean(noise.^2)^.5);
 % dBnoise=20*log10(rms/20e-6)
 

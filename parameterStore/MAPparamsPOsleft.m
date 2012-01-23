@@ -14,7 +14,7 @@ function method=MAPparamsPOsleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. DRNLParams.a is set to zero
-%  2. Only channels from 500 Hz and 2500 Hz remain
+%  2. Only channels from 500 Hz to 2500 Hz remain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

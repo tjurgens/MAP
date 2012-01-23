@@ -13,9 +13,9 @@ function method=MAPparamsDPaleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHC_cilia_RPParams.Et is reduced 
-%  2. Dead high-frequency region
-%  3. Dead mid-frequency region
+%  1. IHC_cilia_RPParams.Et is reduced to 75 mV
+%  2. Dead high-frequency region (8000 Hz channel is missing)
+%  3. Dead mid-frequency region (channels from 600 Hz to 2000 Hz are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

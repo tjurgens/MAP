@@ -15,7 +15,7 @@ function method=MAPparamsJDoright ...
 %  HYPOTHESIS
 %  1. IHCciliaParams.Et reduced to 75 mV
 %  2. DRNLParams.a is reduced in the low-frequency region (thus, frequency-dependent)
-%  2. Dead high-frequency region
+%  2. Dead high-frequency region (channels from 5200 Hz onwards are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ATTENTION !!!!

@@ -13,8 +13,8 @@ function method=MAPparamsJSaleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. Very slight reduction of DRNLParams.a (frequencydependent)
-%  2. Dead high-frequency region
+%  1. Very slight reduction of DRNLParams.a (frequency-dependent)
+%  2. Dead high-frequency region (channels from 4000 Hz onwards are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

@@ -14,7 +14,7 @@ function method=MAPparamsJPrleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. Very slight reduction of DRNLParams.a
-%  2. Dead high-frequency region
+%  2. Dead high-frequency region (channels from 3000 Hz onwards are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

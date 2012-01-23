@@ -14,7 +14,7 @@ function method=MAPparamsBCrleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. IHC_cilia_RPParams.Et is slightly reduced to 80 mV
-%  
+%  2. High-frequency dead region from 6500 Hz onwards
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams

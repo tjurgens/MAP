@@ -1,14 +1,14 @@
 % multiThreshold = 'experimenter GUI for multiThreshold
 % allows the experimenter to design experiments.
-% The *running* of experiments is left to subjGUI.m
+% The *execution* of the experiments is controlled by 'subjGUI.m'
 %
 % There are three kinds of experiments known as 'earOptions':
 % 1. Measurements using real listeners
-% 'left', 'right', 'diotic', 'dichoticLeft', 'dichoticRight'
+%  'left', 'right',  'diotic', 'dichoticLeft', 'dichoticRight'
 % 2. Measurements using the MAP model as the subject
-% 'MAPmodelListen', 'MAPmodelMultiCh', 'MAPmodelSingleCh'
+%   'MAPmodelListen',  'MAPmodelMultiCh', 'MAPmodelSingleCh'
 % 3. Monte Carlo simulations
-% 'statsModelLogistic','statsModelRareEvent'
+%   'statsModelLogistic','statsModelRareEvent'
 %
 % There are many stimulus configurations relating to different measurement
 % requirements. These configurations are defined in paradigm files located
@@ -16,46 +16,46 @@
 % files specify values in the stimulusParameter and experiment structures.
 % Some minor parameters are specified in the intialiseGUI function below.
 % Each configuration is only a start up arrangement and the user can modify
-% the parameters on the GUI itself.
+% the parameters on the GUI itself before hitting the 'run' button.
 %
 % the 'RUN' button initiates the measurements and hands control over to the
-% subjGUI program. When the measurements are complete control is handed
-% back and the stack unwinds without any further action
+% subjGUI program. When the measurements are complete, control is handed
+% back to multiThreshold.
 
 function varargout = multiThreshold(varargin)
 %MULTITHRESHOLD M-file for multiThreshold.fig
-% MULTITHRESHOLD, by itself, creates a new MULTITHRESHOLD or raises the existing
-% singleton*.
+%      MULTITHRESHOLD, by itself, creates a new MULTITHRESHOLD or raises the existing
+%      singleton*.
 %
-% H = MULTITHRESHOLD returns the handle to a new MULTITHRESHOLD or the handle to
-% the existing singleton*.
+%      H = MULTITHRESHOLD returns the handle to a new MULTITHRESHOLD or the handle to
+%      the existing singleton*.
 %
-% MULTITHRESHOLD('Property','Value',...) creates a new MULTITHRESHOLD using the
-% given property value pairs. Unrecognized properties are passed via
-% varargin to multiThreshold_OpeningFcn. This calling syntax produces a
-% warning when there is an existing singleton*.
+%      MULTITHRESHOLD('Property','Value',...) creates a new MULTITHRESHOLD using the
+%      given property value pairs. Unrecognized properties are passed via
+%      varargin to multiThreshold_OpeningFcn.  This calling syntax produces a
+%      warning when there is an existing singleton*.
 %
-% MULTITHRESHOLD('CALLBACK') and MULTITHRESHOLD('CALLBACK',hObject,...) call the
-% local function named CALLBACK in MULTITHRESHOLD.M with the given input
-% arguments.
+%      MULTITHRESHOLD('CALLBACK') and MULTITHRESHOLD('CALLBACK',hObject,...) call the
+%      local function named CALLBACK in MULTITHRESHOLD.M with the given input
+%      arguments.
 %
-% *See GUI Options on GUIDE's Tools menu. Choose "GUI allows only one
-% instance to run (singleton)".
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
 % Edit the above text to modify the response to help multiThreshold
 
-% Last Modified by GUIDE v2.5 20-Sep-2011 11:47:22
+% Last Modified by GUIDE v2.5 13-Jan-2012 08:14:38
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
-gui_State = struct('gui_Name', mfilename, ...
-    'gui_Singleton', gui_Singleton, ...
+gui_State = struct('gui_Name',       mfilename, ...
+    'gui_Singleton',  gui_Singleton, ...
     'gui_OpeningFcn', @multiThreshold_OpeningFcn, ...
-    'gui_OutputFcn', @multiThreshold_OutputFcn, ...
-    'gui_LayoutFcn', [], ...
-    'gui_Callback', []);
+    'gui_OutputFcn',  @multiThreshold_OutputFcn, ...
+    'gui_LayoutFcn',  [], ...
+    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
@@ -67,7 +67,7 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-% -------------------------------------------------- multiThreshold_OpeningFcn
+% --------------------------------------------------  multiThreshold_OpeningFcn
 function multiThreshold_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for multiThreshold
@@ -93,26 +93,27 @@ function initializeGUI(handles)
 % Then wait for user action
 global stimulusParameters experiment betweenRuns
 global targetTypes maskerTypes backgroundTypes
-global variableNames paradigmNames threshEstNames cueNames
+global variableNames paradigmNames threshEstNames  cueNames betweenRunsVariables
 
 % Specify order of fields in main structures
 % identify as empty values or empty strings only
 orderGlobals
 
-addpath ('paradigms') %paradigm informations is stored here
+addpath ('paradigms')   %paradigm informations is stored here
 addpath (['..' filesep 'testPrograms']) % model physiology tests
+addpath    (['..' filesep 'profiles'])
 
-% specify all variables that need to be set on the GUI
+% specify all variables that  need to be set on the GUI
 variableNames={'stimulusDelay','maskerDuration','maskerLevel',...
     'maskerRelativeFrequency', 'targetFrequency', 'gapDuration',...
     'targetDuration','targetLevel','rampDuration',...
-    'cueTestDifference', 'WRVstartValues', 'WRVsteps', 'WRVlimits'};
+    'cueTestDifference', 'WRVstartValues', 'WRVsteps', 'WRVlimits',...
+    'OHIOnTones','notchedNoiseBW'};
 
-% Variable variables
-% (names of variable that can changed between runs)
+%  (names of variable that can changed between runs)
 betweenRunsVariables={'stimulusDelay','maskerDuration','maskerLevel',...
     'maskerRelativeFrequency','targetFrequency', 'gapDuration',...
-    'targetDuration','targetLevel','numOHIOtones'};
+    'targetDuration','targetLevel','OHIOnTones','notchedNoiseBW'};
 % populate the 'between runs variable' menus
 set(handles.popupmenuVaryParameter1,'string',betweenRunsVariables)
 set(handles.popupmenuVaryParameter2,'string',betweenRunsVariables)
@@ -128,13 +129,13 @@ targetTypes={'tone','noise', 'pinkNoise','whiteNoise','24TalkerBabble',...
 set(handles.popupmenuTargetType, 'string', targetTypes);
 
 % maskerType - value must be set in paradigm
-maskerTypes={'tone','noise', 'pinkNoise','TEN','whiteNoise','24TalkerBabble', ...
-    'speech'};
+maskerTypes={'tone','noise', 'pinkNoise','TEN','whiteNoise',...
+    'notchedNoise','24TalkerBabble', 'speech'};
 set(handles.popupmenuMaskerType, 'string', maskerTypes);
 
 % background Type- value must be set in paradigm (default = 1, 'none')
 backgroundTypes={'none','noise', 'pinkNoise', 'TEN','noiseDich',...
-    'pinkNoiseDich','whiteNoise','24TalkerBabble',...
+    'pinkNoiseDich','whiteNoise', 'notchedNoise','24TalkerBabble',...
     '16TalkerBabble','8TalkerBabble','4TalkerBabble',...
     '4TalkerReversedBabble','2TalkerBabble','1TalkerBabble'};
 set(handles.popupmenuBackgroundType, 'string', backgroundTypes);
@@ -143,8 +144,10 @@ set(handles.editBackgroundLevel,'string', '0')
 % Establish available paradigms by scanning paradigms folder
 paradigmNames= what('paradigms');
 paradigmNames= paradigmNames.m; % select m files only
-for i=1:length(paradigmNames) % strip off file extension
-    paradigmNames{i}=paradigmNames{i}(10:end-2);
+idx=strmatch('paradigm_', paradigmNames); % with 'paradigm_'
+paradigmNames=paradigmNames(idx);
+for i=1:length(paradigmNames)   % strip off file extension
+    paradigmNames{i}=paradigmNames{i}(10:end-2); 
 end
 set(handles.popupmenuParadigm,'string', paradigmNames)
 
@@ -159,13 +162,13 @@ else
         ' paradigm found in paradigms folder'])
 end
 
-earOptions={'left', 'right', 'diotic', 'dichoticLeft', 'dichoticRight',...
-    'MAPmodelListen', 'MAPmodelMultiCh', 'MAPmodelSingleCh'...
+earOptions={'left', 'right',  'diotic', 'dichoticLeft', 'dichoticRight',...
+    'MAPmodelListen',  'MAPmodelMultiCh', 'MAPmodelSingleCh'...
     'statsModelLogistic','statsModelRareEvent'};
 set(handles.popupmenuEar,'string', earOptions)
 defaultOption=1;
 experiment.ear=earOptions{defaultOption};
-set(handles.popupmenuEar,'value', defaultOption) % 'left' is deafult
+set(handles.popupmenuEar,'value', defaultOption)    % 'left' is deafult
 set(handles.pushbuttonSingleShot, 'visible', 'off') % use only for MAP
 
 % phase
@@ -183,7 +186,7 @@ threshEstNames={'oneIntervalUpDown', 'MaxLikelihood', ...
     '2I2AFC++', '2I2AFC+++'};
 set(handles.popupmenuThreshEst, 'string', threshEstNames);
 experiment.stopCriteria2IFC=[75 3 5];
-experiment.stopCriteriaSI=[20];
+experiment.stopCriteriaSI=20;
 
 % ** editBoxes that are only set by hand
 % music (relative) level, 'tada!' (manual setting only)
@@ -191,22 +194,18 @@ experiment.stopCriteriaSI=[20];
 set(handles.editMusicLevel,'string','0')
 
 % Catch Trial Rate
-set(handles.editCatchTrialRate,'string','0.2 0.1 2 ');
+set(handles.editCatchTrialRate,'string','0.2   0.1  ');
 
 % calibration
 stimulusParameters.restoreCalibration=7;
 set(handles.editcalibrationdB,'string',...
     stimulusParameters.restoreCalibration)
 
-% a MAPplot
-experiment.MAPplot=0; %default
+% MAPplot shows the output from the MAP model.
+experiment.MAPplot=0;	%default
 set(handles.editMAPplot,'string',num2str(experiment.MAPplot))
 
-% saveData
-experiment.saveData=1;
-set(handles.editSaveData,'string',num2str(experiment.saveData))
-
-% printTracks
+% printTracks in command window
 experiment.printTracks=0;
 set(handles.editPrintTracks,'string',num2str(experiment.printTracks))
 
@@ -216,26 +215,26 @@ experiment.clickToStimulusPause=1;
 % buttonBoxType: NB no problem if mouse is used instead
 experiment.buttonBoxType='square';
 
-% estimation of the mean
+% function used to estimate the mean of a response track.
 % {'logisticLS', 'logisticML', 'rareEvent'}
 experiment.functionEstMethod='logisticLS';
 
-% message box
+% message box used to send messages or reports to the user
 set(handles.textMSG,'backgroundcolor', 'w', 'ForegroundColor', 'b', 'string', '')
 set(handles.editMsgFont,'string','10')
 set(handles.editSubjectFont,'string','14')
 
-% default psychometric bin size and logistic slopes
-experiment.psyBinWidth=1; % dB
-maxLogisticK=2; % steepest slope contemplated
+% default psychometric function bin size and logistic slopes
+experiment.psyBinWidth= 1;  % dB
+maxLogisticK= 2; % steepest logistic slope considered in exhaustive search
 experiment.maxLogisticK=maxLogisticK;
-experiment.numPossLogisticK=100;
+experiment.numPossLogisticK=100;    % spacing of K-values in search
 experiment.possLogSlopes= ...
     0.01: maxLogisticK/experiment.numPossLogisticK: maxLogisticK;
 experiment.meanSearchStep=0.25; % dB
 
-% indicate that this is the first run and the GUI should be located in
-% default location.
+% indicate that multiThreshold has just been initialised 
+%   and the GUI should be located in the default location.
 experiment.justInitialized=1;
 
 % set up GUI based on training paradigm
@@ -244,11 +243,20 @@ earSetUp(handles)
 aThresholdAssessmentMethod(handles)
 aShowRelevantObjects(handles)
 
-% Done. Now wait for action
+% 'Save' button must be invisible until needed
+set(handles.pushbuttonSave,'visible','off')
+
+% Done. Now wait for action. Nothing happens until the user acts.
 
 % -------------------------------------------- popupmenuMaskerType_Callback
 function popupmenuMaskerType_Callback(hObject, eventdata, handles)
 % show or remove masker frequency box
+global stimulusParameters
+% find masker type
+option=get(handles.popupmenuMaskerType,'value');
+strings=get(handles.popupmenuMaskerType,'string');
+stimulusParameters.maskerType=strings{option};
+
 aShowRelevantObjects(handles)
 
 % -------------------------------------------- popupmenuTargetType_Callback
@@ -264,7 +272,7 @@ aParadigmSelection(handles);
 
 % -------------------------------------------- aParadigmSelection
 function aParadigmSelection(handles)
-global experiment stimulusParameters betweenRuns paradigmNames
+global experiment stimulusParameters betweenRuns  paradigmNames
 global variableNames
 
 % identify paradigm selected
@@ -336,6 +344,25 @@ end
 set(handles.editBackgroundLevel,'string', num2str...
     (stimulusParameters.backgroundLevel))
 
+% values related to assessment method
+switch experiment.threshEstMethod
+    case {'MaxLikelihood','oneIntervalUpDown'}
+        set(handles.editstopCriteriaBox, 'string', ...
+            num2str(experiment.singleIntervalMaxTrials))
+    case {'2I2AFC++','2I2AFC+++'}
+        set(handles.editstopCriteriaBox, 'string', ...
+            num2str(experiment.stopCriteria2IFC))
+    otherwise
+        error([' aResetPopupMenus:  threshEstMethod not recognised -> ' ...
+            experiment.threshEstMethod])
+end
+% assessment method popup may be changed between paradigms
+%  e.g. SRT must be one interval
+x=get(handles.popupmenuThreshEst, 'string');
+set(handles.popupmenuThreshEst, 'value', ...
+    strmatch(experiment.threshEstMethod, x));
+
+
 % on RUN the sample rate will be picked from the text box
 % However, MAP overrules the sample rate and sets its own
 aSetSampleRate(stimulusParameters.subjectSampleRate, handles);
@@ -351,19 +378,19 @@ aResetPopupMenus(handles)
 
 % ------------------------------------------------------ aResetPopupMenus
 function aResetPopupMenus(handles)
-global stimulusParameters betweenRuns variableNames
-global targetTypes maskerTypes experiment backgroundTypes
+global   stimulusParameters betweenRuns variableNames
+global targetTypes maskerTypes experiment backgroundTypes betweenRunsVariables
 
 switch experiment.threshEstMethod
     case {'MaxLikelihood','oneIntervalUpDown'}
         set(handles.editstopCriteriaBox, 'string', ...
             num2str(experiment.singleIntervalMaxTrials))
-        
+
     case {'2I2AFC++','2I2AFC+++'}
         set(handles.editstopCriteriaBox, 'string', ...
             num2str(experiment.stopCriteria2IFC))
     otherwise
-        error([' aResetPopupMenus: threshEstMethod not recognised -> ' ...
+        error([' aResetPopupMenus:  threshEstMethod not recognised -> ' ...
             experiment.threshEstMethod])
 end
 
@@ -375,11 +402,11 @@ end
 
 %set variables popupmenus as specified in betweenRuns
 variableParameter1ID=0; variableParameter2ID=0;
-for i=1:length(variableNames)
-    if strcmp(variableNames{i},betweenRuns.variableName1)
+for i=1:length(betweenRunsVariables) %  variableNames
+    if strcmp(betweenRunsVariables{i},betweenRuns.variableName1)
         variableParameter1ID=i;
     end
-    if strcmp(variableNames{i},betweenRuns.variableName2)
+    if strcmp(betweenRunsVariables{i},betweenRuns.variableName2)
         variableParameter2ID=i;
     end
 end
@@ -416,6 +443,15 @@ set(handles.edittargetLevel, 'visible', 'on')
 set(handles.edittargetDuration, 'visible', 'on')
 set(handles.edittargetFrequency, 'visible', 'on')
 
+switch experiment.paradigm(1:3)
+    case 'OHI'
+        set(handles.editOHIOnTones, 'visible', 'on')
+        set(handles.textOHIOnTones, 'visible', 'on')
+    otherwise
+        set(handles.editOHIOnTones, 'visible', 'off')
+        set(handles.textOHIOnTones, 'visible', 'off')
+end
+
 switch experiment.ear
     case {'statsModelLogistic', 'statsModelRareEvent'}
         set(handles.editStatsModel, 'visible', 'on')
@@ -430,8 +466,8 @@ switch experiment.ear
         set(handles.textCue, 'visible', 'off')
         set(handles.editMusicLevel,'visible', 'off')
         set(handles.textMusicLevel,'visible', 'off')
-        
-    case {'MAPmodel', 'MAPmodelListen', 'MAPmodelMultiCh', 'MAPmodelSingleCh'}
+
+    case {'MAPmodel',  'MAPmodelListen', 'MAPmodelMultiCh', 'MAPmodelSingleCh'}
         set(handles.popupmenuCueNoCue, 'visible', 'off')
         set(handles.editStatsModel, 'visible', 'off')
         set(handles.textStatsModel, 'visible', 'off')
@@ -442,7 +478,7 @@ switch experiment.ear
         set(handles.textCue, 'visible', 'off')
         set(handles.editMusicLevel,'visible', 'off')
         set(handles.textMusicLevel,'visible', 'off')
-        
+
     otherwise
         % i.e. using real subjects (left, right, diotic, dichotic)
         set(handles.editStatsModel, 'visible', 'off')
@@ -465,7 +501,7 @@ switch experiment.threshEstMethod
         set(handles.textCue,'visible', 'on')
         set(handles.editstopCriteriaBox, 'string', ...
             num2str(experiment.singleIntervalMaxTrials))
-        
+
         if stimulusParameters.includeCue==0
             set(handles.editcueTestDifference,'visible', 'off')
             set(handles.textcueTestDifference,'visible', 'off')
@@ -473,7 +509,7 @@ switch experiment.threshEstMethod
             set(handles.editcueTestDifference,'visible', 'on')
             set(handles.textcueTestDifference,'visible', 'on')
         end
-        
+
     case {'2I2AFC++','2I2AFC+++'}
         set(handles.editCatchTrialRate, 'visible', 'off')
         set(handles.textCatchTrials, 'visible', 'off')
@@ -495,7 +531,7 @@ if ~experiment.maskerInUse
     set(handles.textgapDuration,'visible', 'off')
     set(handles.popupmenuMaskerType,'visible', 'off')
     set(handles.textMaskerType,'visible', 'off')
-    
+
     % paradigms with maskers
 else
     set(handles.editmaskerDuration,'visible', 'on')
@@ -535,6 +571,14 @@ switch targetType
         set(handles.edittargetFrequency,'visible', 'off')
 end
 
+if strcmp(stimulusParameters.maskerType,'notchedNoise')
+    set(handles.editnotchedNoiseBW, 'visible', 'on');
+    set(handles.textnotchedNoiseBW,'visible','on')
+else
+    set(handles.editnotchedNoiseBW, 'visible', 'off');
+    set(handles.textnotchedNoiseBW,'visible','off')
+end
+
 if strcmp(stimulusParameters.backgroundType,'none')
     set(handles.popupmenuBackgroundType, 'visible', 'on');
     set(handles.editBackgroundLevel,'visible','off')
@@ -559,7 +603,7 @@ if on
     set(handles.pushbuttonSingleShot, 'visible', 'on')
     set(handles.editMAPplot,'visible', 'on')
     set(handles.textMAPplot,'visible', 'on')
-    
+
 else
     set(handles.pushbuttonOME, 'visible', 'off')
     set(handles.pushbuttonBM, 'visible', 'off')
@@ -572,7 +616,7 @@ else
     set(handles.pushbuttonSingleShot, 'visible', 'off')
     set(handles.editMAPplot,'visible', 'off')
     set(handles.textMAPplot,'visible', 'off')
-    
+
 end
 
 % ------------------------------------------------ pushbuttonRun_Callback
@@ -585,11 +629,16 @@ experiment.stop=0;
 
 switch experiment.paradigm
     case 'profile'
-        %% special option for successive and linked measurements
+        %% special sequence: abs thresholds, TMC, IFMC
         global resultsTable
+        
+        % user sets max trials now. It overrides paradigm file settings
+        profileMaxTrials=get(handles.editstopCriteriaBox,'string');
+        
+        % 16-ms abs thresholds
         experiment.paradigm='threshold_16ms';
         set(handles.edittargetDuration,'string', num2str(0.25))
-        set(handles.editstopCriteriaBox,'string','10') % nTrials
+        set(handles.editstopCriteriaBox,'string', profileMaxTrials) % nTrials
         run (handles)
         if experiment.stop
             optionNo=strmatch('profile',paradigmNames);
@@ -598,10 +647,11 @@ switch experiment.paradigm
             aParadigmSelection(handles)
             return
         end
-        
+
+        % 250-ms abs thresholds
         longTone=resultsTable(2:end,2:end);
         set(handles.edittargetDuration,'string', num2str(0.016))
-        set(handles.editstopCriteriaBox,'string','30') % nTrials
+        set(handles.editstopCriteriaBox,'string',profileMaxTrials) % nTrials
         run (handles)
         if experiment.stop
             disp(errormsg)
@@ -614,13 +664,13 @@ switch experiment.paradigm
         end
         shortTone=resultsTable(2:end,2:end);
         
-        % use 16ms thresholds for TMC
+        % 16-ms TMC
         thresholds16ms=betweenRuns.thresholds;
         optionNo=strmatch('TMC',paradigmNames);
         set(handles.popupmenuParadigm,'value',optionNo);
         aParadigmSelection(handles)
         set(handles.edittargetLevel,'string', thresholds16ms+10);
-        set(handles.editstopCriteriaBox,'string','30') % nTrials
+        set(handles.editstopCriteriaBox,'string',profileMaxTrials)  % nTrials
         pause(.1)
         run (handles)
         if experiment.stop
@@ -635,13 +685,13 @@ switch experiment.paradigm
         TMC=resultsTable(2:end,2:end);
         gaps=resultsTable(2:end,1);
         BFs=resultsTable(1, 2:end);
-        
-        % use 16ms threshold for IFMC
+
+        % 16-ms IFMC
         optionNo=strmatch('IFMC',paradigmNames);
         set(handles.popupmenuParadigm,'value',optionNo);
         aParadigmSelection(handles)
         set(handles.edittargetLevel,'string', thresholds16ms+10);
-        set(handles.editstopCriteriaBox,'string','30') % nTrials
+        set(handles.editstopCriteriaBox,'string', profileMaxTrials)  % nTrials
         pause(.1)
         run (handles)
         if experiment.stop
@@ -655,24 +705,34 @@ switch experiment.paradigm
         end
         IFMCs=resultsTable(2:end,2:end);
         offBFs=resultsTable(2:end,1);
-        
+
         % reset original paradigm
         optionNo=strmatch('profile',paradigmNames);
         set(handles.popupmenuParadigm,'value',optionNo);
         aParadigmSelection(handles)
         
-        %% save data and plot profile
-        
-        % save profile longTone shortTone gaps BFs TMC offBFs IFMCs
-        fileName=['MTprofile' Util_timeStamp];
-        %act_path = pwd;
-        %cd(['..' filesep 'profiles']);
-        profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
-            fileName)
-        % cd(act_path);
-        while ~fopen(fileName), end
-        plotProfile(fileName, 'profile_CMA_L')
-        %% xx
+%% save data and plot profile
+
+        save profile longTone shortTone gaps BFs TMC offBFs IFMCs
+
+%%
+
+fileName=['MTprofile_' experiment.name '_' UTIL_timeStamp];
+destination=['..' filesep 'profiles' filesep 'MTprofiles'];
+profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
+    fileName, destination)
+while ~fopen(fileName), end  % wait for file to close
+comparisonFile='profile_CMA_L';
+plotProfile(fileName, comparison)
+
+fileName=['MTprofile' UTIL_timeStamp];
+profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
+    fileName, 'MTprofiles')
+while ~fopen(fileName), end  % wait for file to close
+fileLocation='MTprofiles';
+comparisonFile='profile_CMA_L';
+plotProfile(fileLocation,fileName, comparisonFile)
+%% xx
         if strcmp(errormsg,'manually stopped')
             disp(errormsg)
             optionNo=strmatch('profile',paradigmNames);
@@ -691,6 +751,8 @@ function run (handles)
 global experiment expGUIhandles stimulusParameters
 tic
 expGUIhandles=handles;
+set(handles.pushbuttonSave,'visible','off')
+
 set(handles.pushbuttonStop, 'backgroundColor', [.941 .941 .941])
 % set(handles.editparamChanges,'visible','off')
 
@@ -721,8 +783,14 @@ toc
 
 % --- Executes on button press in pushbuttonSingleShot.
 function pushbuttonSingleShot_Callback(hObject, eventdata, handles)
-global experiment
+global experiment paradigmNames
 experiment.singleShot=1;
+
+% startup paradigm, 'training' (could be anywhere on the list)
+startupParadigm='training';
+idx= find(strcmp(paradigmNames,startupParadigm));
+set(handles.popupmenuParadigm,'value', idx)
+aParadigmSelection(handles);
 
 % special test for spontaneous activity
 x=get(handles.editWRVstartValues, 'string');
@@ -742,8 +810,8 @@ set(handles.edittargetDuration, 'string', y)
 
 % ------------------------------------------aReadAndCheckParameterBoxes
 function errorMsg=aReadAndCheckParameterBoxes(handles)
-global experiment stimulusParameters betweenRuns statsModel
-global variableNames LevittControl paramChanges
+global experiment  stimulusParameters betweenRuns  statsModel
+global variableNames  LevittControl paramChanges betweenRunsVariables
 % When the program sets the parameters all should be well
 % But when the user changes them...
 
@@ -761,12 +829,12 @@ switch experiment.ear
     case { 'MAPmodel', 'MAPmodelMultiCh', ...
             'MAPmodelSingleCh', 'MAPmodelListen'}
         % MAPmodel writes forced parameter settings to the screen
-        % so that they can be read from there
+        %  so that they can be read from there
         % {'randomize within blocks', 'fixed sequence',...
-        % 'randomize across blocks'}
-        set(handles.popupmenuRandomize,'value',2) % fixed sequence
-        set(handles.editstimulusDelay,'string','0.01') % no stimulus delay
-        stimulusParameters.includeCue=0; % no cue for MAP
+        %  'randomize across blocks'}
+        set(handles.popupmenuRandomize,'value',2)       % fixed sequence
+        set(handles.editstimulusDelay,'string','0.01')  % no stimulus delay
+        stimulusParameters.includeCue=0;                % no cue for MAP
 end
 
 % find tone type
@@ -804,7 +872,7 @@ for i=1:length(variableNames)-3 % do not include 'level limits'
 end
 
 chosenOption=get(handles.popupmenuVaryParameter1,'value');
-betweenRuns.variableName1=variableNames{chosenOption};
+betweenRuns.variableName1=betweenRunsVariables{chosenOption};
 eval(['betweenRuns.variableList1 = stimulusParameters.' ...
     betweenRuns.variableName1 ';']);
 
@@ -821,14 +889,14 @@ if strcmp(betweenRuns.variableName1,betweenRuns.variableName2) ...
 end
 
 % calibration
-% this is used to *reduce* the output signal from what it otherwise
-% would be
+%  this is used to *reduce* the output signal from what it otherwise
+%  would be
 % signal values are between 1 - 2^23
-% these are interpreted as microPascals between -29 dB and 128 dB SPL
+%  these are interpreted as microPascals between -29 dB and 128 dB SPL
 % calibrationdB adjusts these values to compensate for equipment
-% characteristics
-% this will change the range. e.g. a 7 dB calibration will yield
-% a range of -36 to 121 dB SPL
+%  characteristics
+%  this will change the range. e.g. a 7 dB calibration will yield
+%   a range of -36 to 121 dB SPL
 % Calibration is not used when modelling. Values are treated as dB SPL
 stimulusParameters.calibrationdB=...
     str2num(get(handles.editcalibrationdB,'string'));
@@ -866,16 +934,10 @@ end
 % MAP plotting
 experiment.MAPplot=str2num(get(handles.editMAPplot,'string'));
 % if ~isequal(experiment.MAPplot, 0),
-% % any other character will do it
-% experiment.MAPplot=1;
+%     % any other character will do it
+%     experiment.MAPplot=1;
 % end
 
-% save data
-experiment.saveData=str2num(get(handles.editSaveData,'string'));
-if ~isequal(experiment.saveData, 0),
-    % any other character will do it
-    experiment.saveData=1;
-end
 
 % print tracks
 experiment.printTracks=str2num(get(handles.editPrintTracks,'string'));
@@ -885,7 +947,7 @@ if ~isequal(experiment.printTracks, 0),
 end
 
 % catch trial rate
-% (1)= start rate, (2)= base rate, (3)= time constant (trials)
+% (1)= start rate,   (2)= base rate,   (3)= time constant (trials)
 stimulusParameters.catchTrialRates=...
     str2num(get(handles.editCatchTrialRate,'string'));
 if stimulusParameters.catchTrialRates(1) ...
@@ -894,6 +956,9 @@ if stimulusParameters.catchTrialRates(1) ...
         'catch trial base rates must be less than catch trial start rate';
     return,
 end
+% force the decay rate for catchTrialRate
+%  to avoid having to explain it to the user
+stimulusParameters.catchTrialRates(3)=2;
 
 % sample rate
 % The sample rate is set in the paradigm file.
@@ -907,7 +972,7 @@ stimulusParameters.sampleRate=...
 stimulusParameters.musicLeveldB=...
     str2num(get(handles.editMusicLevel,'string'));
 
-% set message box font size
+%  set message box font size
 experiment.msgFontSize=str2num(get(handles.editMsgFont,'string'));
 experiment.subjGUIfontSize=str2num(get(handles.editSubjectFont,'string'));
 
@@ -943,7 +1008,7 @@ s=get(handles.popupmenuRandomize,'string');
 betweenRuns.randomizeSequence=s{idx};
 
 % Make small adjustments to variable values
-% to keep values unique against later sorting
+%  to keep values unique against later sorting
 x=betweenRuns.variableList1;
 [y idx]= sort(x);
 for i=1:length(y)-1, if y(i+1)==y(i); y(i+1)=y(i)*1.001; end, end
@@ -956,7 +1021,7 @@ for i=1:length(y)-1, if y(i+1)==y(i); y(i+1)=y(i)*1.001; end, end
 x(idx)=y;
 betweenRuns.variableList2=x;
 
-% Checks: after reading and setting parameters ------------------------------------------
+% Checks: after reading and setting parameters  ------------------------------------------
 % check for finger trouble (more checks possible
 if stimulusParameters.maskerDuration>10
     errorMsg='maskerDuration is too long'; return, end
@@ -1027,7 +1092,7 @@ switch experiment.paradigm
 end
 
 switch experiment.paradigm
-    case {'gapDetection', 'frequencyDiscrimination'}
+    case  {'gapDetection', 'frequencyDiscrimination'}
         if ~isequal(stimulusParameters.targetDuration, ...
                 stimulusParameters.maskerDuration)
             addToMsg(...
@@ -1043,11 +1108,16 @@ end
 % identify model parameter changes if any
 paramChanges=get(handles.editparamChanges,'string');
 if ~strcmp(paramChanges, ';'), paramChanges=[paramChanges ';']; end
+try
 eval(paramChanges);
+catch
+    error('Problems with suggested parameter changes')
+end
+
 
 % -------------------------------------------- aSetSampleRate
 function aSetSampleRate(sampleRate, handles)
-global stimulusParameters
+global  stimulusParameters
 stimulusParameters.sampleRate=sampleRate;
 set(handles.textsampleRate,'string',num2str(stimulusParameters.sampleRate))
 
@@ -1055,7 +1125,7 @@ set(handles.textsampleRate,'string',num2str(stimulusParameters.sampleRate))
 function popupmenuEar_Callback(hObject, eventdata, handles)
 global experiment
 option=get(handles.popupmenuEar,'value');
-options=get(handles.popupmenuEar,'string'); % left/right/model
+options=get(handles.popupmenuEar,'string');			% left/right/model
 experiment.ear=options{option};
 set(handles.editparamChanges,'visible','off')
 switch experiment.ear
@@ -1063,16 +1133,16 @@ switch experiment.ear
         set(handles.editStatsModel,'string', '15, 0.5')
     case 'statsModelRareEvent'
         set(handles.editStatsModel,'string', '20 1')
-    case {'MAPmodelListen', 'MAPmodelMultiCh', 'MAPmodelSingleCh'}
+    case {'MAPmodelListen',  'MAPmodelMultiCh', 'MAPmodelSingleCh'}
         set(handles.editparamChanges,'visible','on')
 end
 earSetUp(handles)
 
 % -------------------------------------------- earSetUp
-function earSetUp(handles)
+function	earSetUp(handles)
 global experiment stimulusParameters
 % option=get(handles.popupmenuEar,'value');
-% options=get(handles.popupmenuEar,'string'); % left/right/model
+% options=get(handles.popupmenuEar,'string');			% left/right/model
 % experiment.ear=options{option};
 
 switch experiment.ear
@@ -1092,27 +1162,30 @@ switch experiment.ear
     case {'statsModelLogistic', 'statsModelRareEvent'}
         set(handles.editStatsModel, 'visible', 'off')
         set(handles.textStatsModel, 'visible', 'off')
-        
+
         % default psychometric bin size and logistic slopes
-        set(handles.popupmenuRandomize,'value',2) % fixed sequence
+        set(handles.popupmenuRandomize,'value',2)   % fixed sequence
         set(handles.editName,'string', 'statsModel')
-        % experiment.headphonesUsed=0;
-        
+        %         experiment.headphonesUsed=0;
+
     case {'MAPmodelListen', 'MAPmodelMultiCh', 'MAPmodelSingleCh'}
-        stimulusParameters.includeCue=0; % no cue
+        stimulusParameters.includeCue=0;						 % no cue
         set(handles.popupmenuCueNoCue,'value', 2)
-        
-        set(handles.editCatchTrialRate,'string','0 0 2 ');%no catch trials
-        set(handles.editName,'string', 'Normal') % force name
-        experiment.name=get(handles.editName,'string'); % read name back
+
+        set(handles.editCatchTrialRate,'string','0 0');%no catch trials
+        set(handles.editName,'string', 'Normal')			% force name
+        experiment.name=get(handles.editName,'string');	% read name back
         set(handles.editcalibrationdB,'string','0')
-        
-        set(handles.popupmenuRandomize,'value',2) % fixed sequence
+
+        set(handles.popupmenuRandomize,'value',2)       % fixed sequence
         set(handles.editstimulusDelay,'string','0')
-        
-        set(handles.editSaveData,'string', '0')
+
+%         set(handles.editSaveData,'string', '0')
         set(handles.editSubjectFont,'string', '10');
         experiment.MacGThreshold=0; % num MacG spikes to exceed threshold
+    otherwise
+        set(handles.editCatchTrialRate,'string','0.2 0.1');%no catch trials
+
 end
 aResetPopupMenus(handles)
 
@@ -1122,30 +1195,33 @@ cueSetUp(handles)
 
 % ------------------------------------------------------------- cueSetUp
 function cueSetUp(handles)
-global stimulusParameters
+global stimulusParameters experiment
 
-chosenOption=get(handles.popupmenuCueNoCue,'value');
-if chosenOption==1
-    stimulusParameters.includeCue=1;
-    set(handles.editcueTestDifference,'visible', 'on')
-    set(handles.textcueTestDifference,'visible', 'on')
-    stimulusParameters.subjectText=stimulusParameters.instructions{2};
-else
-    stimulusParameters.includeCue=0;
-    set(handles.editcueTestDifference,'visible', 'off')
-    set(handles.textcueTestDifference,'visible', 'off')
-    stimulusParameters.subjectText= stimulusParameters.instructions{1};
+switch experiment.threshEstMethod
+    case {'oneIntervalUpDown', 'MaxLikelihood'}
+        chosenOption=get(handles.popupmenuCueNoCue,'value');
+        if chosenOption==1
+            stimulusParameters.includeCue=1;
+            set(handles.editcueTestDifference,'visible', 'on')
+            set(handles.textcueTestDifference,'visible', 'on')
+            stimulusParameters.subjectText=stimulusParameters.instructions{2};
+        else
+            stimulusParameters.includeCue=0;
+            set(handles.editcueTestDifference,'visible', 'off')
+            set(handles.textcueTestDifference,'visible', 'off')
+            stimulusParameters.subjectText= stimulusParameters.instructions{1};
+        end
 end
 
 % -------------------------------------------- popupmenuThreshEst_Callback
 function popupmenuThreshEst_Callback(hObject, eventdata, handles)
 aThresholdAssessmentMethod(handles);
 
-% --------------------------------------------- aThresholdAssessmentMethod
+%  --------------------------------------------- aThresholdAssessmentMethod
 function aThresholdAssessmentMethod(handles)
 % identify the threshold assessment method
-% and set various parameters on the GUI appropriately
-global stimulusParameters experiment threshEstNames LevittControl
+%  and set various parameters on the GUI appropriately
+global stimulusParameters experiment  threshEstNames LevittControl
 
 chosenOption=get(handles.popupmenuThreshEst,'value');
 experiment.threshEstMethod=threshEstNames{chosenOption};
@@ -1156,7 +1232,7 @@ set(handles.textCatchTrials, 'visible', 'on')
 switch experiment.threshEstMethod
     case 'MaxLikelihood'
         experiment.functionEstMethod='logisticML';
-        stimulusParameters.WRVsteps=10*experiment.psyFunSlope; % ???
+        stimulusParameters.WRVsteps=10*experiment.psyFunSlope;  % ???
         set(handles.textstopCriteria,'string', 'stop criteria \ maxTrials')
         experiment.singleIntervalMaxTrials=experiment.stopCriteriaSI;
         experiment.allowCatchTrials= 1;
@@ -1164,7 +1240,7 @@ switch experiment.threshEstMethod
             case 'training'
                 experiment.possLogSlopes=0.5;
         end
-        
+
     case 'oneIntervalUpDown'
         experiment.functionEstMethod='logisticLS';
         set(handles.textstopCriteria,'string', 'stop criteria \ maxTrials')
@@ -1175,9 +1251,9 @@ switch experiment.threshEstMethod
             otherwise
                 experiment.allowCatchTrials= 1;
         end
-        
-    case {'2I2AFC++', '2I2AFC+++'}
-        LevittControl.rule='++'; % e.g. '++' or '+++'
+
+    case {'2I2AFC++',  '2I2AFC+++'}
+        LevittControl.rule='++'; %  e.g. '++' or '+++'
         experiment.singleIntervalMaxTrials=experiment.stopCriteria2IFC;
         experiment.functionEstMethod='peaksAndTroughs';
         LevittControl.maxTrials=experiment.singleIntervalMaxTrials(1);
@@ -1198,7 +1274,7 @@ switch experiment.threshEstMethod
     case {'2I2AFC++', '2A2AIFC+++'}
         stimulusParameters.subjectText=...
             'did the tone occur in window 1 or 2?';
-    case {'MaxLikelihood', 'oneIntervalUpDown'};
+    case {'MaxLikelihood',  'oneIntervalUpDown'};
         switch stimulusParameters.includeCue
             case 0
                 stimulusParameters.subjectText=...
@@ -1213,126 +1289,126 @@ stimulusParameters.messageString={'training'};
 aResetPopupMenus(handles)
 % -------------------------------------------------- function orderGlobals
 function orderGlobals
-global stimulusParameters experiment betweenRuns withinRuns
+global  stimulusParameters experiment betweenRuns withinRuns
 
 stimulusParameters=[];
-stimulusParameters.sampleRate= [];
-stimulusParameters.targetType= '';
-stimulusParameters.targetFrequency= [];
-stimulusParameters.targetDuration= [];
-stimulusParameters.targetLevel= [];
-stimulusParameters.gapDuration= [];
-stimulusParameters.maskerType= '';
-stimulusParameters.maskerRelativeFrequency= [];
-stimulusParameters.maskerDuration= [];
-stimulusParameters.maskerLevel= [];
-stimulusParameters.backgroundType= '';
-stimulusParameters.backgroundTypeValue= [];
-stimulusParameters.backgroundLevel= [];
-stimulusParameters.includeCue= [];
+stimulusParameters.sampleRate=		[];
+stimulusParameters.targetType=	'';
+stimulusParameters.targetFrequency=	[];
+stimulusParameters.targetDuration=	[];
+stimulusParameters.targetLevel=	[];
+stimulusParameters.gapDuration=	[];
+stimulusParameters.maskerType=	'';
+stimulusParameters.maskerRelativeFrequency=	[];
+stimulusParameters.maskerDuration=	[];
+stimulusParameters.maskerLevel=	[];
+stimulusParameters.backgroundType=	'';
+stimulusParameters.backgroundTypeValue=	[];
+stimulusParameters.backgroundLevel=	[];
+stimulusParameters.includeCue=	[];
 experiment.clickToStimulusPause=[];
-stimulusParameters.stimulusDelay= [];
-stimulusParameters.rampDuration= [];
-stimulusParameters.absThresholds= [];
-stimulusParameters.numOHIOtones= [];
+stimulusParameters.stimulusDelay=	[];
+stimulusParameters.rampDuration=	[];
+stimulusParameters.absThresholds=	[];
+stimulusParameters.numOHIOtones=	[];
 
-stimulusParameters.WRVname= '';
-stimulusParameters.WRVstartValues= [];
-stimulusParameters.WRVsteps= [];
-stimulusParameters.WRVlimits= [];
-stimulusParameters.WRVinitialStep= [];
-stimulusParameters.WRVsmallStep= [];
-experiment.singleIntervalMaxTrials= [];
-stimulusParameters.calibrationdB= [];
+stimulusParameters.WRVname=	'';
+stimulusParameters.WRVstartValues=		[];
+stimulusParameters.WRVsteps=	[];
+stimulusParameters.WRVlimits=	[];
+stimulusParameters.WRVinitialStep=		[];
+stimulusParameters.WRVsmallStep=	[];
+experiment.singleIntervalMaxTrials=	[];
+stimulusParameters.calibrationdB=	[];
 
-stimulusParameters.catchTrialRates= [];
-stimulusParameters.catchTrialBaseRate= [];
-stimulusParameters.catchTrialRate= [];
-stimulusParameters.catchTrialTimeConstant= [];
+stimulusParameters.catchTrialRates=	[];
+stimulusParameters.catchTrialBaseRate=	[];
+stimulusParameters.catchTrialRate=	[];
+stimulusParameters.catchTrialTimeConstant=	[];
 
-stimulusParameters.dt= [];
+stimulusParameters.dt=		[];
 
-stimulusParameters.jitterStartdB= [];
-stimulusParameters.restoreCalibration= [];
-stimulusParameters.messageString= [];
-stimulusParameters.cueTestDifference= [];
-stimulusParameters.subjectText= '';
-stimulusParameters.testTargetBegins= [];
-stimulusParameters.testTargetEnds= [];
-stimulusParameters.musicLeveldB= [];
+stimulusParameters.jitterStartdB=	[];
+stimulusParameters.restoreCalibration=	[];
+stimulusParameters.messageString=		[];
+stimulusParameters.cueTestDifference=	[];
+stimulusParameters.subjectText=	 '';
+stimulusParameters.testTargetBegins=	[];
+stimulusParameters.testTargetEnds=	[];
+stimulusParameters.musicLeveldB=	[];
 
 stimulusParameters.subjectSampleRate=[];
 stimulusParameters.MAPSampleRate=[];
 
 experiment=[];
-experiment.name= '';
-experiment.date= '';
-experiment.paradigm= '';
-experiment.ear= '';
+experiment.name=	'';
+experiment.date=	'';
+experiment.paradigm=	'';
+experiment.ear=	'';
 experiment.headphonesUsed=[];
-experiment.singleShot= [];
-experiment.randomize= '';
-experiment.maxTrials= [];
-experiment.MacGThreshold= [];
-experiment.resetCriterion= [];
-experiment.runResetCriterion= [];
+experiment.singleShot=	[];
+experiment.randomize=	'';
+experiment.maxTrials=	[];
+experiment.MacGThreshold=	[];
+experiment.resetCriterion=	[];
+experiment.runResetCriterion=	[];
 
-experiment.comparisonData= [];
-experiment.absThresholds= [];
-experiment.threshEstMethod= '';
-experiment.functionEstMethod= '';
-experiment.psyBinWidth= [];
+experiment.comparisonData=	[];
+experiment.absThresholds=	[];
+experiment.threshEstMethod=	'';
+experiment.functionEstMethod=	'';
+experiment.psyBinWidth=	[];
 experiment.maxLogisticK=[];
 experiment.numPossLogisticK=[];
-experiment.possLogSlopes= [];
-experiment.meanSearchStep= [];
-experiment.psyFunSlope= [];
+experiment.possLogSlopes=	[];
+experiment.meanSearchStep=	[];
+experiment.psyFunSlope=	[];
 experiment.predictionLevels=[];
 
-experiment.buttonBoxType= '';
-experiment.buttonBoxStatus= '';
-experiment.status= '';
-experiment.stop= [];
-experiment.pleaseRepeat= [];
+experiment.buttonBoxType=	'';
+experiment.buttonBoxStatus=	'';
+experiment.status=	'';
+experiment.stop=	[];
+experiment.pleaseRepeat=	[];
 experiment.justInitialized=[];
 
-experiment.MAPplot= [];
-experiment.saveData= [];
-experiment.printTracks= [];
-experiment.msgFontSize= [];
-experiment.subjGUIfontSize= [];
+experiment.MAPplot=	    [];
+experiment.saveData=	[];
+experiment.printTracks=	[];
+experiment.msgFontSize=	[];
+experiment.subjGUIfontSize=	[];
 
-experiment.timeAtStart= '';
-experiment.minElapsed= [];
+experiment.timeAtStart=	'';
+experiment.minElapsed=	[];
 
 betweenRuns=[];
-betweenRuns.variableName1= '';
-betweenRuns.variableList1= [];
-betweenRuns.variableName2= '';
-betweenRuns.variableList2= [];
-betweenRuns.var1Sequence= [];
-betweenRuns.var2Sequence= [];
+betweenRuns.variableName1=	'';
+betweenRuns.variableList1=	[];
+betweenRuns.variableName2=	'';
+betweenRuns.variableList2=	[];
+betweenRuns.var1Sequence=	[];
+betweenRuns.var2Sequence=	[];
 betweenRuns.randomizeSequence=[];
-betweenRuns.timeNow= [];
-betweenRuns.runNumber= [];
-betweenRuns.thresholds= [];
-betweenRuns.forceThresholds= [];
-betweenRuns.observationCount= [];
-betweenRuns.timesOfFirstReversals= [];
+betweenRuns.timeNow=	[];
+betweenRuns.runNumber=	[];
+betweenRuns.thresholds=	[];
+betweenRuns.forceThresholds=	[];
+betweenRuns.observationCount=	[];
+betweenRuns.timesOfFirstReversals=	[];
 betweenRuns.bestThresholdTracks='';
 betweenRuns.levelTracks='';
 betweenRuns.responseTracks='';
-betweenRuns.slopeKTracks= [];
-betweenRuns.gainTracks= [];
-betweenRuns.VminTracks= [];
-betweenRuns.bestGain= [];
-betweenRuns.bestVMin= [];
-betweenRuns.bestPaMin= [];
-betweenRuns.bestLogisticM= [];
-betweenRuns.bestLogisticK= [];
+betweenRuns.slopeKTracks=	[];
+betweenRuns.gainTracks=	[];
+betweenRuns.VminTracks=	[];
+betweenRuns.bestGain=	[];
+betweenRuns.bestVMin=	[];
+betweenRuns.bestPaMin=	[];
+betweenRuns.bestLogisticM=	[];
+betweenRuns.bestLogisticK=	[];
 betweenRuns.psychometicFunction='';
-betweenRuns.catchTrials= [];
-betweenRuns.caughtOut= [];
+betweenRuns.catchTrials=	[];
+betweenRuns.caughtOut=	[];
 
 withinRuns=[];
 withinRuns.trialNumber=[];
@@ -1341,19 +1417,19 @@ withinRuns.beginningOfPhase2=[];
 withinRuns.variableValue=[];
 withinRuns.direction='';
 withinRuns.peaks=[];
-withinRuns.troughs= [];
-withinRuns.levelList= [];
-withinRuns.responseList= [];
-withinRuns.meanEstTrack= [];
+withinRuns.troughs=	[];
+withinRuns.levelList=	[];
+withinRuns.responseList=	 [];
+withinRuns.meanEstTrack=	[];
 withinRuns.meanLogisticEstTrack=[];
-withinRuns.bestSlopeK= [];
-withinRuns.bestGain= [];
-withinRuns.bestVMin= [];
+withinRuns.bestSlopeK=	[];
+withinRuns.bestGain=	[];
+withinRuns.bestVMin=	[];
 withinRuns.forceThreshold=[];
-withinRuns.catchTrial= [];
+withinRuns.catchTrial=	[];
 withinRuns.caughtOut=[];
 withinRuns.catchTrialCount=[];
-withinRuns.wrongButton= [];
+withinRuns.wrongButton=	[];
 withinRuns.babblePlaying=[];
 
 % --- Executes on selection change in popupmenuBackgroundType.
@@ -1373,6 +1449,27 @@ switch selectedBackground
 end
 
 
+function pushbuttonSave_Callback(hObject, eventdata, handles)
+global experiment
+
+subjectName=experiment.name;
+if ~isdir(['savedData' filesep subjectName ])
+    mkdir(['savedData' filesep subjectName ])
+end
+
+% date and time and replace ':' with '_'
+date=datestr(now);idx=findstr(':',date);date(idx)='_';
+fileName=[subjectName ' ' date '.mat'];
+movefile(['savedData' filesep 'mostRecentResults.mat'], ...
+    ['savedData' filesep subjectName filesep fileName])
+set(handles.pushbuttonSave,'visible','off')
+fprintf('\n')
+disp(['files saved as ' fileName])
+disp('To print it out again use this command:')
+disp(['    printReport(''' fileName ''')'])
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function pushbuttonStop_Callback(hObject, eventdata, handles)
 global experiment
@@ -1388,9 +1485,9 @@ aReadAndCheckParameterBoxes(handles);
 testOME(experiment.name, paramChanges);
 
 function pushbuttonBM_Callback(hObject, eventdata, handles)
-global stimulusParameters experiment paramChanges
+global  stimulusParameters experiment paramChanges
 aReadAndCheckParameterBoxes(handles);
-relativeFrequencies=[0.25 .5 .75 1 1.25 1.5 2];
+relativeFrequencies=[0.25    .5   .75  1  1.25 1.5    2];
 relativeFrequencies=[ 1 ];
 AN_spikesOrProbability='probability';
 AN_spikesOrProbability='spikes';
@@ -1421,7 +1518,8 @@ aReadAndCheckParameterBoxes(handles);
 showPSTHs=0;
 targetFrequency=stimulusParameters.targetFrequency(1);
 BFlist=targetFrequency;
-testSynapse(BFlist,experiment.name, paramChanges)
+AN_spikesOrProbability='probability';
+testSynapse(BFlist,experiment.name, AN_spikesOrProbability, paramChanges)
 
 function pushbuttonFM_Callback(hObject, eventdata, handles)
 global stimulusParameters experiment paramChanges
@@ -1728,28 +1826,28 @@ end
 
 
 function editnumOHIOtones_Callback(hObject, eventdata, handles)
-% hObject handle to editnumOHIOtones (see GCBO)
-% eventdata reserved - to be defined in a future version of MATLAB
-% handles structure with handles and user data (see GUIDATA)
+% hObject    handle to editnumOHIOtones (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: get(hObject,'String') returns contents of editnumOHIOtones as text
-% str2double(get(hObject,'String')) returns contents of editnumOHIOtones as a double
+%        str2double(get(hObject,'String')) returns contents of editnumOHIOtones as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function editnumOHIOtones_CreateFcn(hObject, eventdata, handles)
-% hObject handle to editnumOHIOtones (see GCBO)
-% eventdata reserved - to be defined in a future version of MATLAB
-% handles empty - handles not created until after all CreateFcns called
+% hObject    handle to editnumOHIOtones (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
 
 % Hint: edit controls usually have a white background on Windows.
-% See ISPC and COMPUTER.
+%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-function editOHIOnTones_CreateFcn(hObject, eventdata, handles)
+
 
 
 function editparamChanges_Callback(hObject, eventdata, handles)
@@ -1758,7 +1856,36 @@ function editparamChanges_Callback(hObject, eventdata, handles)
 function editparamChanges_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
-% See ISPC and COMPUTER.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+
+
+function editOHIOnTones_Callback(hObject, eventdata, handles)
+
+
+function editOHIOnTones_CreateFcn(hObject, eventdata, handles)
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+
+function editnotchedNoiseBW_Callback(hObject, eventdata, handles)
+
+
+function editnotchedNoiseBW_CreateFcn(hObject, eventdata, handles)
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end

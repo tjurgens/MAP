@@ -14,7 +14,7 @@ function method=MAPparamsECrleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. DRNLParams.a is set to zero
-%  2. Only one channel at 200 Hz and 273 Hz remain
+%  2. Only one channel at 250 Hz  remains
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -37,9 +37,8 @@ if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
 % BFlist=1000;  % single channel option
-lowestBF=250; 	highestBF= 8000; 	numChannels=41;
-availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = availableBFlist(1:2);
+
+availableBFlist = 250;
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));

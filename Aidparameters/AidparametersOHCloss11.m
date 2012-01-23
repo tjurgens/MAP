@@ -11,7 +11,9 @@ aidparams.numSamples = 48;%1024; %MAX=6912, LAB_USE=48
 
 aidparams.mainGain_dB  = [ 50;    50;    50;    50;    50;   50];   %Gain applied at audiometric frequencies
 aidparams.TC_dBSPL      = [25;   25;   20;   25;   35;  40];   %Compression thresholds (in dB HL from 2nd filt)
+%aidparams.TC_dBSPL      = [100;   100;  100;   100;   100;  100];
 aidparams.TM_dBSPL      = [5;  5;  0;  5;   15;  20];   %MOC thresholds (in dB OUTPUT from 2nd filt)
+%aidparams.TM_dBSPL      = [100; 100;  100;  100;   100;  100];
 aidparams.DRNLc        = [ 0.2;  0.2;  0.2;  0.2;  0.2; 0.2]; %Compression exponent at audiometric frequencies
 
 %------------------------------------------------------------------
@@ -26,5 +28,5 @@ aidparams.MOCfactor = 0.74;     %dB attenuation applied to the input per dB exce
 % Band filtering properties
 %------------------------------------------------------------------
 aidparams.bwOct = 1/2; %1/1, 1/2, 1/3, 1/4, 1/5
-aidparams.filterOrder = 3; %BUTTER=2, GTF=3
-aidparams.useGTF = true;%false; %If false, revert to butterworth
+aidparams.filterOrder = 2;%3; %BUTTER=2, GTF=3
+aidparams.useGTF = false;%true;%false; %If false, revert to butterworth

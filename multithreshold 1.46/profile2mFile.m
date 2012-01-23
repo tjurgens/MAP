@@ -1,10 +1,21 @@
 function profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, ...
-    IFMCs, mFileName)
+    IFMCs, mFileName, location)
+% profile2mFile creates an .m file suitable for use with plotProfile.
+% mFileName is saved in 'location' inside the 'profiles' folder
+%
+% The arguments are based on matrices that can be copied and pasted 
+%   from the Excel file for the participant.
+%   Alternatively, they are supplied directly by multiThreshold after 
+%   a 'profile' paradigm execution
 act_path = pwd;
 cd(['..' filesep 'profiles']);
 
+restorePath=path;
+addpath(['..' filesep 'utilities'])
+
 St = ['function x = ' mFileName ];
-fid = fopen([mFileName '.m'],'w');
+filePath=['..'  filesep 'profiles' filesep location filesep mFileName '.m'];
+fid = fopen(filePath,'w');
 fprintf(fid, '%s\n', St);
 
 St = ['%created: ' UTIL_timeStamp];
@@ -61,10 +72,5 @@ fprintf(fid, '%s\n', St);
 
 fclose(fid);
 
- cd(act_path);
-
-
-
-
-
-
+path(restorePath)
+cd(act_path);

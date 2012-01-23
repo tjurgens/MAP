@@ -974,8 +974,8 @@ if length(withinRuns.meanEstTrack)>=1
     ptr=withinRuns.beginningOfPhase2+1;
     plot(ptr: ptr+length(withinRuns.meanEstTrack)-1, ...
         withinRuns.meanEstTrack, 'r')
-    plot( ptr: ptr+length(withinRuns.thresholdEstimateTrack)-1, ...
-        withinRuns.thresholdEstimateTrack, 'g')
+%     plot( ptr: ptr+length(withinRuns.thresholdEstimateTrack)-1, ...
+%         withinRuns.thresholdEstimateTrack, 'g')
     hold off
     estThresh=withinRuns.thresholdEstimateTrack(end);
     switch experiment.threshEstMethod
@@ -1050,24 +1050,24 @@ switch experiment.threshEstMethod
                 title(' ')
             end
 
-            switch experiment.ear
-                %plot green line for statsModel a priori model
-                case 'statsModelLogistic'
-                    % plot proTem logistic (green) used by stats model
-                    p= 1./(1+exp(-statsModel.logisticSlope...
-                        *(levelsBinVector-logistic.bestThreshold)));
-                    if experiment.psyFunSlope<0, p=1-p;end
-                    titleText=[ ',  statsModel: logistic'];
-                    hold on,    plot(levelsBinVector, p,'g')
-                case  'statsModelRareEvent'
-                    pressure=28*10.^(levelsBinVector/20);
-                    p=1-exp(-stimulusParameters.targetDuration...
-                        *(statsModel.rareEvenGain...
-                        * pressure-statsModel.rareEventVmin));
-                    p(p<0)=0;
-                    if experiment.psyFunSlope<0, p=1-p;end
-                    hold on,    plot(levelsBinVector, p,'g')
-            end %(estMethod)
+%             switch experiment.ear
+%                 %plot green line for statsModel a priori model
+%                 case 'statsModelLogistic'
+%                     % plot proTem logistic (green) used by stats model
+%                     p= 1./(1+exp(-statsModel.logisticSlope...
+%                         *(levelsBinVector-logistic.bestThreshold)));
+%                     if experiment.psyFunSlope<0, p=1-p;end
+%                     titleText=[ ',  statsModel: logistic'];
+%                     hold on,    plot(levelsBinVector, p,'g')
+%                 case  'statsModelRareEvent'
+%                     pressure=28*10.^(levelsBinVector/20);
+%                     p=1-exp(-stimulusParameters.targetDuration...
+%                         *(statsModel.rareEvenGain...
+%                         * pressure-statsModel.rareEventVmin));
+%                     p(p<0)=0;
+%                     if experiment.psyFunSlope<0, p=1-p;end
+%                     hold on,    plot(levelsBinVector, p,'g')
+%             end %(estMethod)
         end
 
     otherwise           % 2A2IFC
@@ -1447,9 +1447,6 @@ MacGregorResponse=[];
 % mono only (column vector)
 audio=audio(:,1)';
 
-
-
-
 % if stop button pressed earlier
 if experiment.stop
     errormsg='manually stopped';
@@ -1477,31 +1474,8 @@ paramChanges=get(expGUIhandles.editparamChanges,'string');
 % convert from string to a cell array
 eval(paramChanges);
 
-%call the hearing aid (if necessary)
-% %look, if there is a paramChange enabling the hearing aid
-% nChanges=length(paramChanges);
-% for idx=1:nChanges
-%     tmp = paramChanges{idx};
-%     if strfind(tmp,'inputStimulusParams.useAid = 1;')
-%         useAid = 1;
-%     end
-% end
-% %only call the aid if it is set in the paramChanges
-% if exist('useAid','var')
-%     if useAid
-        %         %set the aid's parameters
-        %         aidparameterfile = ['Aidparameters' MAPparamsName];
-        %         xT = cJob;
-        %         eval(['xT.aidInstance = ' aidparameterfile ';']);
-        %         xT.aidInstance.sr = stimulusParameters.sampleRate;
-        %
-        %         %call the aid
-        %         xT.aidInstance.stimulusUSER = audio;
-        %         xT.aidInstance = xT.aidInstance.processStim;
-        %         audio = xT.aidInstance.aidOPnice;
-        audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
-%     end
-% end
+%call Essex Aid if necessary
+audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
 
 MAP1_14(audio, stimulusParameters.sampleRate, BFlist,...
     MAPparamsName, AN_spikesOrProbability, paramChanges);

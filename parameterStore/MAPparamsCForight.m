@@ -14,7 +14,7 @@ function method=MAPparamsCForight ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. DRNLParams.a is reduced (frequency-dependent)
-%  2. IHCciliaParams.Et is reduced
+%  2. IHCciliaParams.Et is reduced to 83 mV
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% ATTENTION !!!!

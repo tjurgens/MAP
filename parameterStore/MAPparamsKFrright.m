@@ -14,8 +14,8 @@ function method=MAPparamsKFrright ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. DRNLParams.a is reduced (constant across frequencies, but different for multichannel and single-channelmode)
-%  2. Dead high-frequency region
-%  3. Dead mid-frequency region
+%  2. Dead high-frequency region (channels from 6000 Hz onwards are missing)
+%  3. Dead mid-frequency region (channels from 430 Hz to 2700 Hz are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
