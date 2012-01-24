@@ -13,9 +13,9 @@ function method=MAPparamsDPaleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHC_cilia_RPParams.Et is reduced to 75 mV
+%  1. IHC_cilia_RPParams.Et is reduced to 80 mV
 %  2. Dead high-frequency region (8000 Hz channel is missing)
-%  3. Dead mid-frequency region (channels from 600 Hz to 2000 Hz are missing)
+%  3. Dead mid-frequency region (channels from 600 Hz to 2200 Hz are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -40,7 +40,7 @@ end
 % BFlist=1000;  % single channel option
 lowestBF=250; 	highestBF= 8000; 	numChannels=41;
 availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = [availableBFlist(1:11) availableBFlist(26:39)];
+availableBFlist = [availableBFlist(1:10) availableBFlist(27:39)];
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
@@ -144,7 +144,7 @@ IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 %  #5 IHC_RP
 IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
-IHC_cilia_RPParams.Et=	0.075;          % endocochlear potential (V)
+IHC_cilia_RPParams.Et=	0.080;          % endocochlear potential (V)
 
 IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential

@@ -16,14 +16,7 @@ function method=MAPparamsCWaleft ...
 %  1. DRNLParams.a is reduced (frequency-dependent)
 %  2. Dead high-frequency region from 6300 Hz onwards
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ATTENTION !!!!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% THIS FILE CONTAINS A DRNLPARAMS.A THAT VARIES WITH FREQUENCY
-% NOT YET TESTED IN MULTICHANNEL MODE !!!
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
 global MacGregorParams MacGregorMultiParams  filteredSACFParams
@@ -105,13 +98,15 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-if BFlist <= 700
-    DRNLParams.a = 5e3;
-elseif BFlist > 700 && BFlist < 1500
-    DRNLParams.a = 1e3;
-else
-    DRNLParams.a=5e2;       % DRNL.a=0 means no OHCs (no nonlinear path)
-end
+DRNLParams.a = [repmat(5e3,1,12) repmat(1e3,1,21-12) repmat(6e2,1,38-21)];
+
+%if BFlist <= 700
+%    DRNLParams.a = 5e3;
+%elseif BFlist > 700 && BFlist < 1500
+%    DRNLParams.a = 1e3;
+%else
+%    DRNLParams.a=5e2;       % DRNL.a=0 means no OHCs (no nonlinear path)
+%end
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
