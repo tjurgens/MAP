@@ -13,8 +13,8 @@ function method=MAPparamsBMeright ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. reduction of DRNLParams.a 
-%  2. only one filter at 4000 Hz
+%  1. linear filters between 250 Hz and 3800 Hz
+%  2. only one nonlinear filter at 4000 Hz with reduced DRNLParams.a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -37,7 +37,10 @@ if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
 
-availableBFlist = 4000;
+lowestBF=250; 	highestBF= 8000; 	numChannels=41;
+availableBFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
+
+availableBFlist = [availableBFlist(1:32) 4000];
 if size(BFlist) == 1
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
     BFlist = availableBFlist(tmpindex);
@@ -85,7 +88,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a=1e3;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a= [zeros(1,32) 1e3];       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement

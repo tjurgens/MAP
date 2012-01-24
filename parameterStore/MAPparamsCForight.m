@@ -16,12 +16,7 @@ function method=MAPparamsCForight ...
 %  1. DRNLParams.a is reduced (frequency-dependent)
 %  2. IHCciliaParams.Et is reduced to 83 mV
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ATTENTION !!!!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% THIS FILE CONTAINS A DRNLPARAMS.A THAT VARIES WITH FREQUENCY
-% NOT YET TESTED IN MULTICHANNEL MODE !!!
+
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
@@ -51,7 +46,7 @@ end
 
 lowestBF=250; 	highestBF= 8000; 	numChannels=41;
 availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = availableBFlist(1:38);
+availableBFlist = availableBFlist(1:39);
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
@@ -105,13 +100,15 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-if BFlist <= 750
-    DRNLParams.a = 3e3;
-elseif BFlist > 750 && BFlist < 1500
-    DRNLParams.a = 8e3;
-else 
-    DRNLParams.a = 5e4;% DRNL.a=0 means no OHCs (no nonlinear path)
-end
+
+DRNLParams.a = [repmat(2e3,1,13) repmat(6e3,1,21-13) repmat(5e4,1,39-21)];
+%if BFlist <= 750
+%    DRNLParams.a = 3e3;
+%elseif BFlist > 750 && BFlist < 1500
+%    DRNLParams.a = 8e3;
+%else 
+%    DRNLParams.a = 5e4;% DRNL.a=0 means no OHCs (no nonlinear path)
+%end
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement

@@ -15,6 +15,7 @@ function method=MAPparamsBHaright ...
 %  HYPOTHESIS
 %  1. IHC_cilia_RPParams.Et is reduced to 75 mV
 %  2. The 8000 Hz channel is missing
+%  3. DRNLParams.a is reduced (frequency-dependent)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -92,7 +93,9 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a = [repmat(5e3,1,17) repmat(5e4,1,41-17)];
+
+%DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement

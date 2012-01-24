@@ -13,8 +13,9 @@ function method=MAPparamsECrleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. DRNLParams.a is set to zero
-%  2. Only one channel at 250 Hz  remains
+%  1. DRNLParams.a is set to 5e2
+%  2. Only channels between 250 Hz and 500 Hz remain
+%  3. MacGregorParams.Th0 is increased to 0.025 (brain chemistry change)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -37,8 +38,10 @@ if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
 % BFlist=1000;  % single channel option
+lowestBF=250; 	highestBF= 8000; 	numChannels=41;
+availableBFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
+availableBFlist = availableBFlist(1:9);
 
-availableBFlist = 250;
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
@@ -89,7 +92,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a=0;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a=5e2;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
@@ -248,7 +251,7 @@ MacGregorParams.tauM=0.002;         % membrane time constant (s)
 MacGregorParams.Ek=-0.01;           % K+ eq. potential (V)
 MacGregorParams.dGkSpike=1.33e-4;   % K+ cond.shift on spike,S
 MacGregorParams.tauGk=	0.0012;     % K+ conductance tau (s)
-MacGregorParams.Th0=	0.01;       % equilibrium threshold (V)
+MacGregorParams.Th0=	0.025;       % equilibrium threshold (V)
 MacGregorParams.c=	0;              % threshold shift on spike, (V)
 MacGregorParams.tauTh=	0.02;       % variable threshold tau
 MacGregorParams.Er=-0.06;           % resting potential (V)

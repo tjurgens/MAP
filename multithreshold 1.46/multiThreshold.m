@@ -723,7 +723,7 @@ profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
     fileName, destination)
 while ~fopen(fileName), end  % wait for file to close
 comparisonFile='profile_CMA_L';
-plotProfile(fileName, comparison)
+plotProfile(fileName, comparisonFile)
 
 fileName=['MTprofile' UTIL_timeStamp];
 profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
@@ -731,7 +731,7 @@ profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
 while ~fopen(fileName), end  % wait for file to close
 fileLocation='MTprofiles';
 comparisonFile='profile_CMA_L';
-plotProfile(fileLocation,fileName, comparisonFile)
+%plotProfile(fileLocation,fileName, comparisonFile)
 %% xx
         if strcmp(errormsg,'manually stopped')
             disp(errormsg)
