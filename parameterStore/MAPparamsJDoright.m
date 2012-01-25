@@ -13,18 +13,11 @@ function method=MAPparamsJDoright ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHCciliaParams.Et reduced to 75 mV
+%  1. IHCciliaParams.Et reduced to 78 mV
 %  2. DRNLParams.a is reduced in the low-frequency region (thus, frequency-dependent)
-%  2. Dead high-frequency region (channels from 5200 Hz onwards are missing)
+%  2. Dead high-frequency region (channels from 5000 Hz onwards are missing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% ATTENTION !!!!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% THIS FILE CONTAINS A DRNLPARAMS.A THAT VARIES WITH FREQUENCY
-% NOT YET TESTED IN MULTICHANNEL MODE !!!
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
 global MacGregorParams MacGregorMultiParams  filteredSACFParams
@@ -48,7 +41,7 @@ end
 % BFlist=1000;  % single channel option
 lowestBF=250; 	highestBF= 8000; 	numChannels=41;
 availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = availableBFlist(1:36);
+availableBFlist = availableBFlist(1:35);
 if size(BFlist) == 1
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
     BFlist = availableBFlist(tmpindex);
@@ -96,11 +89,13 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-if BFlist <= 1300
-    DRNLParams.a = 5e3;
-else
-    DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
-end
+DRNLParams.a = [repmat(1e4,1,13) repmat(1e3,1,20-13) repmat(5e4,1,36-20)];
+
+%if BFlist <= 1300
+%    DRNLParams.a = 5e3;
+%else
+%    DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
+%end
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
@@ -153,7 +148,7 @@ IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 %  #5 IHC_RP
 IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
-IHC_cilia_RPParams.Et=	0.075;%0.100;          % endocochlear potential (V)
+IHC_cilia_RPParams.Et=	0.078;%0.100;          % endocochlear potential (V)
 
 IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential
