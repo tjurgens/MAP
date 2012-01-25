@@ -13,7 +13,7 @@ function method=MAPparamsJJoleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHC_cilia_RPParams.Et is reduced to 83 mV
+%  1. IHC_cilia_RPParams.Et is reduced to 81 mV
 %  2. Dead high-frequency region (channels from 3500 Hz onwards are missing)
 %  3. Dead mid-frequency region (channels from 2000 Hz to 3000 Hz are missing)
 %  4. Dead low-frequency region (channels below 580 Hz are missing)
@@ -145,7 +145,7 @@ IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 %  #5 IHC_RP
 IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
-IHC_cilia_RPParams.Et=	0.083;          % endocochlear potential (V)
+IHC_cilia_RPParams.Et=	0.081;          % endocochlear potential (V)
 
 IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential
