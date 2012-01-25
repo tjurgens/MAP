@@ -14,7 +14,7 @@ function method=MAPparamsJHoleft ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. DRNLParams.a is set to zero
-%  2. Only channels from 2400 Hz to 8000 Hz remain
+%  2. Only channels from 2400 Hz to 5200 Hz remain
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -39,7 +39,7 @@ end
 % BFlist=1000;  % single channel option
 lowestBF=250; 	highestBF= 8000; 	numChannels=41;
 availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = availableBFlist(27:41);
+availableBFlist = availableBFlist(27:35);
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));

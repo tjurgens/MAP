@@ -5,7 +5,7 @@ function Experiment1(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'Fourier_timing_features47_EXP22';
+expName = 'Fourier_timing_features47_EXP23';
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -47,7 +47,7 @@ nzLevel = [-200 40:10:70];
 xL.noisePreDur = 1;
 xL.noisePostDur = 0.1;
 xL.truncateDur  = xL.noisePreDur-0.1; 
-xL.noiseName = '20TalkerBabble_bp';%'factory1';
+xL.noiseName = 'babble';%'20TalkerBabble_bp';%'factory1';
 
 if isMasterNode && ~isdir(xL.opFolder)
     mkdir(xL.opFolder);
