@@ -13,7 +13,7 @@ function method=MAPparamsMFrleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. DRNLParams.a is set to 100
+%  1. DRNLParams.a is set to 250
 %  2. Dead region between 2000-2200 Hz and from 5000 Hz onwards
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
@@ -88,7 +88,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a=100;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a=250;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement

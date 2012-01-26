@@ -14,7 +14,7 @@ function method=MAPparamsLAdright ...
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
 %  1. IHCciliaParams.Et reduced to 66 mV
-%  
+%  2. DRNLParams.a is reduced (frequency-dependent)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
@@ -80,8 +80,8 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-
-DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a = [repmat(5e3,1,21) repmat(5e4,1,length(BFlist)-21)];
+%DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
 
 DRNLParams.c=.2;        % compression exponent
 

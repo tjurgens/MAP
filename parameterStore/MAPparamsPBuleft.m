@@ -13,7 +13,7 @@ function method=MAPparamsPBuleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. IHCciliaParams.Et is reduced to 79 mV
+%  1. IHCciliaParams.Et is reduced to 77 mV
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -131,7 +131,7 @@ IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 %  #5 IHC_RP
 IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
-IHC_cilia_RPParams.Et=	0.079;          % endocochlear potential (V)
+IHC_cilia_RPParams.Et=	0.077;          % endocochlear potential (V)
 
 IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential
