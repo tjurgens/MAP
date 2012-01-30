@@ -12,7 +12,7 @@ subplot(3,1,1),image(allparams.nonlinCF,[], DRNLParams.a');
 set(gca,'XScale','log');
 set(gca,'xTick',[125 250 500 1000 2000 4000 8000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k' '8k'});
-subplot(5,3,12), plot(SNR,zeros(5,1))
+set(gca,'Colormap','jet');
 subplot(3,1,2),image(allparams.nonlinCF,[],ones(1,length(allparams.nonlinCF)).*IHC_cilia_RPParams.Et);
 set(gca,'XScale','log');
 set(gca,'xTick',[125 250 500 1000 2000 4000 8000]);
