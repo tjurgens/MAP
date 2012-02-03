@@ -84,7 +84,7 @@ OMEParams.ARdelay=efferentDelay;  %Moss gives 8.5 ms latency
 OMEParams.ARrateThreshold=40;
 
 %%  #3 DRNL
-DRNLParams.a=[repmat(1e4,1,15) repmat(2e4,1,20-15) repmat(5e4,1,length(BFlist)-16)];  % clear the structure first
+DRNLParams.a=[repmat(1e4,1,15) repmat(2e4,1,20-15) repmat(5e4,1,length(BFlist)-20)];  % clear the structure first
 % DRNLParams.BFlist=BFlist;
 
 %   *** DRNL nonlinear path

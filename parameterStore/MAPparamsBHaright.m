@@ -93,7 +93,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a = [repmat(5e3,1,17) repmat(5e4,1,41-17)];
+DRNLParams.a = [repmat(5e3,1,17) repmat(5e4,1,length(BFlist)-17)];
 
 %DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent

@@ -742,6 +742,120 @@ comparisonFile='profile_CMA_L';
             aParadigmSelection(handles)
             return
         end
+    case 'profile8_500'
+        %% special sequence: abs thresholds, TMC, IFMC
+        global resultsTable
+        
+        % user sets max trials now. It overrides paradigm file settings
+        profileMaxTrials=get(handles.editstopCriteriaBox,'string');
+        
+        % 500-ms abs thresholds
+        experiment.paradigm='threshold_8ms';
+        set(handles.edittargetDuration,'string', num2str(0.5))
+        set(handles.editstopCriteriaBox,'string', profileMaxTrials) % nTrials
+        run (handles)
+        if experiment.stop
+            optionNo=strmatch('profile',paradigmNames);
+            set(handles.popupmenuParadigm,'value',optionNo);
+            experiment.paradigm='profile';
+            aParadigmSelection(handles)
+            return
+        end
+
+        % 8-ms abs thresholds
+        longTone=resultsTable(2:end,2:end);
+        set(handles.edittargetDuration,'string', num2str(0.008))
+        set(handles.editstopCriteriaBox,'string',profileMaxTrials) % nTrials
+        run (handles)
+        if experiment.stop
+            disp(errormsg)
+            optionNo=strmatch('profile',paradigmNames);
+            set(handles.popupmenuParadigm,'value',optionNo);
+            experiment.paradigm='profile';
+            experiment.stop=-0;
+            aParadigmSelection(handles)
+            return
+        end
+        shortTone=resultsTable(2:end,2:end);
+        
+        % 8-ms TMC
+        thresholds8ms=betweenRuns.thresholds;
+        optionNo=strmatch('TMC8ms',paradigmNames);
+        set(handles.popupmenuParadigm,'value',optionNo);
+        aParadigmSelection(handles)
+        set(handles.edittargetLevel,'string', thresholds8ms+10);
+        set(handles.editstopCriteriaBox,'string',profileMaxTrials)  % nTrials
+        pause(.1)
+        run (handles)
+        if experiment.stop
+            disp(errormsg)
+            optionNo=strmatch('profile',paradigmNames);
+            set(handles.popupmenuParadigm,'value',optionNo);
+            experiment.paradigm='profile';
+            experiment.stop=-0;
+            aParadigmSelection(handles)
+            return
+        end
+        TMC=resultsTable(2:end,2:end);
+        gaps=resultsTable(2:end,1);
+        BFs=resultsTable(1, 2:end);
+
+        % 8-ms IFMC
+        optionNo=strmatch('IFMC8ms',paradigmNames);
+        set(handles.popupmenuParadigm,'value',optionNo);
+        aParadigmSelection(handles)
+        set(handles.edittargetLevel,'string', thresholds8ms+10);
+        set(handles.editstopCriteriaBox,'string', profileMaxTrials)  % nTrials
+        pause(.1)
+        run (handles)
+        if experiment.stop
+            disp(errormsg)
+            optionNo=strmatch('profile',paradigmNames);
+            set(handles.popupmenuParadigm,'value',optionNo);
+            experiment.paradigm='profile';
+            experiment.stop=-0;
+            aParadigmSelection(handles)
+            return
+        end
+        IFMCs=resultsTable(2:end,2:end);
+        offBFs=resultsTable(2:end,1);
+
+        % reset original paradigm
+        optionNo=strmatch('profile',paradigmNames);
+        set(handles.popupmenuParadigm,'value',optionNo);
+        aParadigmSelection(handles)
+        
+%% save data and plot profile
+
+        save profile longTone shortTone gaps BFs TMC offBFs IFMCs
+
+%%
+
+fileName=['MTprofile_' experiment.name '_' UTIL_timeStamp];
+destination=['..' filesep 'profiles' filesep 'MTprofiles'];
+profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
+    fileName, destination)
+while ~fopen(fileName), end  % wait for file to close
+comparisonFile='profile_CMA_L';
+plotProfile(fileName, comparisonFile)
+
+fileName=['MTprofile' UTIL_timeStamp];
+profile2mFile(longTone, shortTone, gaps, BFs, TMC, offBFs, IFMCs,...
+    fileName, 'MTprofiles')
+while ~fopen(fileName), end  % wait for file to close
+fileLocation='MTprofiles';
+comparisonFile='profile_CMA_L';
+%plotProfile(fileLocation,fileName, comparisonFile)
+%% xx
+        if strcmp(errormsg,'manually stopped')
+            disp(errormsg)
+            optionNo=strmatch('profile',paradigmNames);
+            set(handles.popupmenuParadigm,'value',optionNo);
+            experiment.paradigm='profile';
+            experiment.stop=-0;
+            aParadigmSelection(handles)
+            return
+        end
     otherwise
         run (handles)
         experiment.stop=0;

@@ -1,7 +1,7 @@
 %generate a huge 5x3 matrix from variables from workspace
 
 figure(42);
-SNR = [-10:10:30];
+%SNR = [30:-10:-10];
 
 %first row: babble noise
 subplot(5,3,1), plot(time,babblenoise(100000:sfreq+100000))
@@ -15,10 +15,14 @@ ylim([-180 0])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
-subplot(5,3,3), plot(SNR,zeros(5,1))
+subplot(5,3,3), plot(SNR,score_1babble,'bo-')
 ylim([0 100])
+xlim([-20 40])
 xlabel('SNR (dB)');
 ylabel('recognition rate (%)');
+set(gca,'xTick',[-10:10:30]);
+set(gca,'xTickLabel',{'-10' '0' '10' '20' 'Quiet'});
+
 
 
 %second row: flat broadband babble noise
@@ -33,10 +37,13 @@ ylim([-180 0])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
-subplot(5,3,6), plot(SNR,zeros(5,1))
+subplot(5,3,6), plot(SNR,score_2flatbabble,'bo-')
 ylim([0 100])
+xlim([-20 40])
 xlabel('SNR (dB)');
 ylabel('recognition rate (%)');
+set(gca,'xTick',[-10:10:30]);
+set(gca,'xTickLabel',{'-10' '0' '10' '20' 'Quiet'});
 
 
 %third row:  flat narrowband babble noise
@@ -49,10 +56,13 @@ subplot(5,3,8), fourier_analysis(flat_narrow_babble,sfreq);
 ylim([-180 0])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});%recognition score
-subplot(5,3,9), plot(SNR,zeros(5,1))
+subplot(5,3,9), plot(SNR,score_3flatnarrowbabble,'bo-')
 ylim([0 100])
+xlim([-20 40])
 xlabel('SNR (dB)');
 ylabel('recognition rate (%)');
+set(gca,'xTick',[-10:10:30]);
+set(gca,'xTickLabel',{'-10' '0' '10' '20' 'Quiet'});
 
 
 %fourth row: modulated pink noise
@@ -64,10 +74,14 @@ ylim([-.4 .4])
 subplot(5,3,11), fourier_analysis(modulatedpinknoise,sfreq);
 ylim([-180 0])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
-set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});subplot(5,3,12), plot(SNR,zeros(5,1))
+set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
+subplot(5,3,12), plot(SNR,score_4modulatedpink,'bo-')
 ylim([0 100])
+xlim([-20 40])
 xlabel('SNR (dB)');
 ylabel('recognition rate (%)');
+set(gca,'xTick',[-10:10:30]);
+set(gca,'xTickLabel',{'-10' '0' '10' '20' 'Quiet'});
 
 
 %fifth row: pink noise
@@ -80,10 +94,13 @@ subplot(5,3,14), fourier_analysis(reallyflatpinknoise,sfreq);
 ylim([-180 0])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
-subplot(5,3,15), plot(SNR,zeros(5,1))
+subplot(5,3,15), plot(SNR,score_5pinknoise,'bo-')
 ylim([0 100])
+xlim([-20 40])
 xlabel('SNR (dB)');
 ylabel('recognition rate (%)');
+set(gca,'xTick',[-10:10:30]);
+set(gca,'xTickLabel',{'-10' '0' '10' '20' 'Quiet'});
 
 
 subarrange(42,5,3);

@@ -89,7 +89,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a = [repmat(5e3,1,20) repmat(5e4,1,33-20)];
+DRNLParams.a = [repmat(5e3,1,20) repmat(5e4,1,length(BFlist)-20)];
 %if BFlist <= 1300
 %    DRNLParams.a = 5e3;
 %else
