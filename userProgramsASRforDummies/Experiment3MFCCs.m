@@ -5,7 +5,7 @@ function Experiment3MFCCs(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'MFCCs_EXP40';
+expName = 'MFCCs_EXP41';
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
