@@ -1,0 +1,1 @@
+/scratch/tjurgens/AURORA2_0/TrainingData-Clean/FKC_ZB.wav  /scratch/tjurgens/test/FKC_ZB.mfcc

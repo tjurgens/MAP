@@ -415,7 +415,8 @@ classdef cJob
             
             obj.currentSpeechLevel = tempSpeechLev;
             obj.currentNoiseLevel = tempNoiseLev;
-            [finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
+            %[finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
+            finalFeatures = make_MFCCs(obj, currentWav);
             opForHTK(obj, currentWav, finalFeatures);
         end % ------ OF GENFEAT
         
@@ -695,8 +696,27 @@ classdef cJob
                 imagesc(flipud( reconsData ));
             end
             
-            opForHTK(obj, currentWav, finalFeatures);
+            %opForHTK(obj, currentWav, finalFeatures);
         end % ------ OF PROCESSWAVS
+        
+        %% *********************************************
+        % MFCCs
+        %*************************************************
+        function finalfeatures = make_MFCCs(obj,currentWav)
+            addpath(['..' filesep 'Rastamat']);
+            %**********************************************************
+            % FIRST GET THE STIMULUS
+            %**********************************************************
+            [stimulus, sampleRate] = obj.getStimulus(currentWav);
+            
+            %**********************************************************
+            % SECOND MAKE MFCCs
+            %**********************************************************
+            finalfeatures = melfcc(stimulus,sampleRate,'numcep',14, ...
+                'lifterexp', -22, 'dcttype', 3, 'maxfreq',8000, ...
+                'fbtype', 'htkmel');
+            
+        end
         
     end % ------ OF METHODS
     
@@ -970,6 +990,8 @@ classdef cJob
            
            ANtiming = fouriertransform_histogram_log(ANrate,sampleRate, BFs);
         end
+        
+
 
         
     end % ------ OF STATIC METHODS

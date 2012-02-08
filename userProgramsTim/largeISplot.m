@@ -1,7 +1,7 @@
 %generate a huge 5x3 matrix from variables from workspace
 
 figure(42);
-%SNR = [30:-10:-10];
+SNR = [30:-10:-10];
 
 %first row: babble noise
 subplot(5,3,1), plot(time,babblenoise(100000:sfreq+100000))
@@ -11,11 +11,12 @@ ylabel('Amplitude')
 ylim([-.4 .4])
 %spectrum
 subplot(5,3,2), fourier_analysis(babblenoise,sfreq);
-ylim([-180 0])
+ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
 subplot(5,3,3), plot(SNR,score_1babble,'bo-')
+hold on, plot(SNR,ratescore1babble,'k+-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -33,11 +34,12 @@ ylabel('Amplitude')
 ylim([-.4 .4])
 %Spectrum
 subplot(5,3,5), fourier_analysis(flatbabblenoise,sfreq);
-ylim([-180 0])
+ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
 subplot(5,3,6), plot(SNR,score_2flatbabble,'bo-')
+hold on, plot(SNR,ratescore2flatbabble,'k+-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -53,10 +55,11 @@ xlabel('Time (s)')
 ylabel('Amplitude')
 ylim([-.4 .4])
 subplot(5,3,8), fourier_analysis(flat_narrow_babble,sfreq);
-ylim([-180 0])
+ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});%recognition score
 subplot(5,3,9), plot(SNR,score_3flatnarrowbabble,'bo-')
+hold on, plot(SNR,ratescore3flatnarrowbabble,'k+-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -72,10 +75,11 @@ ylabel('Amplitude')
 xlabel('Time (s)')
 ylim([-.4 .4])
 subplot(5,3,11), fourier_analysis(modulatedpinknoise,sfreq);
-ylim([-180 0])
+ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 subplot(5,3,12), plot(SNR,score_4modulatedpink,'bo-')
+hold on, plot(SNR,ratescore4modulatedpink,'k+-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -91,10 +95,11 @@ xlabel('Time (s)')
 ylabel('Amplitude')
 ylim([-.4 .4])
 subplot(5,3,14), fourier_analysis(reallyflatpinknoise,sfreq);
-ylim([-180 0])
+ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 subplot(5,3,15), plot(SNR,score_5pinknoise,'bo-')
+hold on, plot(SNR,ratescore5pink,'k+-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');

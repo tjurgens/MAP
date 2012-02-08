@@ -11,14 +11,15 @@ function [frequency,z] = fourier_analysis(in, sfreq,color_plot)
 if ~exist('color_plot')
     color_plot = 'b';
 end
-nfft = 1024; 
+nfft = 4*1024; 
 y = buffer(in, nfft)'*sparse(diag(hanning(nfft)));
 out = fft(y');  %%Normierung auf Wurzel der Länge, da Matlab intern ohne Normierung der Hin-Fouriertransformation arbeitet
 t = [0:1/sfreq:nfft/sfreq-1/sfreq];
 frequency = [0:1/t(end):1/(2*(t(2)-t(1)))];
 %spektrale leistungsdichte wird geplottet, wobei eine amplitude von 1 100
 %dB entspricht
-z = abs( mean(out,2) ).^2;
+%z = abs( mean(out,2) ).^2;
+z = mean(abs(out),2);
 semilogx(frequency,20*log10(z(1:floor(nfft/2))),color_plot);
 %sqrt(2) weil Gesamtenergie auch in Spiegelfrequenzen enthalten
 xlabel('frequency / Hz');
