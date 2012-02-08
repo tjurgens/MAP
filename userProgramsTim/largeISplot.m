@@ -17,6 +17,7 @@ set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
 subplot(5,3,3), plot(SNR,score_1babble,'bo-')
 hold on, plot(SNR,ratescore1babble,'k+-')
+hold on, plot(SNR,MFCCscore1,'rv-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -40,6 +41,7 @@ set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
 subplot(5,3,6), plot(SNR,score_2flatbabble,'bo-')
 hold on, plot(SNR,ratescore2flatbabble,'k+-')
+hold on, plot(SNR,MFCCscore2,'rv-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -60,6 +62,7 @@ set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});%recognition score
 subplot(5,3,9), plot(SNR,score_3flatnarrowbabble,'bo-')
 hold on, plot(SNR,ratescore3flatnarrowbabble,'k+-')
+hold on, plot(SNR,MFCCscore3,'rv-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -80,6 +83,7 @@ set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 subplot(5,3,12), plot(SNR,score_4modulatedpink,'bo-')
 hold on, plot(SNR,ratescore4modulatedpink,'k+-')
+hold on, plot(SNR,MFCCscore4,'rv-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
@@ -100,6 +104,7 @@ set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 subplot(5,3,15), plot(SNR,score_5pinknoise,'bo-')
 hold on, plot(SNR,ratescore5pink,'k+-')
+hold on, plot(SNR,MFCCscore5,'rv-')
 ylim([0 100])
 xlim([-20 40])
 xlabel('SNR (dB)');
