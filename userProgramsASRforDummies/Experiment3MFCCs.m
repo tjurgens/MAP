@@ -44,7 +44,7 @@ testWavs = 200;%5;MAX = 358
 nzLevel = [-200 40:10:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xL.noisePreDur = 1;
+xL.noisePreDur = 1; 
 xL.noisePostDur = 0.1;
 xL.truncateDur  = xL.noisePreDur-0.1; 
 xL.noiseName = '3flatnarrowbabble';%'5reallyflatpinknoise';%'4modulatedpinknoise';%'3flatnarrowbabble';%'2flatbabble'; %1babble
