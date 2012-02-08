@@ -708,7 +708,8 @@ classdef cJob
             % FIRST GET THE STIMULUS
             %**********************************************************
             [stimulus, sampleRate] = obj.getStimulus(currentWav);
-            
+            lowlevelnoise = (rand(1,length(stimulus))-0.5).*2e-10;
+            stimulus = stimulus+lowlevelnoise;
             %**********************************************************
             % SECOND MAKE MFCCs
             %**********************************************************
