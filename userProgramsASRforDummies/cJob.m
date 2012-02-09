@@ -415,8 +415,8 @@ classdef cJob
             
             obj.currentSpeechLevel = tempSpeechLev;
             obj.currentNoiseLevel = tempNoiseLev;
-            %[finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
-            finalFeatures = make_MFCCs(obj, currentWav);
+            [finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
+            %finalFeatures = make_MFCCs(obj, currentWav);
             opForHTK(obj, currentWav, finalFeatures);
         end % ------ OF GENFEAT
         
@@ -669,9 +669,11 @@ classdef cJob
             end
             
             
-
+            %RATE FEATURES
             finalFeatures = obj.makeANfeatures(  ...
                 obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
+            
+            %TIMING FEATURES
             %finalFeatures = obj.makeANfeatures( ...
             %    obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
             
