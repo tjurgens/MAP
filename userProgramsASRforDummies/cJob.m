@@ -670,12 +670,12 @@ classdef cJob
             
             
             %RATE FEATURES
-            finalFeatures = obj.makeANfeatures(  ...
-                obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
+            %finalFeatures = obj.makeANfeatures(  ...
+            %    obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
             
             %TIMING FEATURES
-            %finalFeatures = obj.makeANfeatures( ...
-            %    obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
+            finalFeatures = obj.makeANfeatures( ...
+                obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
             
             
             if obj.removeEnergyStatic

@@ -912,6 +912,13 @@ switch experiment.ear
                             playblocking(y) % suspends operations until completed
                     end
                 else
+                    %call Essex aid if necessary
+                    if strcmp(experiment.ear,'leftaid')
+                        audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
+                    elseif strcmp(experiment.ear,'rightaid')
+                        audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
+                    else;
+                    end
                     y=audioplayer(audio, globalStimParams.FS, 24);
                     playblocking(y)
                 end	  %   if experiment.ear
