@@ -16,8 +16,8 @@ time_axis= 1/sfreq*[0:signallaenge-1];
 
 % filterbank parameterk
 
-    lower_cutoff_frequency_hz =     70;
-    upper_cutoff_frequency_hz =   7000;
+    lower_cutoff_frequency_hz =     80;
+    upper_cutoff_frequency_hz =   8000;
     base_frequency_hz         =   1000;
     sampling_rate_hz          =   sfreq; 
     filters_per_ERB           =     1.0;
