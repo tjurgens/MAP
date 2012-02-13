@@ -1,5 +1,0 @@
-EXPORTS
-mexFunction
-EssexAidProcessVFrameSwitchable
-EssexAidProcessVFrameSwitchable_initialize
-EssexAidProcessVFrameSwitchable_terminate
