@@ -618,7 +618,7 @@ classdef cEssexAid
             z = obj.emlc_z; %#ok<NASGU>
             
             % % % USE THE FOLLOWING TO COMPILE LIB
-            emlc EssexAidProcessVFrameSwitchable -eg z -launchreport -T rtw -s rtw_config
+            emlc EssexAidProcessVFrameSwitchable -eg z %-launchreport -T rtw -s rtw_config
 
         end% ---- of generateC
         

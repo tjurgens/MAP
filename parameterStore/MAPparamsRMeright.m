@@ -58,6 +58,7 @@ method.dt=1/sampleRate;
 %%  #1 inputStimulus
 inputStimulusParams=[];
 inputStimulusParams.sampleRate= sampleRate; 
+inputStimulusParams.useAid = 0;
 
 %%  #2 outerMiddleEar
 OMEParams=[];  % clear the structure first

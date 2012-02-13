@@ -123,8 +123,8 @@ subplot(6,3,17), fourier_analysis(whitenoise_bp,sfreq);
 ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
-subplot(6,3,18)%, plot(SNR,score_5pinknoise,'bo-')
-%hold on, plot(SNR,ratescore5pink,'k+-')
+subplot(6,3,18), plot(SNR,score_6whitenoise,'bo-')
+hold on, plot(SNR,ratescore6whitenoise,'k+-')
 hold on, plot(SNR,MFCCscore6,'rv-')
 ylim([0 100])
 xlim([-20 40])

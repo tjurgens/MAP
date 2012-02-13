@@ -415,8 +415,8 @@ classdef cJob
             
             obj.currentSpeechLevel = tempSpeechLev;
             obj.currentNoiseLevel = tempNoiseLev;
-            [finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
-            %finalFeatures = make_MFCCs(obj, currentWav);
+            %[finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
+            finalFeatures = make_MFCCs(obj, currentWav);
             opForHTK(obj, currentWav, finalFeatures);
         end % ------ OF GENFEAT
         
@@ -717,7 +717,9 @@ classdef cJob
             %**********************************************************
             finalfeatures = melfcc(stimulus,sampleRate,'numcep',14, ...
                 'lifterexp', -22, 'dcttype', 3, 'maxfreq',8000, ...
-                'fbtype', 'htkmel');
+                'fbtype', 'htkmel','sumpower',0,'nbands',20);
+            
+            %%%%%%% TAKE ABS(FFT) AS WEIGHTING AND CHECK!!
             
         end
         

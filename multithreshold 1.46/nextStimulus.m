@@ -545,6 +545,12 @@ switch experiment.ear
     case 'right'
         maskerEar=2;
         targetEar=2;
+    case 'leftAid'
+        maskerEar=1;
+        targetEar=1;
+    case 'rightAid'
+        maskerEar=2;
+        targetEar=2;
     case 'dichoticLeft'
         maskerEar=2;
         targetEar=1;
@@ -913,10 +919,10 @@ switch experiment.ear
                     end
                 else
                     %call Essex aid if necessary
-                    if strcmp(experiment.ear,'leftaid')
-                        audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
-                    elseif strcmp(experiment.ear,'rightaid')
-                        audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
+                    if strcmp(experiment.ear,'leftAid')
+                        audio(:,1) = callEssexAid(audio(:,1),experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});
+                    elseif strcmp(experiment.ear,'rightAid')
+                        audio(:,2) = callEssexAid(audio(:,2),experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});   
                     else;
                     end
                     y=audioplayer(audio, globalStimParams.FS, 24);

@@ -1,4 +1,6 @@
 function audio = callEssexAid(audio,MAPparamsName,sampleRate,paramChanges)
+addpath(['..' filesep 'userProgramsASRforDummies']); %path to the Aid
+addpath(['..' filesep 'Aidparameters']); %path to the Aidparameters
 %look, if there is a paramChange enabling the hearing aid
 nChanges=length(paramChanges);
 for idx=1:nChanges
@@ -19,7 +21,9 @@ if exist('useAid','var')
         
         %call the aid
         aidInstance.stimulusUSER = audio;
+        tic
         aidInstance = aidInstance.processStim;
+        toc
         audio = aidInstance.aidOPnice;
     end
 end

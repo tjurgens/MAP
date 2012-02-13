@@ -164,7 +164,7 @@ end
 
 earOptions={'left', 'right',  'diotic', 'dichoticLeft', 'dichoticRight',...
     'MAPmodelListen',  'MAPmodelMultiCh', 'MAPmodelSingleCh'...
-    'statsModelLogistic','statsModelRareEvent'};
+    'statsModelLogistic','statsModelRareEvent','leftAid','rightAid'};
 set(handles.popupmenuEar,'string', earOptions)
 defaultOption=1;
 experiment.ear=earOptions{defaultOption};
