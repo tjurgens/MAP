@@ -5,7 +5,7 @@ function Experiment3MFCCs(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'MFCCs_EXP51';
+expName = 'MFCCs_EXP52';
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -47,7 +47,7 @@ nzLevel = [-200 40:10:70];
 xL.noisePreDur = 1; 
 xL.noisePostDur = 0.1;
 xL.truncateDur  = xL.noisePreDur-0.1; 
-xL.noiseName = '5reallyflatpinknoise';%'6whitenoise';'5reallyflatpinknoise';%'4modulatedpinknoise';%'3flatnarrowbabble';%'2flatbabble'; %1babble
+xL.noiseName = '4modulatedpinknoise';%'6whitenoise';'5reallyflatpinknoise';%'4modulatedpinknoise';%'3flatnarrowbabble';%'2flatbabble'; %1babble
 %xL.noiseName = 'flatbabblenoise';%'modulatedpinknoise';'babble';%'20TalkerBabble_bp';%'factory1';
 
 if isMasterNode && ~isdir(xL.opFolder)
