@@ -27,7 +27,7 @@ xL = cJob('L', learnFolder);
 xL.participant = 'Normal';
 %xL.MAPparamChanges= {'DRNLParams.rateToAttenuationFactorProb=0;', 'OMEParams.rateToAttenuationFactorProb=0;' };
 
-xL.noiseLevToUse   =  -200;
+xL.noiseLevToUse   =  -200; 
 xL.speechLevToUse  =  60;
 
 xL.MAPopHSR = 1;
