@@ -165,7 +165,7 @@ eval(cmd);
 if strcmp(betweenRuns.variableName2, 'targetFrequency') && ...
         length(stimulusParameters.targetLevels)>1
     switch experiment.paradigm
-        case {'trainingIFMC', 'TMC','TMC_16ms', 'TMC - ELP', 'IFMC','IFMC_8ms','IFMC_16ms'}
+        case {'trainingIFMC', 'TMC','TMC_16ms', 'TMC8ms','TMC - ELP', 'IFMC','IFMC8ms','IFMC_16ms'}
             idx=floor(thisRunNumber/length(betweenRuns.variableList1)-0.01)+1;
             cmd=(['stimulusParameters.targetLevel = ' ...
                 num2str(stimulusParameters.targetLevels(idx)) ';']);

@@ -415,8 +415,8 @@ classdef cJob
             
             obj.currentSpeechLevel = tempSpeechLev;
             obj.currentNoiseLevel = tempNoiseLev;
-            %[finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
-            finalFeatures = make_MFCCs(obj, currentWav);
+            [finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
+            %finalFeatures = make_MFCCs(obj, currentWav);
             opForHTK(obj, currentWav, finalFeatures);
         end % ------ OF GENFEAT
         
@@ -583,7 +583,7 @@ classdef cJob
                 ANprobabilityResponse = 10*log10(  abs(P) /  ((20e-6)^2)  ); %now correct [(a^2)/(b^2) = (a/b)^2]
                 
             else
-                [ANprobabilityResponse, dt, myBFlist] = MAPwrap(stimulus, sampleRate, -1, obj.participant, AN_spikesOrProbability, obj.MAPparamChanges);
+                [ANprobabilityResponse, dt, myBFlist, BMoutput] = MAPwrap(stimulus, sampleRate, -1, obj.participant, AN_spikesOrProbability, obj.MAPparamChanges);
             end
             nChannels = numel(myBFlist);
             
@@ -674,8 +674,10 @@ classdef cJob
             %    obj.makeANsmooth(ANprobabilityResponse, 1/dt), obj.numCoeff  );
             
             %TIMING FEATURES
+            %finalFeatures = obj.makeANfeatures( ...
+            %    obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
             finalFeatures = obj.makeANfeatures( ...
-                obj.makeANtiming(ANprobabilityResponse, 1/dt, myBFlist), obj.numCoeff);
+                 obj.ZCPAwrap(BMoutput, 1/dt, myBFlist), obj.numCoeff);
             
             
             if obj.removeEnergyStatic
@@ -994,6 +996,18 @@ classdef cJob
            %here put in various timing features
            
            ANtiming = fouriertransform_histogram_log(ANrate,sampleRate, BFs);
+        end
+        
+        function ANtiming = ZCPAwrap(DRNLoutput,sfreq, BFs) 
+            
+            %parameters for ZCPA
+            params.compression = 'log';%'none';%'log';%'none';
+            params.BFlist = BFs;
+            params.hop_size_msec = 10;
+            params.numfreqbins = 47;
+            method.dt = 1/sfreq;
+            method.plotGraphs = 0;
+            ANtiming = ZCPA(DRNLoutput,method,params);           
         end
         
 

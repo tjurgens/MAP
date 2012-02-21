@@ -1,4 +1,4 @@
-function method=MAPparamsCWaleft ...
+function method=MAPparamsNormal ...
     (BFlist, sampleRate, showParams, paramChanges)
 % MAPparams<> establishes a complete set of MAP parameters
 % Parameter file names must be of the form <MAPparams><name>
@@ -11,11 +11,6 @@ function method=MAPparamsCWaleft ...
 % Output argument
 %  method passes a miscelleny of values
 %  the use of 'method' is being phased out. use globals
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  HYPOTHESIS
-%  1. DRNLParams.a is reduced (frequency-dependent)
-%  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
@@ -39,23 +34,6 @@ if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
 end
 % BFlist=1000;  % single channel option
 
-%%%%%%%%
-%switching some channels off, choosing the closest channel to the signal
-
-lowestBF=250; 	highestBF= 8000; 	numChannels=41;
-availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-%availableBFlist = availableBFlist(1:38);
-if size(BFlist) == 1
-    
-    [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
-    BFlist = availableBFlist(tmpindex);
-else
-    %take even less filters in multichannel mode because of this
-    %probability problem
-    BFlist = availableBFlist;
-end
-%%%%%%%%%
-
 % preserve for backward campatibility
 method.nonlinCF=BFlist; 
 method.dt=1/sampleRate; 
@@ -64,10 +42,9 @@ method.dt=1/sampleRate;
 % set  model parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%  #1 inputStimulus
+%%  #1 inputStimu
 inputStimulusParams=[];
 inputStimulusParams.sampleRate= sampleRate; 
-inputStimulusParams.useAid = 0;
 
 %%  #2 outerMiddleEar
 OMEParams=[];  % clear the structure first
@@ -82,7 +59,7 @@ OMEParams.stapesScalar=	     45e-9;
 % Acoustic reflex: maximum attenuation should be around 25 dB (Price, 1966)
 % i.e. a minimum ratio of 0.056.
 % 'spikes' model: AR based on brainstem spiking activity (LSR)
-OMEParams.rateToAttenuationFactor=0.05; % * N(all ICspikes)
+OMEParams.rateToAttenuationFactor=0.06; % * N(all ICspikes)
 % 'probability model': Ar based on AN firing probabilities (LSR)
 OMEParams.rateToAttenuationFactorProb=0.02;    % * N(all ANrates)
 
@@ -98,18 +75,11 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a = [repmat(9e3,1,12) repmat(3e3,1,15-12) repmat(1e3,1,21-15) repmat(9e2,1,29-21) repmat(1.5e3,1,35-29) repmat(300,1,length(BFlist)-35)];
+DRNLParams.a=ones(length(BFlist),1).*1.5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.c=.25;        % compression exponent
+        % compression exponent
 
-%if BFlist <= 700
-%    DRNLParams.a = 5e3;
-%elseif BFlist > 700 && BFlist < 1500
-%    DRNLParams.a = 1e3;
-%else
-%    DRNLParams.a=5e2;       % DRNL.a=0 means no OHCs (no nonlinear path)
-%end
-DRNLParams.c=.2;        % compression exponent
-
-DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
+DRNLParams.ctBMdB = -5; %Compression threshold dB re 10e-9 m displacement
 
 % filters
 DRNLParams.nonlinOrder=	3;  % order of nonlinear gammatone filters
@@ -120,7 +90,7 @@ DRNLParams.nlBWs=  DRNLParams.p * BFlist + DRNLParams.q;
 
 %   *** DRNL linear path:
 
-DRNLParams.g=100;       % linear path gain factor
+DRNLParams.g=50; %100;       % linear path gain factor
 DRNLParams.linOrder=3;  % order of linear gammatone filters
 % linCF is not necessarily the same as nonlinCF
 minLinCF=153.13; coeffLinCF=0.7341;   % linCF>nonlinBF for BF < 1 kHz
@@ -134,9 +104,8 @@ DRNLParams.MOCdelay = efferentDelay;            % must be < segment length!
 DRNLParams.minMOCattenuationdB=-35;
 
 % 'spikes' model: MOC based on brainstem spiking activity (HSR)
-DRNLParams.MOCtau =.0285;                         % smoothing for MOC
-DRNLParams.rateToAttenuationFactor = .03;  % strength of MOC
-DRNLParams.rateToAttenuationFactor = .0055;  % strength of MOC
+DRNLParams.MOCtau =.025;                         % smoothing for MOC
+DRNLParams.rateToAttenuationFactor = .005;  % strength of MOC
 
 % 'probability' model: MOC based on AN probability (HSR)
 DRNLParams.MOCtauProb =.285;                         % smoothing for MOC
@@ -146,9 +115,9 @@ DRNLParams.MOCrateThresholdProb =67;                % spikes/s probability only
 
 %% #4 IHC_cilia_RPParams
 IHC_cilia_RPParams.tc=	0.00012;   % 0.0003 Shamma
-IHC_cilia_RPParams.C=	0.08;       % 0.1 scalar (C_cilia ) 
-IHC_cilia_RPParams.u0=	5e-9;       
-IHC_cilia_RPParams.s0=	30e-9;
+IHC_cilia_RPParams.C=	0.5;       % 0.1 scalar (C_cilia ) 
+IHC_cilia_RPParams.u0=	0.3e-9;       
+IHC_cilia_RPParams.s0=	20e-9;
 IHC_cilia_RPParams.u1=	1e-9;
 IHC_cilia_RPParams.s1=	1e-9;
 
@@ -157,11 +126,11 @@ IHC_cilia_RPParams.Ga=	1e-9;  % 4.3e-9 fixed apical membrane conductance
 IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 
 %  #5 IHC_RP
-IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
+IHC_cilia_RPParams.Cab=	5e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
 IHC_cilia_RPParams.Et=	0.100;          % endocochlear potential (V)
 
-IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
+IHC_cilia_RPParams.Gk=	2.1e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential
 IHC_cilia_RPParams.Rpc=	0.04;           % combined resistances
 
@@ -308,6 +277,7 @@ end
 % paramChanges
 if nargin>3 && ~isempty(paramChanges)
     if ~iscellstr(paramChanges)
+        disp('paramChanges error: paramChanges not a cell array')
         error('paramChanges error: paramChanges not a cell array')
     end
     
