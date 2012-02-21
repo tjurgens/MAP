@@ -5,7 +5,7 @@ function Experiment3MFCCs(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'MFCCs_EXP55';
+expName = 'MFCCs_EXP56';
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -39,8 +39,8 @@ xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 1000; %10;%MAX=8440
-testWavs = 200;%5;MAX = 358
+xL.numWavs = 8000;%1000; %10;%MAX=8440
+testWavs = 358;%200;%5;MAX = 358
 nzLevel = [-200 40:10:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
