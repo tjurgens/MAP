@@ -1001,7 +1001,7 @@ classdef cJob
         function ANtiming = ZCPAwrap(DRNLoutput,sfreq, BFs) 
             
             %parameters for ZCPA
-            params.compression = 'log';%'none';%'log';%'none';
+            params.compression = 'none';%'log';%'none';
             params.BFlist = BFs;
             params.hop_size_msec = 10;
             params.numfreqbins = 47;
