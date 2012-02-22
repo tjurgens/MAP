@@ -36,7 +36,8 @@ maxframe = fix((size(bm,2)-longest_window_length+hop_size)/hop_size)-1; % maximu
 
 zcpa = zeros(params.numfreqbins,maxframe);
 
-zcpa_bin_center = logspace(log10(BFlist(1)),log10(BFlist(end)),params.numfreqbins);
+%zcpa_bin_center = logspace(log10(BFlist(1)),log10(BFlist(end)),params.numfreqbins);
+zcpa_bin_center = logspace(log10(200),log10(3500),params.numfreqbins);
 
 for chan=1:length(BFlist),
     
