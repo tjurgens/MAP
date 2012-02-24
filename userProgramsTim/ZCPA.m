@@ -31,8 +31,8 @@ functionSpecific = [];
 % find the zero crossings
     
 hop_size = round(params.hop_size_msec/(method.dt*1000.0)); % 10 msec hop size
-%longest_window_length = round(10/(method.dt*BFlist(1))); % longest window is 10 periods of the lowest BF
-longest_window_length = 0.025/method.dt;
+longest_window_length = round(10/(method.dt*BFlist(1))); % longest window is 10 periods of the lowest BF
+%longest_window_length = 0.025/method.dt;
 maxframe = fix((size(bm,2)-longest_window_length+hop_size)/hop_size)-1; % maximum frame number
 
 zcpa = zeros(params.numfreqbins,maxframe);
@@ -42,8 +42,8 @@ zcpa_bin_center = logspace(log10(200),log10(3500),params.numfreqbins);
 
 for chan=1:length(BFlist),
     
-    %window_length = round(10/(method.dt*BFlist(chan))); % window is 10 periods of channel BF
-    window_length = longest_window_length;
+    window_length = round(10/(method.dt*BFlist(chan))); % window is 10 periods of channel BF
+    %window_length = longest_window_length;
     
     % this is inefficient but I can't think of a way of vectorizing it
     % probably need to resort to an m file

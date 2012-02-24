@@ -1,11 +1,11 @@
-function Experiment1(isMasterNode)
+function Experiment_makefeatures(isMasterNode)
 
 % Some description of the experiment goes here
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = 'ZCPA_EXP65';
+expName = '_MFCC_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -39,9 +39,9 @@ xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 1;%1000; %10;%MAX=8440
+xL.numWavs = 1;%8440;%MAX=8440
 testWavs = 1;%200;%5;MAX = 358
-nzLevel = [-200 40:10:70];
+nzLevel = -200;%[-200 40:10:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 xL.noisePreDur = 1;

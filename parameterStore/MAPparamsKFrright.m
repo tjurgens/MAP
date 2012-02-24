@@ -44,7 +44,7 @@ end
 
 lowestBF=250; 	highestBF= 8000; 	numChannels=41;
 availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = [availableBFlist(1:7) availableBFlist(29:37)];
+availableBFlist = [availableBFlist(1:9) availableBFlist(29:36)];
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
@@ -98,12 +98,10 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-if size(BFlist) == 1
-    DRNLParams.a=2e4; %(singlechannel) 
-else
-    DRNLParams.a=1e4; %(multichannel)      % DRNL.a=0 means no OHCs (no nonlinear path)
-end
-%
+DRNLParams.a=[repmat(1e3,1,9) repmat(4e4,1,9)];
+
+%DRNLParams.a=1e4; %(multichannel)      % DRNL.a=0 means no OHCs (no nonlinear path)
+
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
