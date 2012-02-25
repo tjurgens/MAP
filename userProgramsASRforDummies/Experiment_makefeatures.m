@@ -5,7 +5,7 @@ function Experiment_makefeatures(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic folders
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = '_MFCC_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
+expName = '_RATE_FEATURES'; %'_MFCC_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
 dataFolderPrefix = 'hello_world';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';

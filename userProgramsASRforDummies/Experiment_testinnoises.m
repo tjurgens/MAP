@@ -5,7 +5,7 @@ function Experiment_testinnoises(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic experiment parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = '_MFCC_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
+expName = '_RATE_FEATURES'; %'_MFCC_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
 dataFolderPrefix = 'recycle_featR';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
