@@ -5,7 +5,7 @@ function Experiment_testinnoises(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic experiment parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = '_FOURIER_FEATURES'; %'_MFCC_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
+expName = '_ZCPA_FEATURES'; %'_MFCC_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
 dataFolderPrefix = 'recycle_featR';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -39,7 +39,7 @@ xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 12; %MAX=8440
+xL.numWavs = 8440; %MAX=8440
 testWavs = 358; %MAX = 358
 nzLevel = [35:5:70];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
