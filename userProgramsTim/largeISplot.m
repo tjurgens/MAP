@@ -1,7 +1,7 @@
 %generate a huge 6x3 matrix from variables from workspace
 
 figure(42);
-SNR = [30:-10:-10];
+%SNR = [30:-10:-10];
 
 %first row: babble noise
 subplot(6,3,1), plot(time,babblenoise(100000:sfreq+100000))
