@@ -15,7 +15,7 @@ ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
-subplot(6,3,3), plot(SNR,score_1babble,'bo-')
+subplot(6,3,3), plot(SNR,fourier_score_1babble,'bo-')
 hold on, plot(SNR,ratescore1babble,'k+-')
 hold on, plot(SNR,MFCCscore1,'rv-')
 hold on, plot(SNR,ZCPAscore1,'gs-')
@@ -40,7 +40,7 @@ ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
 %recognition score
-subplot(6,3,6), plot(SNR,score_2flatbabble,'bo-')
+subplot(6,3,6), plot(SNR,fourier_score_2flatbabble,'bo-')
 hold on, plot(SNR,ratescore2flatbabble,'k+-')
 hold on, plot(SNR,MFCCscore2,'rv-')
 hold on, plot(SNR,ZCPAscore2,'gs-')
@@ -62,7 +62,7 @@ subplot(6,3,8), fourier_analysis(flat_narrow_babble,sfreq);
 ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});%recognition score
-subplot(6,3,9), plot(SNR,score_3flatnarrowbabble,'bo-')
+subplot(6,3,9), plot(SNR,fourier_score_3flatnarrowbabble,'bo-')
 hold on, plot(SNR,ratescore3flatnarrowbabble,'k+-')
 hold on, plot(SNR,MFCCscore3,'rv-')
 hold on, plot(SNR,ZCPAscore3,'gs-')
@@ -84,7 +84,7 @@ subplot(6,3,11), fourier_analysis(modulatedpinknoise,sfreq);
 ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
-subplot(6,3,12), plot(SNR,score_4modulatedpink,'bo-')
+subplot(6,3,12), plot(SNR,fourier_score_4modulatedpink,'bo-')
 hold on, plot(SNR,ratescore4modulatedpink,'k+-')
 hold on, plot(SNR,MFCCscore4,'rv-')
 hold on, plot(SNR,ZCPAscore4,'gs-')
@@ -106,7 +106,7 @@ subplot(6,3,14), fourier_analysis(reallyflatpinknoise,sfreq);
 ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
-subplot(6,3,15), plot(SNR,score_5pinknoise,'bo-')
+subplot(6,3,15), plot(SNR,fourier_score_5pinknoise,'bo-')
 hold on, plot(SNR,ratescore5pink,'k+-')
 hold on, plot(SNR,MFCCscore5,'rv-')
 hold on, plot(SNR,ZCPAscore5,'gs-')
@@ -128,7 +128,7 @@ subplot(6,3,17), fourier_analysis(whitenoise_bp,sfreq);
 ylim([-20 40])
 set(gca,'xTick',[125 250 500 1000 2000 4000]);
 set(gca,'xTickLabel',{'125' '250' '500' '1k' '2k' '4k'});
-subplot(6,3,18), plot(SNR,score_6whitenoise,'bo-')
+subplot(6,3,18), plot(SNR,fourier_score_6whitenoise,'bo-')
 hold on, plot(SNR,ratescore6whitenoise,'k+-')
 hold on, plot(SNR,MFCCscore6,'rv-')
 hold on, plot(SNR,ZCPAscore6,'gs-')
