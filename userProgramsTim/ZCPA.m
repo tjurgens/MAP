@@ -98,7 +98,7 @@ for chan=1:length(BFlist),
         % find the points within this frame
         inwindow = find(zctab(:,1)>=st & zctab(:,1)<fn);
         % find the corresponding bins in the zcpa
-        bins = interp1(zcpa_bin_center,1:params.numfreqbins,zctab(inwindow,2),'nearest','extrap');
+        bins = interp1(zcpa_bin_center,1:params.numfreqbins,zctab(inwindow,2),'nearest');
         % if a valid bin, add to the zcpa
         % can't vectorise this because the same element may be modified by
         % more than one index

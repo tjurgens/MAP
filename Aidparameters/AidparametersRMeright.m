@@ -9,9 +9,12 @@ aidparams.numSamples = 1024;%48;%1024; %MAX=6912, LAB_USE=48
 % Params for audiometric freqs 250, 500, 1000, 2000, 4000, 8000 Hz
 %------------------------------------------------------------------
 
-aidparams.mainGain_dB  = [ 0;    10;    2;    22;    30;   -100];   %Gain applied at audiometric frequencies
+%aidparams.mainGain_dB  = [ 0;    10;    2;    22;    30;   -100];   %Gain applied at audiometric frequencies
+aidparams.mainGain_dB  = [ 0;    10;    2;    22;    30;   60];
 aidparams.TC_dBSPL      = [90;   80;   88;   63;   55;  88];   %Compression thresholds (in dB HL from 2nd filt)
+%aidparams.TC_dBSPL      = [100;   100;   100;   100;   100;  100];
 aidparams.TM_dBSPL      = [20;   20;   20;   20;   20;  20];   %MOC thresholds (in dB OUTPUT from 2nd filt)
+%aidparams.TM_dBSPL      = [100;   100;   100;   100;   100;  100];
 aidparams.DRNLc        = [ 0.2;  0.2;  0.2;  0.2;  0.2; 0.2]; %Compression exponent at audiometric frequencies
 
 %------------------------------------------------------------------
