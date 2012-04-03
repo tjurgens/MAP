@@ -14,7 +14,7 @@ function MMparentscript(parentdir,repetitionno)
 % scripts of the model. at the same time parent directory for the result
 % directory.
 
-SNR = 200;%5;%-15:5:5; %dB
+SNR = -15:5:5; %dB
 subject = 'Normal'; %take the parameter file of a normal-hearing listener
 auditorymodel = 'MAP';
 speechlevel = 70; %dB SPL
@@ -57,7 +57,7 @@ for iCounter = 1:no_repetitions
             repetitionno = iCounter;
         end
         noiselevel = speechlevel-SNR(jCounter);
-        complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunning' num2str(repetitionno) filesep 'S02M_NO' filesep];
+        complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunninglorentz' num2str(repetitionno) filesep 'S02M_NO' filesep];
         microscopic_model_demo_train(speechlevel,noiselevel,repetitionno,parentdir,complete_path,auditorymodel,subject,additionalcomment);
     end
 end
