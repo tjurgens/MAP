@@ -10,11 +10,14 @@ function MMparentscript(parentdir,repetitionno)
 %  This script builds the framework for testing the microscopic model first
 %  described in Juergens and Brand, JASA 2009 with the MAP model of Meddis
 %  (2006) for different level and noise conditions
+% parentdir: parent directory of the directory that contains all the
+% scripts of the model. at the same time parent directory for the result
+% directory.
 
-SNR = -15:5:5; %dB
+SNR = 200;%5;%-15:5:5; %dB
 subject = 'Normal'; %take the parameter file of a normal-hearing listener
 auditorymodel = 'MAP';
-speechlevel = 60; %dB SPL
+speechlevel = 70; %dB SPL
 
 if nargin < 2
     no_repetitions = 10; %number of repetitions (temporal passages of the noise) to obtain variability
@@ -22,7 +25,7 @@ else
     no_repetitions = 1;
 end
 
-subpath_to_save = 'MMtest'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
+subpath_to_save = 'MMEuklidRateHSRExp1'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
 %parentdir = 'C:\MAP\micmodel\';%'/scratch/tjurgens/MAP/micmodel/'; 
 addpath([parentdir 'matlabarbeitskopie' filesep]);
 
@@ -54,7 +57,7 @@ for iCounter = 1:no_repetitions
             repetitionno = iCounter;
         end
         noiselevel = speechlevel-SNR(jCounter);
-        complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunninglorentz' num2str(repetitionno) filesep 'S02M_NO' filesep];
+        complete_path = [parentdir '..' filesep '..' filesep subpath_to_save filesep 'daten' filesep 'identicalrunning' num2str(repetitionno) filesep 'S02M_NO' filesep];
         microscopic_model_demo_train(speechlevel,noiselevel,repetitionno,parentdir,complete_path,auditorymodel,subject,additionalcomment);
     end
 end

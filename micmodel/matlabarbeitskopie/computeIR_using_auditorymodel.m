@@ -37,37 +37,42 @@ if pcondition.use_mfb == 1
         % schelles hearing-impaired model
         
     elseif strcmp(pcondition.auditorymodel,'MAP')
+        %upsample, if sampling frequency is not already 44100 Hz
+        if sfreq ~= 44100
+            inputsignal = resample(inputsignal,44100,sfreq);
+            sfreq = 44100;
+        end
         %Meddis' MAP model
-        MAP1_14(inputsignal,sfreq,-1,pcondition.parameterfile,'probability')
+        MAP1_14(inputsignal,44100,-1,pcondition.parameterfile,'probability')
         global ANprobRateOutput savedBFlist
         %take only the HSR fibers
         AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
         %calculate rate pattern
-         %ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
-         %hopSize = 10; %ms
-         %winSize = 25; %ms
-         %winSizeSamples = round(winSize*sfreq/1000);
-         %hann = hanning(winSizeSamples);
-         %hopSizeSamples = round(hopSize*sfreq/1000);
-         %for chan = 1:size(AN_HSRoutput,1)
-         %    f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
-         %    ANsmooth(chan,:) = mean(f,2)';
-         %end
+         ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
+         hopSize = 10; %ms
+         winSize = 25; %ms
+         winSizeSamples = round(winSize*sfreq/1000);
+         hann = hanning(winSizeSamples);
+         hopSizeSamples = round(hopSize*sfreq/1000);
+         for chan = 1:size(AN_HSRoutput,1)
+             f = enframe(AN_HSRoutput(chan,:), hann, hopSizeSamples);
+             ANsmooth(chan,:) = mean(f,2)';
+         end
          
-         %IR = ANsmooth;
+         IR = ANsmooth;
         %calculate timing pattern
         %formantpattern = fouriertransform_histogram_log(AN_HSRoutput,sfreq,savedBFlist);
         %formantpattern = formantpattern./max(max(formantpattern));
-        formantpattern=track_formants_from_IPI_guy(AN_HSRoutput, sfreq);
+        %formantpattern=track_formants_from_IPI_guy(AN_HSRoutput, sfreq);
         %formantpattern = getIFpattern(AN_HSRoutput,sfreq,savedBFlist);
         
         %calculate cepstral coefficients
-        cepstralformantpattern = dct(formantpattern);
-        cepstralformantpattern(16:end,:) = 0;
-        formantpattern = idct(cepstralformantpattern);
+        %cepstralformantpattern = dct(formantpattern);
+        %cepstralformantpattern(16:end,:) = 0;
+        %formantpattern = idct(cepstralformantpattern);
         
         %just take the timing features
-        IR = formantpattern; %cepstralformantpattern; %
+        %IR = formantpattern; %cepstralformantpattern; %
         
         %concatenate the features
         %IR = [ANsmooth(1:5:end,1:min([size(ANsmooth,2) size(formantpattern,2)])); ...

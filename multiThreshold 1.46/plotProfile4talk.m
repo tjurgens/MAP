@@ -37,9 +37,9 @@ semilogx(x, y,'ko-','lineWidth',3,'markerSize', 3); hold on
 semilogx(x,y,'bo-','lineWidth',3,'markerSize', 3); hold on
 if ~isempty(bgName)
     [x y]=stripNaNs(foreground.BFs,foreground.LongTone);
-    semilogx(background.BFs,background.LongTone,'Color',[.66 .66 .66],'Marker','o'); hold on
+    semilogx(background.BFs,background.LongTone,'Color',[.66 .66 .66],'Marker','o','LineStyle','--','LineWidth',2); hold on
     [x y]=stripNaNs(foreground.BFs,foreground.LongTone);
-    semilogx(background.BFs,background.ShortTone,'Color',[0.66 0.66 1]','Marker','o'); hold on
+    semilogx(background.BFs,background.ShortTone,'Color',[0.66 0.66 1]','Marker','o','LineStyle','--','LineWidth',2); hold on
 end
 ylim([0 100])
 
@@ -69,7 +69,7 @@ if ~isempty(bgName)
             % SL
             % plot(background.Gaps,background.TMC(BFno,:)-background.LongTone(BFno),'k:')
             [x y]=stripNaNs(background.Gaps,background.TMC(BFno,:));
-            plot(x,y,'Color',[.66 .66 .66])
+            plot(x,y,'Color',[.66 .66 .66],'LineStyle','--','LineWidth',2)
             ylim([-10 110])
             xlim([0.01 0.1])
         end
@@ -105,7 +105,7 @@ if ~isempty(bgName)
         freq=background.MaskerRatio'*background.IFMCFreq(BFno);
         subplot(2,1,2)
         [x y]=stripNaNs(freq,background.IFMCs(BFno,:));
-        semilogx(x,y,'Color',[.66 .66 .66])
+        semilogx(x,y,'Color',[.66 .66 .66],'LineStyle','--','LineWidth',2)
         ylim([0 100])
         xlim([100 12000])
     end

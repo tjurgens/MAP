@@ -197,8 +197,8 @@ for iRow = 1:nRows
         currShiftY = nBottomY + (nRows-iRow)*nPlotY + nAbsYShift;
         % set inner geometry to 1/X x 1/Y
         %%%%% HERE I PUT IN 0.9 TO ALLOW A LITTLE SPACE BETWEEN COLUMNS
-        %set(hSub(iPlot), 'Position', [ currShiftX currShiftY nPlotX*0.9 nPlotY ]);
-        set(hSub(iPlot), 'Position', [ currShiftX currShiftY nPlotX nPlotY ]);
+        set(hSub(iPlot), 'Position', [ currShiftX currShiftY nPlotX*0.9 nPlotY ]);
+        %set(hSub(iPlot), 'Position', [ currShiftX currShiftY nPlotX nPlotY ]);
     end
 end
 

@@ -5,7 +5,7 @@ function Experiment_testinnoises(isMasterNode)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Set up the basic experiment parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-expName = '_ZCPA_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
+expName = '_ZCPA_FEATURES';%'_MFCC_FEATURES';%'_ZCPA_FEATURES'; %'_RATE_FEATURES' '_FOURIER_FEATURES' '_ZCPA_FEATURES'
 dataFolderPrefix = 'recycle_featR';
 if isunix
     expFolderPrefix = '/scratch/tjurgens/hmmexps/';
@@ -39,13 +39,13 @@ xL.numCoeff = 14;
 xL.removeEnergyStatic = 0;
 
 %%%%% Group of params that will influence simulation run time %%%%%%%
-xL.numWavs = 8440; %MAX=8440
-testWavs = 358; %MAX = 358
-nzLevel = [35:5:70];%40:10:60;
+xL.numWavs = 1;%8440; %MAX=8440
+testWavs = 1;%358; %MAX = 358
+nzLevel = [35:5:70];%[40:10:60];%;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-xL.noisePreDur = 1; %0.05;%%%THIS IS IMPORTANT TO SET BACK!
-xL.noisePostDur = 0.1;%0.05;
+xL.noisePreDur = 1;% 0.05;% %%%THIS IS IMPORTANT TO SET BACK!
+xL.noisePostDur = 0.1;%0.05;%
 xL.truncateDur  = xL.noisePreDur-0.1; 
 %xL.noiseName = '6whitenoise';%'6whitenoise';%'5reallyflatpinknoise';%'4modulatedpinknoise';%'3flatnarrowbabble';%'2flatbabble'; %1babble
 
