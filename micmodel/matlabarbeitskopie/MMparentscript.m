@@ -1,4 +1,4 @@
-function MMparentscript(parentdir,repetitionno)
+function MMparentscript(parentdir,repetitionno,parameterfile)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Skript
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -15,7 +15,11 @@ function MMparentscript(parentdir,repetitionno)
 % directory.
 thisdirectory = pwd;
 SNR = -15:5:5; %dB
-subject = 'Normal'; %take the parameter file of a normal-hearing listener
+if nargin < 3
+    subject = 'Normal'; %take the parameter file of a normal-hearing listener
+else
+    subject = parameterfile;
+end
 auditorymodel = 'MAP';
 speechlevel = 70; %dB SPL
 
