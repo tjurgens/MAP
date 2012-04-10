@@ -6,7 +6,7 @@ whole_path = model_directory; %complete path
 actualdir = pwd;
 cd(whole_path);
 cd('daten');
-directories = getdir(pwd);
+directories = getDir(pwd);
 for iCounter = 1:length(directories)
     cd(directories{iCounter});
      subdirectory = getdir(pwd);
