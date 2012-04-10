@@ -47,6 +47,8 @@ if pcondition.use_mfb == 1
         global ANprobRateOutput savedBFlist
         %take only the HSR fibers
         AN_HSRoutput = ANprobRateOutput(size(ANprobRateOutput)/2+1:end,:);
+        %frequency weighting: multiply by the best frequency
+        AN_HSRoutput = (AN_HSRoutput'*diag(savedBFlist))';
         %calculate rate pattern
          ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
          hopSize = 10; %ms
