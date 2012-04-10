@@ -9,7 +9,7 @@ cd('daten');
 directories = getDir(pwd);
 for iCounter = 1:length(directories)
     cd(directories{iCounter});
-     subdirectory = getdir(pwd);
+     subdirectory = getDir(pwd);
      cd(subdirectory{1});
     
     %load all mat-files
