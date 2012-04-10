@@ -13,7 +13,7 @@ function MMparentscript(parentdir,repetitionno)
 % parentdir: parent directory of the directory that contains all the
 % scripts of the model. at the same time parent directory for the result
 % directory.
-
+thisdirectory = pwd;
 SNR = -15:5:5; %dB
 subject = 'Normal'; %take the parameter file of a normal-hearing listener
 auditorymodel = 'MAP';
@@ -62,7 +62,7 @@ for iCounter = 1:no_repetitions
     end
 end
 
-
+cd(thisdirectory);
 %% Evaluate
 auswertung_model([parentdir '..' filesep '..' filesep subpath_to_save]);
 
