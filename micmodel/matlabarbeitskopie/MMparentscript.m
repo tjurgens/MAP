@@ -25,7 +25,7 @@ else
     no_repetitions = 1;
 end
 
-subpath_to_save = 'MMEuklidRateHSRExp1'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
+subpath_to_save = 'MMEuklidRateHSRExp2'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
 %parentdir = 'C:\MAP\micmodel\';%'/scratch/tjurgens/MAP/micmodel/'; 
 addpath([parentdir 'matlabarbeitskopie' filesep]);
 
