@@ -14,8 +14,8 @@ function MMparentscript(parentdir,repetitionno,parameterfile,subpathtosave)
 % scripts of the model. at the same time parent directory for the result
 % directory.
 thisdirectory = pwd;
-%SNR = -15:5:5; %dB
-SNR = 200; %dB - for clean speech
+SNR = -15:5:5; %dB
+%SNR = 200; %dB - for clean speech
 if nargin < 3
     subject = 'Normal'; %take the parameter file of a normal-hearing listener
 else
