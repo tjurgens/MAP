@@ -6,6 +6,7 @@ if strcmp(subject,'Normal')
     pcondition.parameterfile = 'Normal';
     pcondition.audiogram = zeros(1,11);
 else
+    pcondition.parameterfile = subject;
     pcondition.audiogram = [];
 end
 
