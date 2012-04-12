@@ -5,6 +5,8 @@ function pcondition = initialize_auditorymodel(subject,auditorymodel, parentdir)
 if strcmp(subject,'Normal')
     pcondition.parameterfile = 'Normal';
     pcondition.audiogram = zeros(1,11);
+else
+    pcondition.audiogram = [];
 end
 
 
