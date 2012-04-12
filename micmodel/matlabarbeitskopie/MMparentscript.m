@@ -1,4 +1,4 @@
-function MMparentscript(parentdir,repetitionno,parameterfile)
+function MMparentscript(parentdir,repetitionno,parameterfile,subpathtosave)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Skript
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -14,7 +14,8 @@ function MMparentscript(parentdir,repetitionno,parameterfile)
 % scripts of the model. at the same time parent directory for the result
 % directory.
 thisdirectory = pwd;
-SNR = -15:5:5; %dB
+%SNR = -15:5:5; %dB
+SNR = 200; %dB - for clean speech
 if nargin < 3
     subject = 'Normal'; %take the parameter file of a normal-hearing listener
 else
@@ -29,7 +30,12 @@ else
     no_repetitions = 1;
 end
 
-subpath_to_save = 'MMEuklidRateLSRExp4'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
+if nargin < 4
+    subpath_to_save = 'MMEuklidRateLSRExp4'; %specify savepath here! DON'T USE UNDERLINES FOR SAVEPATHS
+else
+    subpath_to_save = subpathtosave;
+end
+
 %parentdir = 'C:\MAP\micmodel\';%'/scratch/tjurgens/MAP/micmodel/'; 
 addpath([parentdir 'matlabarbeitskopie' filesep]);
 
