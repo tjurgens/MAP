@@ -1,4 +1,4 @@
-function method=MAPparamsHFdead ...
+function method=MAPparamsRMeright ...
     (BFlist, sampleRate, showParams, paramChanges)
 % MAPparams<> establishes a complete set of MAP parameters
 % Parameter file names must be of the form <MAPparams><name>
@@ -11,7 +11,11 @@ function method=MAPparamsHFdead ...
 % Output argument
 %  method passes a miscelleny of values
 %  the use of 'method' is being phased out. use globals
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  HYPOTHESIS
+%  1. IHCciliaParams.Et is reduced to 58mV
+%  2. Dead region above 1000 Hz
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global inputStimulusParams OMEParams DRNLParams IHC_cilia_RPParams
 global IHCpreSynapseParams  AN_IHCsynapseParams
 global MacGregorParams MacGregorMultiParams  filteredSACFParams
@@ -33,10 +37,9 @@ if nargin<1 || BFlist(1)<0 % if BFlist= -1, set BFlist to default
     BFlist=round(logspace(log10(lowestBF),log10(highestBF),numChannels));
 end
 % BFlist=1000;  % single channel option
-
 lowestBF=250; 	highestBF= 8000; 	numChannels=41;
 availableBFlist = round(logspace(log10(lowestBF),log10(highestBF),numChannels));
-availableBFlist = availableBFlist(1:20);
+availableBFlist = availableBFlist(1:18);
 if size(BFlist) == 1
     
     [tmp,tmpindex] = min(abs(availableBFlist-BFlist));
@@ -55,6 +58,7 @@ method.dt=1/sampleRate;
 %%  #1 inputStimulus
 inputStimulusParams=[];
 inputStimulusParams.sampleRate= sampleRate; 
+inputStimulusParams.useAid = 0;
 
 %%  #2 outerMiddleEar
 OMEParams=[];  % clear the structure first
@@ -85,7 +89,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a=ones(length(BFlist),1).*5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
+DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
 
 DRNLParams.ctBMdB = 10; %Compression threshold dB re 10e-9 m displacement
@@ -99,7 +103,7 @@ DRNLParams.nlBWs=  DRNLParams.p * BFlist + DRNLParams.q;
 
 %   *** DRNL linear path:
 
-DRNLParams.g=100;%50; %100;       % linear path gain factor
+DRNLParams.g=100;       % linear path gain factor
 DRNLParams.linOrder=3;  % order of linear gammatone filters
 % linCF is not necessarily the same as nonlinCF
 minLinCF=153.13; coeffLinCF=0.7341;   % linCF>nonlinBF for BF < 1 kHz
@@ -138,7 +142,7 @@ IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 %  #5 IHC_RP
 IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
-IHC_cilia_RPParams.Et=	0.100;          % endocochlear potential (V)
+IHC_cilia_RPParams.Et=	0.057;          % endocochlear potential (V)
 
 IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential
