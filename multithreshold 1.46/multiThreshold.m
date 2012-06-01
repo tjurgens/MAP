@@ -670,6 +670,7 @@ switch experiment.paradigm
         set(handles.popupmenuParadigm,'value',optionNo);
         aParadigmSelection(handles)
         set(handles.edittargetLevel,'string', thresholds16ms+10);
+        %set(handles.edittargetLevel,'string', thresholds16ms+15);
         set(handles.editstopCriteriaBox,'string',profileMaxTrials)  % nTrials
         pause(.1)
         run (handles)
@@ -691,6 +692,7 @@ switch experiment.paradigm
         set(handles.popupmenuParadigm,'value',optionNo);
         aParadigmSelection(handles)
         set(handles.edittargetLevel,'string', thresholds16ms+10);
+        %set(handles.edittargetLevel,'string', thresholds16ms+15);
         set(handles.editstopCriteriaBox,'string', profileMaxTrials)  % nTrials
         pause(.1)
         run (handles)
