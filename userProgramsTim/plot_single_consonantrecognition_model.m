@@ -2,15 +2,25 @@
 %model
 %SNR = [0 -5 -10 -15 -20];
 %SNR = [0 -10 -15 -5 5];
-SNR = [0 -5 -10 -15 5];
-matrices_to_use = who('Average_cons*');
-%matrices_to_use = who('BIGcons*');
+%SNR = [0 -5 -10 -15 5];
+%SNR = [0 10 5 -10 -5 15];
+SNR = [0 10 5 -10 -15 -5 15];
+%matrices_to_use = who('Average_cons*');
+matrices_to_use = who('BIGcons*');
 %first: collect the data in the appropriate format
 for iCounter = 1:length(matrices_to_use)
     %eval(['recognition_rates(:,iCounter) = diag(' matrices_to_use{iCounter} ').*2;']);
-    eval(['recognition_rates(:,iCounter) = diag(' matrices_to_use{iCounter} ');']);
+    eval(['recognition_rates(:,iCounter) = diag(' matrices_to_use{iCounter} ...
+        ').*100./sum(' matrices_to_use{iCounter} ''')'';']);
     %SNR(iCounter) = str2num(matrices_to_use{iCounter}(18:19)) - ...
-    %    str2num(matrices_to_use{iCounter}(26:27));
+     %   str2num(matrices_to_use{iCounter}(26:27));
+     
+     %just to make sure that no NaNs are in recognition rates
+     for jCounter = 1:14
+         if isnan(recognition_rates(jCounter,iCounter))
+             recognition_rates(jCounter,iCounter) = 100/14; %guessing
+         end
+     end
     average_recognition(iCounter) = mean(recognition_rates(:,iCounter));
 end
 
@@ -31,7 +41,7 @@ text(-14,90,['SRT = ' num2str(SRT,'%10.1f') ' dB SNR'],'FontSize',16);
 c = colormap(jet); %this is the colormap where different colors are taken for the different consonants
 markers = {'x','.','>','x','+','*','s','p','d','v','^','<','h','o'};
 hold on;
-xlim([-15 10])
+xlim([-15 20])
 ylim([0 100])
 
 for iCounter = 1:size(recognition_rates,1)
