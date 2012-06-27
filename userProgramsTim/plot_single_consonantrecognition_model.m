@@ -4,6 +4,7 @@
 %SNR = [0 -10 -15 -5 5];
 %SNR = [0 -5 -10 -15 5];
 %SNR = [0 10 5 -10 -5 15];
+%SNR = [0 10 5 -10 -15 -5 15];
 SNR = [0 10 5 -10 -15 -5 15];
 %matrices_to_use = who('Average_cons*');
 matrices_to_use = who('BIGcons*');
