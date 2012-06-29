@@ -14,7 +14,7 @@ function MMparentscript(parentdir,repetitionno,parameterfile,subpathtosave)
 % scripts of the model. at the same time parent directory for the result
 % directory.
 thisdirectory = pwd;
-SNR = -15:5:5; %dB
+SNR = -15:5:10; %dB
 %SNR = 200; %dB - for clean speech
 if nargin < 3
     subject = 'Normal'; %take the parameter file of a normal-hearing listener
@@ -22,7 +22,7 @@ else
     subject = parameterfile;
 end
 auditorymodel = 'MAP';
-speechlevel = 70; %dB SPL
+speechlevel = 75;%70; %dB SPL
 
 if nargin < 2
     no_repetitions = 10; %number of repetitions (temporal passages of the noise) to obtain variability
