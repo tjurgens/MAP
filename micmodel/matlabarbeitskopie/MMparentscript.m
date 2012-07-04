@@ -22,7 +22,7 @@ else
     subject = parameterfile;
 end
 auditorymodel = 'MAP';
-speechlevel = 75;%70; %dB SPL
+speechlevel = 70; %75; %dB SPL
 
 if nargin < 2
     no_repetitions = 10; %number of repetitions (temporal passages of the noise) to obtain variability

@@ -1,4 +1,4 @@
-function method=MAPparamsBG ...
+function method=MAPparamsSB ...
     (BFlist, sampleRate, showParams, paramChanges)
 % MAPparams<> establishes a complete set of MAP parameters
 % Parameter file names must be of the form <MAPparams><name>
@@ -88,7 +88,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a = [repmat(7e3,1,10) repmat(2e3,1,19-10) repmat(1e3,1,28-19) repmat(5e2,1,35-28) repmat(0,1,41-35)];
+DRNLParams.a = [repmat(2e4,1,8) repmat(5e3,1,25-8) repmat(1e4,1,35-25) repmat(5e2,1,41-35)];
 %DRNLParams.a=5e4;       % DRNL.a=0 means no OHCs (no nonlinear path)
 DRNLParams.c=.2;        % compression exponent
 
