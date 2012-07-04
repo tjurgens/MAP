@@ -38,8 +38,8 @@ semilogx(x,y,'bo-','lineWidth',3,'markerSize', 3); hold on
 if ~isempty(bgName)
     [x y]=stripNaNs(foreground.BFs,foreground.LongTone);
     semilogx(background.BFs,background.LongTone,'Color',[.66 .66 .66],'Marker','o','LineStyle','--','LineWidth',2); hold on
-    [x y]=stripNaNs(foreground.BFs,foreground.LongTone);
-    semilogx(background.BFs,background.ShortTone,'Color',[0.66 0.66 1]','Marker','o','LineStyle','--','LineWidth',2); hold on
+    %[x y]=stripNaNs(foreground.BFs,foreground.LongTone);
+    %semilogx(background.BFs,background.ShortTone,'Color',[0.66 0.66 1]','Marker','o','LineStyle','--','LineWidth',2); hold on
 end
 ylim([0 100])
 
