@@ -57,8 +57,8 @@ if pcondition.use_mfb == 1
         
         %calculate rate pattern
          ANsmooth = [];%Cannot pre-allocate a size as it is unknown until the enframing
-         hopSize = 10; %ms
-         winSize = 25; %ms
+         hopSize = 5;%hopSize = 10; %ms
+         winSize = 10; %winSize = 25; %ms
          winSizeSamples = round(winSize*sfreq/1000);
          hann = hanning(winSizeSamples);
          hopSizeSamples = round(hopSize*sfreq/1000);
