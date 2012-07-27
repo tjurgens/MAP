@@ -1,0 +1,222 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02FAA83F156AA62C00F28536 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 02FAA83A156AA62C00F28536 /* main.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		02FAA823156AA5EA00F28536 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		01A6B4FF156EBDC900BF5378 /* algoInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = algoInterface.h; sourceTree = "<group>"; };
+		02FAA825156AA5EA00F28536 /* BioAid */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BioAid; sourceTree = BUILT_PRODUCTS_DIR; };
+		02FAA839156AA62C00F28536 /* algoComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = algoComponents.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		02FAA83A156AA62C00F28536 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		02FAA83C156AA62C00F28536 /* params.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = params.h; sourceTree = "<group>"; };
+		02FAA83D156AA62C00F28536 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		02FAA822156AA5EA00F28536 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		02FAA81A156AA5EA00F28536 = {
+			isa = PBXGroup;
+			children = (
+				02FAA837156AA62C00F28536 /* src */,
+				02FAA826156AA5EA00F28536 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		02FAA826156AA5EA00F28536 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				02FAA825156AA5EA00F28536 /* BioAid */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		02FAA837156AA62C00F28536 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				02FAA83A156AA62C00F28536 /* main.cpp */,
+				02FAA83C156AA62C00F28536 /* params.h */,
+				02FAA83D156AA62C00F28536 /* utils.h */,
+				02FAA839156AA62C00F28536 /* algoComponents.h */,
+				01A6B4FF156EBDC900BF5378 /* algoInterface.h */,
+			);
+			name = src;
+			path = ../src;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		02FAA824156AA5EA00F28536 /* BioAid */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02FAA82F156AA5EA00F28536 /* Build configuration list for PBXNativeTarget "BioAid" */;
+			buildPhases = (
+				02FAA821156AA5EA00F28536 /* Sources */,
+				02FAA822156AA5EA00F28536 /* Frameworks */,
+				02FAA823156AA5EA00F28536 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BioAid;
+			productName = BioAid;
+			productReference = 02FAA825156AA5EA00F28536 /* BioAid */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		02FAA81C156AA5EA00F28536 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 02FAA81F156AA5EA00F28536 /* Build configuration list for PBXProject "BioAid" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 02FAA81A156AA5EA00F28536;
+			productRefGroup = 02FAA826156AA5EA00F28536 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				02FAA824156AA5EA00F28536 /* BioAid */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		02FAA821156AA5EA00F28536 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02FAA83F156AA62C00F28536 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		02FAA82D156AA5EA00F28536 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		02FAA82E156AA5EA00F28536 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		02FAA830156AA5EA00F28536 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = $HOME/programming/SDKs/boost;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		02FAA831156AA5EA00F28536 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				HEADER_SEARCH_PATHS = $HOME/programming/SDKs/boost;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02FAA81F156AA5EA00F28536 /* Build configuration list for PBXProject "BioAid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02FAA82D156AA5EA00F28536 /* Debug */,
+				02FAA82E156AA5EA00F28536 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02FAA82F156AA5EA00F28536 /* Build configuration list for PBXNativeTarget "BioAid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02FAA830156AA5EA00F28536 /* Debug */,
+				02FAA831156AA5EA00F28536 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 02FAA81C156AA5EA00F28536 /* Project object */;
+}

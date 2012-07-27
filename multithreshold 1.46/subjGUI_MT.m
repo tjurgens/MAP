@@ -1475,7 +1475,8 @@ paramChanges=get(expGUIhandles.editparamChanges,'string');
 eval(paramChanges);
 
 %call Essex Aid if necessary
-audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
+%audio = callEssexAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
+audio = callBioAid(audio,MAPparamsName,stimulusParameters.sampleRate,paramChanges);
 
 MAP1_14(audio, stimulusParameters.sampleRate, BFlist,...
     MAPparamsName, AN_spikesOrProbability, paramChanges);
