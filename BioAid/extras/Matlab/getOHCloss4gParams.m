@@ -23,19 +23,19 @@ for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
     eval(['SHAREDpars.Band_' num2str(nn) '_MOCtc = 0.05;']);
     eval(['SHAREDpars.Band_' num2str(nn) '_MOCfactor = 0.74;']);
     eval(['SHAREDpars.Band_' num2str(nn) '_MOClatency = 0.01;']);
-    %eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 200;']);
+    eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 10;']);%10
 end
-SHAREDpars.Band_0_MOCthreshold_dBspl = 5;
-SHAREDpars.Band_1_MOCthreshold_dBspl = 5;
-SHAREDpars.Band_2_MOCthreshold_dBspl = 5;
-SHAREDpars.Band_3_MOCthreshold_dBspl = 2.5;
-SHAREDpars.Band_4_MOCthreshold_dBspl = 0;
-SHAREDpars.Band_5_MOCthreshold_dBspl = 2.5;
-SHAREDpars.Band_6_MOCthreshold_dBspl = 5;
-SHAREDpars.Band_7_MOCthreshold_dBspl = 10;
-SHAREDpars.Band_8_MOCthreshold_dBspl = 15;
-SHAREDpars.Band_9_MOCthreshold_dBspl = 17.5;
-SHAREDpars.Band_10_MOCthreshold_dBspl = 20;
+% SHAREDpars.Band_0_MOCthreshold_dBspl = 5;
+% SHAREDpars.Band_1_MOCthreshold_dBspl = 5;
+% SHAREDpars.Band_2_MOCthreshold_dBspl = 5;
+% SHAREDpars.Band_3_MOCthreshold_dBspl = 2.5;
+% SHAREDpars.Band_4_MOCthreshold_dBspl = 0;
+% SHAREDpars.Band_5_MOCthreshold_dBspl = 2.5;
+% SHAREDpars.Band_6_MOCthreshold_dBspl = 5;
+% SHAREDpars.Band_7_MOCthreshold_dBspl = 10;
+% SHAREDpars.Band_8_MOCthreshold_dBspl = 15;
+% SHAREDpars.Band_9_MOCthreshold_dBspl = 17.5;
+% SHAREDpars.Band_10_MOCthreshold_dBspl = 20;
 
 %%
 UNIQUEpars.InputGain_dB = 0;

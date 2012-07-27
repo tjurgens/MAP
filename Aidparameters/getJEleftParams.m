@@ -1,4 +1,4 @@
-function [ UNIQUEpars, SHAREDpars ] = getRMerightParams(  )
+function [ UNIQUEpars, SHAREDpars ] = getJEleftParams(  )
 %GETDEFAULTPARAMS Returns a pair of default parameter structures
 %   This function returns some default parameter sets for the gain model.
 %   The parameter sets can be modified once they have been created, or
@@ -63,25 +63,25 @@ for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
 end
 
 
-UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 95;
-UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 95;
-UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 93;
-UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 80;
-UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 70;
-UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 65;
-UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 60;
-UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 47.5;
-UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 35;
+UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 65;
+UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 65;
+UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 60;
+UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 57.5;
+UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 55;
+UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 52.5;
+UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 50;
+UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 50;
+UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 50;
 
-UNIQUEpars.Band_0_Gain_dB  =  0.0;
-UNIQUEpars.Band_1_Gain_dB  =  0.0;
-UNIQUEpars.Band_2_Gain_dB  =  2.0;
-UNIQUEpars.Band_3_Gain_dB  =  12.0;
-UNIQUEpars.Band_4_Gain_dB  =  19.0;
-UNIQUEpars.Band_5_Gain_dB  =  25.5;
-UNIQUEpars.Band_6_Gain_dB  =  32.0;
-UNIQUEpars.Band_7_Gain_dB  =  43.5;
-UNIQUEpars.Band_8_Gain_dB  =  60.0;
+UNIQUEpars.Band_0_Gain_dB  =  25.0;
+UNIQUEpars.Band_1_Gain_dB  =  25.0;
+UNIQUEpars.Band_2_Gain_dB  =  30.0;
+UNIQUEpars.Band_3_Gain_dB  =  35.0;
+UNIQUEpars.Band_4_Gain_dB  =  40.0;
+UNIQUEpars.Band_5_Gain_dB  =  42.5;
+UNIQUEpars.Band_6_Gain_dB  =  45.0;
+UNIQUEpars.Band_7_Gain_dB  =  45.0;
+UNIQUEpars.Band_8_Gain_dB  =  45.0;
 
 
 end

@@ -920,9 +920,11 @@ switch experiment.ear
                 else
                     %call Essex aid if necessary
                     if strcmp(experiment.ear,'leftAid')
-                        audio(:,1) = callEssexAid(audio(:,1),experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});
+                        %audio(:,1) = callEssexAid(audio(:,1),experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});
+                        audio(:,1) = callBioAid(audio(:,1)',experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});
                     elseif strcmp(experiment.ear,'rightAid')
-                        audio(:,2) = callEssexAid(audio(:,2),experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});   
+                        %audio(:,2) = callEssexAid(audio(:,2),experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});   
+                        audio(:,2) = callBioAid(audio(:,2)',experiment.name,stimulusParameters.sampleRate,{'inputStimulusParams.useAid = 1;'});
                     else;
                     end
                     y=audioplayer(audio, globalStimParams.FS, 24);

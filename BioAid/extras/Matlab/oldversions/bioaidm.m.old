@@ -171,14 +171,6 @@ for nn=1:size(x,1)
             %else do nothing
             %------------ end ---------------
             
-                                                            
-            
-            %--------------------------------
-            % SECOND BP FILTERING
-            %--------------------------------
-            [sb, bp_zOUT(:,ff,kk)] = filter(bp_b(:,ff),bp_a(:,ff),sb,bp_zOUT(:,ff,kk));
-            %------------ end ---------------
-            
             
             
             %--------------------------------
@@ -198,6 +190,14 @@ for nn=1:size(x,1)
                 dBsb = pa2dbspl(sb);
                 [MOCbuff{ff}, MOCz(:,ff)] = updateMOCbuffer(dBsb, MOCbuff{ff}, MOCthresh(ff), MOCfactor(ff), MOCb(:,ff), MOCa(:,ff), MOCz(:,ff), db2lin);
             end            
+            %------------ end ---------------
+            
+            
+            
+            %--------------------------------
+            % SECOND BP FILTERING
+            %--------------------------------
+            [sb, bp_zOUT(:,ff,kk)] = filter(bp_b(:,ff),bp_a(:,ff),sb,bp_zOUT(:,ff,kk));
             %------------ end ---------------
             
             

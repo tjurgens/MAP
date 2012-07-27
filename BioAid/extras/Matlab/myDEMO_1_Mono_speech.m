@@ -2,11 +2,11 @@ close all;
 
 [x,sr] = wavread('twister_44kHz'); 
 
-[ UNIQUEpars, SHAREDpars ] = getOHCloss4g_aidparams();%getDefaultParams();
+[ UNIQUEpars, SHAREDpars ] = getOHCloss4gParams();%getDefaultParams();
 SHAREDpars.SampleRate = sr;
 
 tic
-y = bioaid( x, UNIQUEpars, SHAREDpars);
+y = bioaidm( x, UNIQUEpars, SHAREDpars);
 toc
 
 % Plotting from here down
