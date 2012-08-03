@@ -27,6 +27,11 @@ if ~isStereo
      'Please supply a 1x1 element struct for a mono input, or convert input to stereo'] );
 end
 
+% If the stimulus is stereo but the user only supplys mono unique pars,
+% assume they intended to use the same settings in each stereo channel.
+if isStereo && (numel(UNIQUEpars)==1)
+    UNIQUEpars = [UNIQUEpars UNIQUEpars];
+end
 
 %=================================================================
 % Nick Clark's mystical utility anonymous-functions
@@ -122,6 +127,12 @@ for nn = 1:nBands
 end
 
 %=================================================================
+% Internal storage parameters for post-analysis
+%=================================================================
+store.MOC = zeros(size(x,1), nBands);
+
+
+%=================================================================
 % Signal processing
 %=================================================================
 y = zeros(size(x));
@@ -178,26 +189,44 @@ for nn=1:size(x,1)
             %--------------------------------
             [sb, bp_zOUT(:,ff,kk)] = filter(bp_b(:,ff),bp_a(:,ff),sb,bp_zOUT(:,ff,kk));
             %------------ end ---------------
-            
-            
+                        
             
             %--------------------------------
             % Update MOC ring-buffer
             %--------------------------------
+            % Before calculating attenuation for MOC loop, add a tiny DC
+            % offset to the incoming sample. This is so that Pa values of
+            % zero do not cause a value of -1000 dB SPL to be fed to the
+            % attenuation calculator. Attenuation is thresholded after
+            % filtering, so any preceeding zeros in a lab-based simulation
+            % would cause the internal MOC level to drop incredibly low. At
+            % the onset of a stimulus, it takes the internal MOC vale a
+            % long time to recover. The effects of the MOC are only visible
+            % once the internal value has exceeded threshold, so zeros
+            % preceeding the stimulus would increase the MOC latency. The
+            % small DC offset rectifies this problem. However, one should
+            % note that the MOC latency is intrinsicly linked to the MOC
+            % time constant because of this architecture.
+            sb=sb+2e-05;
+            %------------------
             if isStereo
                 if isSample2of2
                     stereoAccumulator = stereoAccumulator + pa2dbspl(sb);
                     dBsb = stereoAccumulator/2;
                     [MOCbuff{ff}, MOCz(:,ff)] = updateMOCbuffer(dBsb, MOCbuff{ff}, MOCthresh(ff), MOCfactor(ff), MOCb(:,ff), MOCa(:,ff), MOCz(:,ff), db2lin);
-                    isSample2of2 = false;
                 else 
                     stereoAccumulator = pa2dbspl(sb);
-                    isSample2of2 = true;
                 end
+                isSample2of2 = ~isSample2of2; %Flip bit for subsequent loop
             else % for a MONO input signal
                 dBsb = pa2dbspl(sb);
                 [MOCbuff{ff}, MOCz(:,ff)] = updateMOCbuffer(dBsb, MOCbuff{ff}, MOCthresh(ff), MOCfactor(ff), MOCb(:,ff), MOCa(:,ff), MOCz(:,ff), db2lin);
-            end            
+            end      
+            store.MOC(nn,ff) = MOCbuff{ff}(end);
+            
+            % The small DC offset can be removed after calculation of the
+            % MOC strength
+            sb=sb-2e-05;
             %------------ end ---------------
             
             
@@ -232,10 +261,10 @@ end %END OF BIOAIDM FUNCTION
 
 
 function [buff, MOCz] = updateMOCbuffer(dBsample, buff, MOCthresh, MOCfactor, MOCb, MOCa, MOCz, db2lin_func)   
-    tmp = dBsample +6; %not sure why +6 now!
+    tmp = dBsample; %+6; %not sure why +6 now!
     [tmp,MOCz] = filter(MOCb,MOCa,tmp,MOCz);
     tmp = max(tmp-MOCthresh,0) * MOCfactor; % dB
-    tmp = db2lin_func(-tmp); %incase you're confused, this is a function passed to the function (D.R.Y.)
+    tmp = db2lin_func(-tmp); %incase you're confused, this is a function handle passed to this function (D.R.Y.)
     buff = [tmp; buff(1:end-1)];
 end
 

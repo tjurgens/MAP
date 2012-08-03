@@ -5,7 +5,7 @@ freq = 1000;
 sr = 44100;
 t = 0:1/44100:.25;
 sinsignal = sin(2*pi*freq.*t)*.001;
-sinsignal = [zeros(1,1500) sinsignal];
+sinsignal = [zeros(1,5000) sinsignal];
 
 %test old hearing aid
 %clear all, close all;  clc;
@@ -20,13 +20,13 @@ toc
 old = y;
 
 %test new hearing aid
-%cd('c:\MAP\BioAid\extras\Matlab');
-%[ UNIQUEpars, SHAREDpars ] = getOHCloss4gParams();%getDefaultParams();
-%SHAREDpars.SampleRate = sr;
+cd('c:\MAP\BioAid\extras\Matlab');
+[ UNIQUEpars, SHAREDpars ] = getOHCloss4gParams();%getDefaultParams();
+SHAREDpars.SampleRate = sr;
 
 tic
-%y = bioaid( sinsignal', UNIQUEpars, SHAREDpars);
-y = callBioAid(sinsignal,MAPparamsName,sr,paramChanges);
+y = bioaid( sinsignal', UNIQUEpars, SHAREDpars);
+%y = callBioAid(sinsignal,MAPparamsName,sr,paramChanges);
 toc
 new = y;
 
