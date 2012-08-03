@@ -20,7 +20,7 @@ for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
     eval(['SHAREDpars.Band_' num2str(nn) '_LowBandEdge  = loEdge;']);
     eval(['SHAREDpars.Band_' num2str(nn) '_HighBandEdge = hiEdge;']);
     
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOCtc = 0.07;']);
+    eval(['SHAREDpars.Band_' num2str(nn) '_MOCtc = 0.01;']);
     eval(['SHAREDpars.Band_' num2str(nn) '_MOCfactor = 0.8;']);
     eval(['SHAREDpars.Band_' num2str(nn) '_MOClatency = 0.010;']);
     eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 10;']);

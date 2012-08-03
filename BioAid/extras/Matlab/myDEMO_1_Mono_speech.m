@@ -6,7 +6,7 @@ close all;
 SHAREDpars.SampleRate = sr;
 
 tic
-y = bioaidm( x, UNIQUEpars, SHAREDpars);
+y = bioaid( x, UNIQUEpars, SHAREDpars);
 toc
 
 % Plotting from here down

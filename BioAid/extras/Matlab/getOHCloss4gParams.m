@@ -47,7 +47,7 @@ UNIQUEpars.ARlatency = 0.01;
 for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!    
     eval(['UNIQUEpars.Band_' num2str(nn) '_InstantaneousCmpThreshold_dBspl  = 200;']);
     eval(['UNIQUEpars.Band_' num2str(nn) '_DRNLc = 0.2;']);       
-    eval(['UNIQUEpars.Band_' num2str(nn) '_Gain_dB  =  0.0;']);
+    eval(['UNIQUEpars.Band_' num2str(nn) '_Gain_dB  =  30.0;']);
 end
 
 % UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 25;
