@@ -1,4 +1,4 @@
-function [ UNIQUEpars, SHAREDpars ] = getRMerightParams(  )
+function [ UNIQUEpars, SHAREDpars ] = getOHCloss4hParams(  )
 %GETDEFAULTPARAMS Returns a pair of default parameter structures
 %   This function returns some default parameter sets for the gain model.
 %   The parameter sets can be modified once they have been created, or
@@ -36,53 +36,46 @@ SHAREDpars.Band_7_LowBandEdge = cf(5)*2^-.25;
 SHAREDpars.Band_7_HighBandEdge= cf(5)*2^.25;
 SHAREDpars.Band_8_LowBandEdge = cf(6)*2^-.25;
 SHAREDpars.Band_8_HighBandEdge= cf(6)*2^.25;
-
-
-
-for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOCtc = 0.05;']);
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOCfactor = 0.85;']);
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOClatency = 0.001;']);
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 10;']);
-end
-
-
-
+% SHAREDpars.SampleRate = 44100;
+% SHAREDpars.NumBands = 11;
+% 
+ for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
+     %cf = 250 * ( 2 ^ (nn/2) );
+     %bw = 1/2;
+     %loEdge = cf * (2^(-bw/2)); %#ok<NASGU> Warnings suppressed as value is used in eval statement below
+     %hiEdge = cf * (2^ (bw/2)); %#ok<NASGU> Warnings suppressed as value is used in eval statement below
+     
+     %eval(['SHAREDpars.Band_' num2str(nn) '_LowBandEdge  = loEdge;']);
+     %eval(['SHAREDpars.Band_' num2str(nn) '_HighBandEdge = hiEdge;']);
+     
+     eval(['SHAREDpars.Band_' num2str(nn) '_MOCtc = 0.05;']);
+     eval(['SHAREDpars.Band_' num2str(nn) '_MOCfactor = 0.85;']);
+     eval(['SHAREDpars.Band_' num2str(nn) '_MOClatency = 0.001;']);
+     eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 10;']);%10
+ end
+ 
 
 %%
 UNIQUEpars.InputGain_dB = 0;
 UNIQUEpars.OutputGain_dB = 0;
 UNIQUEpars.ARthreshold_dBSPL = 200;
 UNIQUEpars.ARtc = 0.06;
-UNIQUEpars.ARlatency = 0.010;
+UNIQUEpars.ARlatency = 0.01;
 
 for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!    
-    %eval(['UNIQUEpars.Band_' num2str(nn) '_InstantaneousCmpThreshold_dBspl  = 65;']);
+    %eval(['UNIQUEpars.Band_' num2str(nn) '_InstantaneousCmpThreshold_dBspl  = 30;']);
     eval(['UNIQUEpars.Band_' num2str(nn) '_DRNLc = 0.2;']);       
-    %eval(['UNIQUEpars.Band_' num2str(nn) '_Gain_dB  =  0.0;']);
+    eval(['UNIQUEpars.Band_' num2str(nn) '_Gain_dB  =  50.0;']);
 end
 
-
-UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 95;
-UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 95;
-UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 93;
-UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 80;
-UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 68;
-UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 62;
-UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 60;
-UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 47.5;
-UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 35;
-
-
-UNIQUEpars.Band_0_Gain_dB  =  0.0;  %250
-UNIQUEpars.Band_1_Gain_dB  =  0.0;  %500
-UNIQUEpars.Band_2_Gain_dB  =  2.0;  %1000
-UNIQUEpars.Band_3_Gain_dB  =  12.0;
-UNIQUEpars.Band_4_Gain_dB  =  22.0; %2000
-UNIQUEpars.Band_5_Gain_dB  =  27.0;
-UNIQUEpars.Band_6_Gain_dB  =  32.0;
-UNIQUEpars.Band_7_Gain_dB  =  43.5;
-UNIQUEpars.Band_8_Gain_dB  =  60.0;
-
+ UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 25;
+ UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 25;
+ UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 20;
+ UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 22.5;
+ UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 25;
+ UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 30;
+ UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 35;
+ UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 37.5;
+ UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 40;
 
 end

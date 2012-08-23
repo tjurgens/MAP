@@ -41,9 +41,9 @@ SHAREDpars.Band_8_HighBandEdge= cf(6)*2^.25;
 
 for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
     eval(['SHAREDpars.Band_' num2str(nn) '_MOCtc = 0.05;']);
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOCfactor = 0.8;']);
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOClatency = 0.010;']);
-    eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 10;']);
+    eval(['SHAREDpars.Band_' num2str(nn) '_MOCfactor = 0.85;']);
+    eval(['SHAREDpars.Band_' num2str(nn) '_MOClatency = 0.010;']);   %0.001
+    eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 10;']);  %0%10
 end
 
 
@@ -63,25 +63,26 @@ for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
 end
 
 
-UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 65;
-UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 65;
-UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 60;
-UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 57.5;
-UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 55;
-UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 52.5;
-UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 50;
-UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 50;
-UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 50;
+UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 45;  %250
+UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 45;  %500
+UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 45;  %1000
+UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 45;
+UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 40;  %2000
+UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 35;
+UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 35;  %4000
+UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 30;
+UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 30;  %8000
 
-UNIQUEpars.Band_0_Gain_dB  =  25.0;
-UNIQUEpars.Band_1_Gain_dB  =  25.0;
-UNIQUEpars.Band_2_Gain_dB  =  30.0;
-UNIQUEpars.Band_3_Gain_dB  =  35.0;
-UNIQUEpars.Band_4_Gain_dB  =  40.0;
-UNIQUEpars.Band_5_Gain_dB  =  42.5;
-UNIQUEpars.Band_6_Gain_dB  =  45.0;
-UNIQUEpars.Band_7_Gain_dB  =  45.0;
-UNIQUEpars.Band_8_Gain_dB  =  45.0;
+
+UNIQUEpars.Band_0_Gain_dB  =  40.0;
+UNIQUEpars.Band_1_Gain_dB  =  40.0;
+UNIQUEpars.Band_2_Gain_dB  =  40.0;
+UNIQUEpars.Band_3_Gain_dB  =  40.0;
+UNIQUEpars.Band_4_Gain_dB  =  45.0;
+UNIQUEpars.Band_5_Gain_dB  =  50.0;
+UNIQUEpars.Band_6_Gain_dB  =  50.0;
+UNIQUEpars.Band_7_Gain_dB  =  55.0;
+UNIQUEpars.Band_8_Gain_dB  =  55.0;
 
 
 end

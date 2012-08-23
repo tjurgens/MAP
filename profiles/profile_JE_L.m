@@ -5,10 +5,10 @@ x.BFs= [
 	250	500	1000	2000	4000	6000	8000		
 	];								
 x.LongTone= [ 									
-	31.71	30.29	30.54	39.79	53.71	NaN	NaN		
+	49.78	48.68	45.22	54.28	67.98	NaN	NaN		
 	];								
 x.ShortTone= [ 									
-	48.50	50.17	46.57	55.80	63.45	NaN	NaN		
+	59.40	54.70	50.60	61.67	70.60	NaN	NaN		
 	];								
 x.IFMCFreq= [									
 	250	500	1000	2000	4000	6000	8000		
@@ -17,13 +17,13 @@ x.MaskerRatio=[
 	0.5	0.7	0.9	1	1.1	1.3	1.6		
 	];								
 x.IFMCs=[									
-	64.37	64.53	67.65	75.50	76.26	NaN	NaN		
-	59.70	62.93	63.70	74.57	72.56	NaN	NaN		
-	57.50	57.67	59.85	70.53	74.90	NaN	NaN		
-	58.27	55.27	59.30	66.97	75.13	NaN	NaN		
-	57.20	53.73	61.55	67.73	76.04	NaN	NaN		
-	60.23	58.73	72.58	71.23	80.08	NaN	NaN		
-	64.47	69.40	78.98	76.70	NaN	NaN	NaN		
+	NaN	84.04	78.99	78.57	85.33	NaN	NaN		
+	NaN	73.23	68.51	64.86	77.05	NaN	NaN		
+	NaN	69.33	60.57	74.57	78.67	NaN	NaN		
+	NaN	66.27	62.17	70.96	81.70	NaN	NaN		
+	NaN	64.81	63.58	75.89	87.20	NaN	NaN		
+	NaN	72.59	81.05	69.95	88.02	NaN	NaN		
+	NaN	83.49	NaN	84.38	NaN	NaN	NaN		
 	];								
 x.IFMCs= x.IFMCs';									
 x.Gaps= [									
@@ -33,14 +33,14 @@ x.TMCFreq= [
 	250	500	1000	2000	4000	6000	8000		
 	];								
 x.TMC= [									
-	68.97	61.43	63.20	67.37	81.83	NaN	NaN		
-	82.70	68.40	69.27	71.07	82.38	NaN	NaN		
-	81.77	78.53	79.20	74.50	85.78	NaN	NaN		
-	93.90	87.77	83.83	80.07	85.60	NaN	NaN		
-	NaN	93.00	92.40	81.50	NaN	NaN	NaN		
-	NaN	NaN	NaN	83.53	82.50	NaN	NaN		
-	NaN	NaN	NaN	88.35	88.20	NaN	NaN		
-	NaN	NaN	NaN	92.80	89.50	NaN	NaN		
-	NaN	NaN	NaN	NaN	74.80	NaN	NaN		
+	NaN	67.92	66.30	76.18	81.57	NaN	NaN		
+	NaN	NaN	NaN	NaN	NaN	NaN	NaN		
+	NaN	83.04	77.25	88.96	85.18	NaN	NaN		
+	NaN	NaN	NaN	NaN	NaN	NaN	NaN		
+	NaN	96.27	90.86	95.72	95.23	NaN	NaN		
+	NaN	NaN	NaN	NaN	NaN	NaN	NaN		
+	NaN	NaN	NaN	NaN	NaN	NaN	NaN		
+	NaN	NaN	NaN	NaN	NaN	NaN	NaN		
+	NaN	NaN	NaN	NaN	NaN	NaN	NaN		
 	];								
 x.TMC = x.TMC';									

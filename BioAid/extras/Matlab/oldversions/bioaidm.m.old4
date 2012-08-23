@@ -198,14 +198,14 @@ for nn=1:size(x,1)
             % offset to the incoming sample. This is so that Pa values of
             % zero do not cause a value of -1000 dB SPL to be fed to the
             % attenuation calculator. Attenuation is thresholded after
-            % filtering, so any preceding zeros in a lab-based simulation
+            % filtering, so any preceeding zeros in a lab-based simulation
             % would cause the internal MOC level to drop incredibly low. At
             % the onset of a stimulus, it takes the internal MOC vale a
             % long time to recover. The effects of the MOC are only visible
             % once the internal value has exceeded threshold, so zeros
-            % preceding the stimulus would increase the MOC latency. The
+            % preceeding the stimulus would increase the MOC latency. The
             % small DC offset rectifies this problem. However, one should
-            % note that the MOC latency is intrinsically linked to the MOC
+            % note that the MOC latency is intrinsicly linked to the MOC
             % time constant because of this architecture.
             sb=sb+2e-05;
             %------------------
@@ -262,9 +262,9 @@ end %END OF BIOAIDM FUNCTION
 
 function [buff, MOCz] = updateMOCbuffer(dBsample, buff, MOCthresh, MOCfactor, MOCb, MOCa, MOCz, db2lin_func)   
     tmp = dBsample; %+6; %not sure why +6 now!
-    tmp = max(tmp-MOCthresh,0) * MOCfactor; % dB    
-    [tmp,MOCz] = filter(MOCb,MOCa,tmp,MOCz);    
-    tmp = db2lin_func(-tmp); %incase you're confused, this is a function handle passed to this function (D.R.Y.)     
+    [tmp,MOCz] = filter(MOCb,MOCa,tmp,MOCz);
+    tmp = max(tmp-MOCthresh,0) * MOCfactor; % dB
+    tmp = db2lin_func(-tmp); %incase you're confused, this is a function handle passed to this function (D.R.Y.)
     buff = [tmp; buff(1:end-1)];
 end
 

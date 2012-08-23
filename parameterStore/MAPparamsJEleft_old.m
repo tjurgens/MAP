@@ -13,7 +13,8 @@ function method=MAPparamsJEleft ...
 %  the use of 'method' is being phased out. use globals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  HYPOTHESIS
-%  1. DRNLParams.a is reduced to near zero (thus, frequency-dependent)
+%  1. IHCciliaParams.Et is reduced to 75 mV
+%  2. DRNLParams.a is reduced for low frequencies (thus, frequency-dependent)
 %  3. Dead high-frequency region (channels from 4000 Hz onwards are missing)_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -89,7 +90,7 @@ DRNLParams=[];  % clear the structure first
 
 %   *** DRNL nonlinear path
 % broken stick compression
-DRNLParams.a = [repmat(1e2,1,length(BFlist))];
+DRNLParams.a = [repmat(5e3,1,20) repmat(5e4,1,length(BFlist)-20)];
 %if BFlist <= 1300
 %    DRNLParams.a = 5e3;
 %else
@@ -148,7 +149,7 @@ IHC_cilia_RPParams.Ga=	.8e-9;  % 4.3e-9 fixed apical membrane conductance
 %  #5 IHC_RP
 IHC_cilia_RPParams.Cab=	4e-012;         % IHC capacitance (F)
 % IHC_cilia_RPParams.Cab=	1e-012;         % IHC capacitance (F)
-IHC_cilia_RPParams.Et=	0.100;          % endocochlear potential (V)
+IHC_cilia_RPParams.Et=	0.075;          % endocochlear potential (V)
 
 IHC_cilia_RPParams.Gk=	2e-008;         % 1e-8 potassium conductance (S)
 IHC_cilia_RPParams.Ek=	-0.08;          % -0.084 K equilibrium potential
