@@ -63,25 +63,25 @@ for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!
 end
 
 
-UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 45;  %250
-UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 45;  %500
-UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 45;  %1000
-UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 45;
-UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 40;  %2000
-UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 35;
-UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 35;  %4000
-UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 30;
+UNIQUEpars.Band_0_InstantaneousCmpThreshold_dBspl  = 50;  %250
+UNIQUEpars.Band_1_InstantaneousCmpThreshold_dBspl  = 50;  %500
+UNIQUEpars.Band_2_InstantaneousCmpThreshold_dBspl  = 50;  %1000
+UNIQUEpars.Band_3_InstantaneousCmpThreshold_dBspl  = 47.5;
+UNIQUEpars.Band_4_InstantaneousCmpThreshold_dBspl  = 45;  %2000
+UNIQUEpars.Band_5_InstantaneousCmpThreshold_dBspl  = 40;
+UNIQUEpars.Band_6_InstantaneousCmpThreshold_dBspl  = 40;  %4000
+UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 35;
 UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 30;  %8000
 
 
-UNIQUEpars.Band_0_Gain_dB  =  40.0;
-UNIQUEpars.Band_1_Gain_dB  =  40.0;
-UNIQUEpars.Band_2_Gain_dB  =  40.0;
-UNIQUEpars.Band_3_Gain_dB  =  40.0;
-UNIQUEpars.Band_4_Gain_dB  =  45.0;
-UNIQUEpars.Band_5_Gain_dB  =  50.0;
-UNIQUEpars.Band_6_Gain_dB  =  50.0;
-UNIQUEpars.Band_7_Gain_dB  =  55.0;
+UNIQUEpars.Band_0_Gain_dB  =  30.0;
+UNIQUEpars.Band_1_Gain_dB  =  30.0;
+UNIQUEpars.Band_2_Gain_dB  =  30.0;
+UNIQUEpars.Band_3_Gain_dB  =  32.5;
+UNIQUEpars.Band_4_Gain_dB  =  40.0;
+UNIQUEpars.Band_5_Gain_dB  =  45.0;
+UNIQUEpars.Band_6_Gain_dB  =  45.0;
+UNIQUEpars.Band_7_Gain_dB  =  50.0;
 UNIQUEpars.Band_8_Gain_dB  =  55.0;
 
 
