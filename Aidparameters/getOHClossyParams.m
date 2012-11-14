@@ -1,4 +1,4 @@
-function [ UNIQUEpars, SHAREDpars ] = getOHClossxParams(  )
+function [ UNIQUEpars, SHAREDpars ] = getOHClossyParams(  )
 %GETDEFAULTPARAMS Returns a pair of default parameter structures
 %   This function returns some default parameter sets for the gain model.
 %   The parameter sets can be modified once they have been created, or
@@ -44,7 +44,7 @@ SHAREDpars.Band_8_HighBandEdge= cf(6)*2^.25;
      eval(['SHAREDpars.Band_' num2str(nn) '_MOCtc = 0.05;']);
      eval(['SHAREDpars.Band_' num2str(nn) '_MOCfactor = 0.85;']);
      eval(['SHAREDpars.Band_' num2str(nn) '_MOClatency = 0.010;']);
-     eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 10;']);%10
+     eval(['SHAREDpars.Band_' num2str(nn) '_MOCthreshold_dBspl = 100;']);%10
  end
 
 
@@ -56,11 +56,14 @@ UNIQUEpars.ARtc = 0.06;
 UNIQUEpars.ARlatency = 0.01;
 
 for nn = 0:SHAREDpars.NumBands-1 %Channels are indexed from zero!    
-    eval(['UNIQUEpars.Band_' num2str(nn) '_InstantaneousCmpThreshold_dBspl  = 35;']);
+    eval(['UNIQUEpars.Band_' num2str(nn) '_InstantaneousCmpThreshold_dBspl  = 100;']);
     eval(['UNIQUEpars.Band_' num2str(nn) '_DRNLc = 0.2;']);       
-    eval(['UNIQUEpars.Band_' num2str(nn) '_Gain_dB  =  50.0;']);
+    eval(['UNIQUEpars.Band_' num2str(nn) '_Gain_dB  =  45.0;']);
 end
 
-
+%UNIQUEpars.Band_7_InstantaneousCmpThreshold_dBspl  = 37.5;
+%UNIQUEpars.Band_8_InstantaneousCmpThreshold_dBspl  = 35;
+UNIQUEpars.Band_7_Gain_dB  =  47.5;
+UNIQUEpars.Band_8_Gain_dB  =  50.0; %8000
 
 end
