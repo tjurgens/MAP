@@ -2,6 +2,12 @@
 
 load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 
+%paths
+addpath('/home/tim/MAP/userProgramsASRforDummies');
+addpath('/home/tim/MAP/userProgramsTim');
+addpath('/home/tim/MAP/');
+addpath('/home/tim/MAP/parameterStore');
+
 %Header for HTK
 SHIFT = 10;     % sampling rate of features in [ms] (usually 10 ms)
     byteswap = 1;
