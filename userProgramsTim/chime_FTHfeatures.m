@@ -1,18 +1,16 @@
 %Script for the generation of FTH features for CHiME
 
-%load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
+load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 
 %Header for HTK
 SHIFT = 10;     % sampling rate of features in [ms] (usually 10 ms)
     byteswap = 1;
     header.sampPeriod = SHIFT*1E4;
     header.sampKind = 9;
-    header.nSamples = size(Features,2);     % get number of frames
-    header.sampSize = size(Features,1)*4;   % get number of features
     numCoeff = 14; %14 DCT coefficients
     
 for iCounter = 1:length(filepaths)
-    actualfilepathname = [chime_root(2) filesep filepaths(iCounter)];
+    actualfilepathname = [chime_root{2} filesep filepaths{iCounter}];
     [signal,sampleRate] = wavread(actualfilepathname);
     
     %auditory model
@@ -28,7 +26,8 @@ for iCounter = 1:length(filepaths)
     %write HTK compatible file with features
      %Features  <= deine Feature Matrix (columns: features, rows: frames)
     
-
+    header.nSamples = size(Features,2);     % get number of frames
+    header.sampSize = size(Features,1)*4;   % get number of features
     strOutputFile = ['/schroedersan/tim/chime/features/' filepaths_own(iCounter)];
     % ^^zB (Endung own nicht vergessen)
 
