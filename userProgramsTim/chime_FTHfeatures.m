@@ -1,11 +1,11 @@
 %Script for the generation of FTH features for CHiME
-
+clear all;
 load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 
 %paths
 addpath('/home/tim/MAP/userProgramsASRforDummies');
 addpath('/home/tim/MAP/userProgramsTim');
-addpath('/home/tim/MAP/');
+addpath('/home/tim/MAP/MAP');
 addpath('/home/tim/MAP/parameterStore');
 
 %Header for HTK
@@ -18,12 +18,24 @@ SHIFT = 10;     % sampling rate of features in [ms] (usually 10 ms)
 for iCounter = 1:length(filepaths)
     actualfilepathname = [chime_root{2} filesep filepaths{iCounter}];
     [signal,sampleRate] = wavread(actualfilepathname);
+    %take the mean from both channels as monaural signal
+    signal = mean(signal,2);
+    
+    %set signal to 60 dB SPL for MAP
+    
+    
+    %resample -> this step requires much time and might be unnecessary if I
+    %get MAP to produce reasonable output for sfreq = 16000;
+    signal = resample(signal,44100,sampleRate);
     
     %auditory model
-    [ANprobabilityResponse, dt, myBFlist] = MAPwrap(signal, sampleRate, -1, 'Normal', 'probability', '{};');
+    [ANprobabilityResponse, dt, myBFlist] = MAPwrap(signal, 44100, -1, 'Normal', 'probability', {';'});
+    
+    %take only HSR fibers
+    ANResponse = ANprobabilityResponse(42:end,:);
     
     %speech feature extraction
-    ANtiming = fouriertransform_histogram_log(ANprobabilityResponse,sampleRate, myBFlist);
+    ANtiming = fouriertransform_histogram_log(ANResponse,sampleRate, myBFlist);
     
     %DCT
     features = cJob.GJB_dct(ANtiming);
@@ -31,10 +43,9 @@ for iCounter = 1:length(filepaths)
     
     %write HTK compatible file with features
      %Features  <= deine Feature Matrix (columns: features, rows: frames)
-    
-    header.nSamples = size(Features,2);     % get number of frames
-    header.sampSize = size(Features,1)*4;   % get number of features
-    strOutputFile = ['/schroedersan/tim/chime/features/' filepaths_own(iCounter)];
+    header.nSamples = size(ANfeatures,2);     % get number of frames
+    header.sampSize = size(ANfeatures,1)*4;   % get number of features
+    strOutputFile = ['/schroedersan/tim/chime/features/' filepaths_own{iCounter}];
     % ^^zB (Endung own nicht vergessen)
 
     write_htk_with_header(ANfeatures,header,strOutputFile,byteswap); 

@@ -374,7 +374,7 @@ classdef cJob
                 'not enough files available in the corpus');  % make sure we have enough wavs
             
             randomWavs = rand(1, size(speechWavs, 1));
-            [~,b] = sort(randomWavs);
+            [donotuse,b] = sort(randomWavs);
             trainFileIdx = b(1:obj.numWavs);
             
             obj.wavList  = speechWavs(trainFileIdx); %This is a record of all of the wavs that should be done
@@ -415,7 +415,7 @@ classdef cJob
             
             obj.currentSpeechLevel = tempSpeechLev;
             obj.currentNoiseLevel = tempNoiseLev;
-            [finalFeatures, ~] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
+            [finalFeatures] = processWavs(obj, currentWav); %discard the output from ANprobabilityResponse and method using ~
             %finalFeatures = make_MFCCs(obj, currentWav);
             opForHTK(obj, currentWav, finalFeatures);
         end % ------ OF GENFEAT
@@ -578,7 +578,7 @@ classdef cJob
                 hopSamples = 64;
                 noverlap = nfft - hopSamples;
                 dt = hopSamples/sampleRate;
-                [~,~,~,P] = spectrogram(stimulus,nfft,noverlap,F,sampleRate);
+                [tmp1,tmp2,tmp3,P] = spectrogram(stimulus,nfft,noverlap,F,sampleRate);
                 
                 ANprobabilityResponse = 10*log10(  abs(P) /  ((20e-6)^2)  ); %now correct [(a^2)/(b^2) = (a/b)^2]
                 
@@ -644,7 +644,7 @@ classdef cJob
                 SACFmethod.nonlinCF = myBFlist;
                 
                 %This is slightly misleading as the ANprob is now a SACF
-                [ANprobabilityResponse, ~, ~, ~] = filteredSACF(ANprobabilityResponse, SACFmethod, SACFparams);
+                ANprobabilityResponse = filteredSACF(ANprobabilityResponse, SACFmethod, SACFparams);
                 
                 % OPTIONAL PLOTTING
                 YTickIdx = 1:floor(obj.SACFnBins/6):obj.SACFnBins;
