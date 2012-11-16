@@ -1,11 +1,11 @@
 
 %START IN AN EMPTY DIRECTORY! -> home/tim/status
-cd('/home/tim/statusmsg');
+%cd('/home/tim/statusmsg');
 clear;
 load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 nwavs = length(filepaths);
-startindex=[1:40:nwavs];
-endindex = [40:40:nwavs];
+startindex=[1:20:nwavs];
+endindex = [20:20:nwavs];
 addpath('/home/tim/MAP/userProgramsTim');
 
 for iCounter = 1:length(startindex)
