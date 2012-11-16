@@ -1,5 +1,6 @@
 
-%START IN AN EMPTY DIRECTORY!
+%START IN AN EMPTY DIRECTORY! -> home/tim/status
+cd('/home/tim/status_msg');
 clear;
 load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 nwavs = length(filepaths);
