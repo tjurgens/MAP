@@ -1,6 +1,6 @@
 function chime_FTHfeatures(startindex,endindex)
 %Script for the generation of FTH features for CHiME
-clear all;
+
 load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 
 %paths
