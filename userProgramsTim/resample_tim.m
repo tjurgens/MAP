@@ -103,7 +103,7 @@ end
 h = [h zeros(1,nz1)];
 
 % ----  HERE'S THE CALL TO UPFIRDN  ----------------------------
-y = upfirdn(x,h,p,q);
+y = upfirdn_tim(x,h,p,q);
 
 % Get rid of trailing and leading data so input and output signals line up
 % temporally:
