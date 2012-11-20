@@ -18,5 +18,9 @@ for iCounter = 1:nwavs
     if ~exist(fullpath,'file')
         missingnumber = [missingnumber iCounter];
     end
+    % display every 1000th file to monitor the progress
+    if ~mod(iCounter,1000) 
+        disp(sprintf('Checking file no. %s',num2str(iCounter)));
+    end
 end
 

@@ -1,0 +1,23 @@
+??? License checkout failed.
+License Manager Error -4
+Maximum number of users for Signal_Toolbox reached.
+Try again later.
+To see a list of current users use the lmstat utility or contact your License
+Administrator.
+
+Troubleshoot this issue by visiting:
+http://www.mathworks.com/support/lme/R2008a/4
+
+Diagnostic Information:
+Feature: Signal_Toolbox
+License path:
+/home/tim/.matlab/R2008a_licenses:/share/apps/Matlab_R2008a/licenses/license.dat:/share/apps/Matlab_R2008a/licenses/network.lic:
+FLEXnet Licensing error: -4,132.
+
+Error in ==> resample_tim at 72
+      h = p*firls( L-1, [0 2*fc 2*fc 1], [1 1 0 0]).*kaiser(L,bta)' ;
+
+Error in ==> chime_FTHfeatures at 31
+    signal = resample_tim(signal,44100,sampleRate);
+
+
