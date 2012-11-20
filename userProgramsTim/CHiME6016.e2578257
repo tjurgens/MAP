@@ -1,7 +1,0 @@
-??? Error using ==> wavread at 67
-Cannot open file.
-
-Error in ==> chime_FTHfeatures at 22
-    [signal,sampleRate] = wavread(actualfilepathname);
-
-
