@@ -1,6 +1,6 @@
 function chime_FTHfeatures(startindex,endindex)
 %Script for the generation of FTH features for CHiME
-clear all;
+
 load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 
 %paths
@@ -28,7 +28,7 @@ for iCounter = startindex:endindex %1:length(filepaths)
     
     %resample -> this step requires much time and might be unnecessary if I
     %get MAP to produce reasonable output for sfreq = 16000;
-    signal = resample(signal,44100,sampleRate);
+    signal = resample_tim(signal,44100,sampleRate);
      
     %auditory model
     [ANprobabilityResponse, dt, myBFlist] = MAPwrap(signal, 44100, -1, 'Normal', 'probability', {';'});

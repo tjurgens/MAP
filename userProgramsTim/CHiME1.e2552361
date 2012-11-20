@@ -1,6 +1,0 @@
-??? Reference to a cleared variable startindex.
-
-Error in ==> chime_FTHfeatures at 19
-for iCounter = startindex:endindex %1:length(filepaths)
-
-
