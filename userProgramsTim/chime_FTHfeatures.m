@@ -28,7 +28,8 @@ for iCounter = startindex:endindex %1:length(filepaths)
     
     %resample -> this step requires much time and might be unnecessary if I
     %get MAP to produce reasonable output for sfreq = 16000;
-    signal = resample(signal,44100,sampleRate);
+    signal = resample_wosigproc(signal,44100,sampleRate); %using a resample function that is
+    %not part of the sig proc toolbox (only for upsampling!)
      
     %auditory model
     [ANprobabilityResponse, dt, myBFlist] = MAPwrap(signal, 44100, -1, 'Normal', 'probability', {';'});
