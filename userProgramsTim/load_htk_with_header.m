@@ -21,11 +21,11 @@ end
 [header.sampSize, count]=fread(fid,1,'short'); 
 [header.sampKind, count]=fread(fid,1,'short'); 
 
-header
+%header
 
 % read data
 [indata, count]=fread(fid,inf,'float');
-count
+%count
 
 
 % close file
