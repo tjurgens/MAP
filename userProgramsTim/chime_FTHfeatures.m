@@ -56,7 +56,7 @@ for iCounter = startindex:endindex %1:length(filepaths)
      %Features  <= deine Feature Matrix (columns: features, rows: frames)
     header.nSamples = size(ANfeatures,2);     % get number of frames
     header.sampSize = size(ANfeatures,1)*4;   % get number of features
-    strOutputFile = ['/schroedersan/tim/Chime/feat1/' filepaths_own{iCounter}];
+    strOutputFile = ['/schroedersan/tim/Chime/feat5/' filepaths_own{iCounter}];
     % ^^zB (Endung own nicht vergessen)
 
     write_htk_with_header(ANfeatures,header,strOutputFile,byteswap); 

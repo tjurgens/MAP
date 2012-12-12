@@ -4,8 +4,8 @@
 clear;
 load('/schroedersan/Corpora/CHiME/eval_chime_fhg/dir_struct/chime_filepaths.mat');
 nwavs = length(filepaths);
-startindex=[1:20:nwavs];
-endindex = [20:20:nwavs];
+startindex=[1:10:nwavs];
+endindex = [10:10:nwavs];
 addpath('/home/tim/MAP/userProgramsTim');
 
 for iCounter = 1:length(startindex)
