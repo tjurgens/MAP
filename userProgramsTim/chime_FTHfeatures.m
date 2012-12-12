@@ -30,9 +30,17 @@ for iCounter = startindex:endindex %1:length(filepaths)
     %get MAP to produce reasonable output for sfreq = 16000;
     signal = resample_wosigproc(signal,44100,sampleRate); %using a resample function that is
     %not part of the sig proc toolbox (only for upsampling!)
-     
+    
+    %concatenate two waveforms (and later take only the last one) to
+    %initialize MOC
+    signal = fade_concat(signal',signal',44100);
+    signal = signal';
+    
     %auditory model
-    [ANprobabilityResponse, dt, myBFlist] = MAPwrap(signal, 44100, -1, 'Normal', 'probability', {';'});
+    [ANprobabilityResponse, dt, myBFlist] = MAPwrap(signal, 44100, -1, 'Normalg50', 'probability', {';'});
+    
+    %take only latter half of the response (which is adapted)
+    ANprobabilityResponse = ANprobabilityResponse(:,floor(end/2):end);
     
     %take only HSR fibers
     ANResponse = ANprobabilityResponse(42:end,:);
